@@ -5,6 +5,8 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 
+const { ethers } = require("ethers");
+
 const AWS = require("aws-sdk");
 AWS.config.update({
   region: 'us-east-1'
@@ -28,6 +30,10 @@ function submitVote(data, callback) {
   var voteId = uuidv4();
   var voteClass = data.voteClass;
   var voteValue = data.voteValue;
+  var signedVoteValue = data.signedVoteValue;
+  var walletAddress = data.walletAddress;
+
+  // TODO: consider signing something besides just the vote, maybe it would improve security
 
   var params = {
     TableName: "Votes",
@@ -41,8 +47,14 @@ function submitVote(data, callback) {
       "VoteValue": {
         S: voteValue
       },
+      "SignedVoteValue": {
+        S: signedVoteValue
+      },
       "CreationTime": {
         S: creationTime
+      },
+      "WalletAddress": {
+        S: walletAddress
       }
     },
     ConditionExpression: 'attribute_not_exists(VoteId)' // prevent someone from overriding the vote
