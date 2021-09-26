@@ -1,0 +1,440 @@
+<html>
+<head>
+<title>Lionrun - Login</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+<style>
+td {
+border-width: 1;
+padding: 5px;
+}
+</style>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/web3modal@1.9.4/dist/index.js"></script>
+<script type="text/javascript" src="https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider@1.6.5/dist/umd/index.min.js"></script>
+<script type="text/javascript" src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" ></script>
+<script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+<script type="module" src="/constants.js"></script>
+<script>
+"use strict";
+
+
+
+function parseHttpHeaders(httpHeaders) {
+    return httpHeaders.split("\n")
+     .map(x=>x.split(/: */,2))
+     .filter(x=>x[0])
+     .reduce((ac, x)=>{ac[x[0]] = x[1].trim();return ac;}, {});
+}
+
+var req = new XMLHttpRequest();
+req.open('GET', document.location, false);
+req.send(null);
+var headers = parseHttpHeaders(req.getAllResponseHeaders());
+// Now we can do:  headers["content-type"]
+
+
+ // Unpkg imports
+const Web3Modal = window.Web3Modal.default;
+const WalletConnectProvider = window.WalletConnectProvider.default;
+const evmChains = window.evmChains;
+
+// Web3modal instance
+let web3Modal
+
+// Chosen wallet provider given by the dialog window
+let provider;
+
+// Address of the selected account
+let selectedAccount;
+
+let bcaddr = headers['bcaddr'];
+/**
+ * Setup the orchestra
+ */
+function init() {
+
+
+  // Check that the web page is run in a secure context,
+  // as otherwise MetaMask won't be available
+/*  if(location.protocol !== 'https:') {
+    // https://ethereum.stackexchange.com/a/62217/620
+    const alert = document.querySelector("#alert-error-https");
+    alert.style.display = "block";
+    document.querySelector("#btn-connect").setAttribute("disabled", "disabled")
+    return;
+  } */
+
+  // Tell Web3modal what providers we have available.
+  // Built-in web browser provider (only one can exist as a time)
+  // like MetaMask, Brave or Opera is added automatically by Web3modal
+  const providerOptions = {
+  /*  walletconnect: {
+      package: WalletConnectProvider, //This should work only with HTTPS
+      options: {
+        // Mikko's test key - don't copy as your mileage may vary  //8043bb2cf99347b1bfadfb233c5325c0
+        infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", //a1d145ed2a82409a8a4371b4861f89cf
+      }
+    } */
+  };
+
+  web3Modal = new Web3Modal({
+    network: "matic",
+    cacheProvider: true, // optional
+    providerOptions, // required
+    disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+  });
+
+
+  if(headers['bcaddr']){
+    showSigned(headers['bcaddr']);
+  } else {
+    showUnsigned();
+  }
+
+  // check if web wallet is already connected.
+  if (window.ethereum) {
+
+    web3 = new Web3(window.ethereum);
+
+    web3.eth.getAccounts((accounta,accountb) => {
+      //if(accounta){onConnect();}
+      //else
+      if(accountb[0]){onConnect();} // <<-- this is what works for me on Firefox Metamask
+    });
+  }
+
+}
+
+
+/**
+ * Kick in the UI action after Web3modal dialog has chosen a provider
+ */
+async function fetchAccountData() {
+
+  // Get a Web3 instance for the wallet
+  const web3 = new Web3(provider);
+
+  // Get connected chain id from Ethereum node
+  const chainId = await web3.eth.getChainId();
+
+  // Load chain information over an HTTP API
+  const chainData = evmChains.getChain(chainId);
+  document.querySelector("#network-name").textContent = chainData.name;
+
+  // Get list of accounts of the connected wallet
+  const accounts = await web3.eth.getAccounts();
+
+  // MetaMask does not give you all accounts, only the selected account
+  selectedAccount = accounts[0];
+
+  if(!accounts[0]){await onDisconnect();return;} //if user disconnected wallet
+
+  document.querySelector("#selected-account").textContent = selectedAccount;
+
+  // Display fully loaded UI for wallet data
+  document.querySelector("#prepare").style.display = "none";
+  document.querySelector("#connected").style.display = "block";
+}
+
+
+
+/**
+ * Fetch account data for UI when
+ * - User switches accounts in wallet
+ * - User switches networks in wallet
+ * - User connects wallet initially
+ */
+async function refreshAccountData() {
+
+  // If any current data is displayed when
+  // the user is switching acounts in the wallet
+  // immediate hide this data
+  document.querySelector("#connected").style.display = "none";
+  document.querySelector("#prepare").style.display = "block";
+
+  // Disable button while UI is loading.
+  // fetchAccountData() will take a while as it communicates
+  // with Ethereum node via JSON-RPC and loads chain data
+  // over an API call.
+  document.querySelector("#btn-connect").setAttribute("disabled", "disabled")
+  await fetchAccountData(provider);
+  document.querySelector("#btn-connect").removeAttribute("disabled")
+}
+
+
+/**
+ * Connect wallet button pressed.
+ */
+async function onConnect() {
+
+  try {
+    provider = await web3Modal.connect();
+  } catch(e) {
+    console.log("Could not get a wallet connection", e);
+    return;
+  }
+
+  // Subscribe to accounts change
+  provider.on("accountsChanged", (accounts) => {
+    fetchAccountData();
+  });
+
+  // Subscribe to chainId change
+  provider.on("chainChanged", (chainId) => {
+    fetchAccountData();
+  });
+
+  await refreshAccountData();
+
+}
+
+
+async function Disconnect() {
+
+  if(provider.disconnect) {
+
+    await provider.disconnect();
+
+    await Disconnect();
+
+  } else {
+
+    alert ("The disconnection button is located in the wallet!");
+
+  }
+
+}
+
+/**
+ * Disconnect wallet button pressed.
+ */
+async function onDisconnect() {
+
+  // If the cached provider is not cleared,
+  // WalletConnect will default to the existing session
+  // and does not allow to re-scan the QR code with a new wallet.
+  // Depending on your use case you may want or want not his behavir.
+  await web3Modal.clearCachedProvider();
+
+  //provider = null; //if set to null, we get an error when reconnecting the wallet
+
+  selectedAccount = null;
+
+  // Set the UI back to the initial state
+  document.querySelector("#prepare").style.display = "block";
+  document.querySelector("#connected").style.display = "none";
+
+  Logout();
+}
+
+
+async function Logout() {
+
+  $.get("/logoutreq", function(data){
+      if(data==='done') {
+        showUnsigned();
+        location.reload();
+
+      } else if (data==='failed') {
+        alert("The signed message did not match the current session.\nRefresh the page and try again.\nIf the error persist, contact the dev team!");
+      } else {
+        alert ("Unexpected error occured");
+      }
+  });
+}
+
+
+
+async function onSign() {
+
+  const web3 = await new Web3(provider);
+
+  // msg must match the msg in the server side
+  let msg = "Session id: " + headers["sessionid"] + "\n\nSign your session id with your Polygon Account, this proves to us and to all players that you are the real owner of that address and NFTs. This does not cost any fees.";
+
+  bcaddr = Web3.utils.toChecksumAddress(window.ethereum.selectedAddress);
+
+  web3.eth.personal.sign(msg, bcaddr,'', function(err,   signature) {
+      if (err){console.log("Signature Denied");}
+      if (signature){
+
+        //Session message signed! Sending Login request!
+
+        $.post("/loginreq",{
+          bcaddr: bcaddr, //User Blockchain address
+          signature: signature
+          }, function(data){
+            if(data==='done') {
+
+              showSigned(bcaddr);
+
+            } else if (data==='failed') {
+              alert("The signed message did not match the current session.\nRefresh the page and try again.\nIf the error persist, contact the dev team!");
+            } else {
+              alert ("Unexpected error occured");
+            }
+        });
+      }
+  });
+}
+
+async function showSigned(bcaddr) {
+
+  $("#view-bcaddr").text(bcaddr.substring(0, 6)+"..."+bcaddr.substring(bcaddr.length - 2));
+
+  getVotePoints();
+
+  $(".btn-signed").show();
+  $(".btn-unsigned").hide();
+
+}
+
+async function showUnsigned() {
+
+  $("#view-bcaddr").text("Unsigned");
+
+  $(".btn-unsigned").show();
+  $(".btn-signed").hide();
+
+}
+
+function getVotePoints() {
+
+  $.post("/reqvotepoints", function(data){
+      if(data.details) {
+
+        //let tabl = $("#votepts-table").append("<table></table>").append("<tr></tr>");
+        let tabl = $("#votepts-table");
+
+        data.details.forEach(item => {
+          //tabl.append("<td></td>").append($("#"+item.chain+"-vtpts").append("<tr></tr>");
+          //let row = tabl.append("<td></td>").append($("#"+item.chain+"-vtpts")).append("<tr></tr>");
+          let row = tabl.append(item.chain+"<table class='table table-sm table-dark'></table>");
+
+          let rowr = row.append("<tr></tr>");
+          rowr.append("<td>Timestamp</td>");
+          rowr.append("<td>Days</td>");
+          rowr.append("<td>Amount MM</td>");
+          rowr.append("<td>Points</td>");
+
+          item.points_detail.forEach(r => {
+            let rowr = row.append("<tr></tr>");
+            rowr.append("<td>"+r.timestamp +"</td>");
+            rowr.append("<td>"+r.days +"</td>");
+            rowr.append("<td>"+r.token_amount +"</td>");
+            rowr.append("<td>"+r.points +"</td>");
+          });
+          tabl.append("</br>");
+
+        });
+
+        console.log(data.details);
+        //$("#votepts-table").html("<table><tr><td><table id='eth-vtpts'></table></td><td><table id='matic-vtpts'></table></td><td><table id='bsc-vtpts'></table></td></tr></table>");
+
+      }
+  });
+
+
+
+}
+
+/**
+ * Main entry point.
+ */
+window.addEventListener('load', async () => {
+  init();
+  document.querySelector("#btn-connect").addEventListener("click", onConnect);
+  document.querySelector("#btn-disconnect").addEventListener("click", Disconnect);
+  document.querySelector("#btn-logout").addEventListener("click", Logout);
+  document.querySelector("#btn-sign").addEventListener("click", onSign);
+});
+
+</script>
+</head>
+<body>
+  <!-- Construct a Bootstrap layout -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Lionrun - Wallet connection and signing</h1>
+
+        <div class="alert alert-danger" id="alert-error-https" style="display: none">
+          You can run this example only over HTTPS connection.
+        </div>
+
+        <div id="prepare">
+          <button class="btn btn-primary" id="btn-connect">
+            Connect wallet
+          </button>
+        </div>
+
+        <div id="connected" style="display: none">
+
+          <div>
+                <button class="btn btn-primary" id="btn-disconnect">
+                  Disconnect wallet
+                </button>
+
+
+                <button class="btn btn-primary btn-unsigned" id="btn-sign">
+                  Sign Session & Login
+                </button>
+
+
+                <button class="btn btn-success btn-signed" id="view-bcaddr">
+                  Loged as
+                </button>
+
+                <button class="btn btn-outline-warning btn-signed" id="btn-logout">
+                  Logout
+                </button>
+
+          </div>
+
+          <!-- <img src="https://static.wixstatic.com/media/a6bdb1_f3dae17ea683499a981ca9b75def8851~mv2.png/v1/fill/w_1338,h_885,al_c,q_90,usm_0.66_1.00_0.01/LionRunWebsiteBanner-export.webp" -->
+
+          <hr>
+
+          <div id="network">
+            <p>
+              <strong>Connected blockchain:</strong> <span id="network-name"></span>
+            </p>
+
+            <p>
+              <strong>Selected account:</strong> <span id="selected-account"></span>
+            </p>
+
+            <div id="votepts-table"></div>
+
+          </div>
+
+          <hr>
+
+
+
+        </div>
+
+        <br>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div id="templates" style="display: none">
+    <template id="template-balance">
+      <tr>
+        <th class="address"></th>
+        <td class="balance"></td>
+      </tr>
+    </template>
+  </div>
+
+
+</body>
+</html>
