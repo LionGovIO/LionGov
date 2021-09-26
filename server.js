@@ -80,7 +80,13 @@ function privacyVoteQuery(data, callback) {
                 }
             }
 
-            callback(null, outputItems)
+            var output = {
+                items: outputItems,
+                count: data['Count'],
+                scannedCount: data['ScannedCount']
+            };
+
+            callback(null, output)
 
             /*
             var result = {};
@@ -110,11 +116,7 @@ app.get('/privacyvotequery', function(req, res) {
         };
 
         if (voteClass) {
-            privacyVoteQuery(queryInput, function(err, outputItems) {
-                var output = {
-                    items: outputItems
-                };
-
+            privacyVoteQuery(queryInput, function(err, output) {
                 console.log('output!');
                 console.log(output);
 

@@ -303,7 +303,8 @@
                         }
                     }
 
-                    // votes_table_tbody
+                    var totalVoteCount = result.count;
+                    $('#total_vote_count_num').text(totalVoteCount);
                 }
             };
             var currentVoteClass = 'matrix';
@@ -418,13 +419,15 @@
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">LionGov</h1>
-
+            <p style="margin-top: 20px;">
+                <a href="https://www.liongov.io/">🏠 LionGov.io Home Page</a>
+            </p>
             <p>
-                <button class="btn btn-primary" id="btn-connect-wallet">
+                <button class="btn btn-outline-primary" id="btn-connect-wallet">
                     Connect wallet
                 </button>
             </p>
+            <h1 class="mt-5">LionGov</h1>
 
             <p class="lead">
                 This is your last chance. After this, there is no turning back. You take the blue pill—the story ends,
@@ -453,9 +456,20 @@
                 <button type="button" id="voteButton" class="btn btn-primary">Vote</button>
             </p>
 
-            <br />
+            <br/>
 
-            <h4>Recent votes</h4>
+            <h4>Stats</h4>
+
+            <p>
+
+                <i>Total vote count:</i> <span id="total_vote_count_num"></span>
+
+            </p>
+
+            <br/>
+
+            <h4>Recent Votes</h4>
+            <p>
             <table class="table table-sm">
                 <thead>
                     <tr>
@@ -466,6 +480,7 @@
                 <tbody id="votes_table_tbody">
                 </tbody>
             </table>
+            </p>
         </div>
     </main>
 
