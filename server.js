@@ -33,6 +33,7 @@ function privacyVoteQuery(data, callback) {
             }
         },
         KeyConditionExpression: "VoteClass = :v1",
+        ScanIndexForward: false,
         TableName: 'Votes',
         IndexName: 'VoteClass-CreationTime-index'
     };
@@ -56,7 +57,7 @@ function privacyVoteQuery(data, callback) {
             var items = data['Items'];
             if (items && items.length >= 1) {
                 for (var i = 0; i < items.length; i++) {
-                    var item = items[0];
+                    var item = items[i];
                     console.log(item);
 
                     // TODO: handle case where desired attributes in item are missing, probably throw an error via callback

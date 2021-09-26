@@ -290,8 +290,16 @@
                             var obscuredWalletAddress = item.obscuredWalletAddress;
                             var creationTime = item.creationTime; // in epoch milli
 
-                            var creationDate = new Date(creationTime);
+                            // TODO: make creationDate prettier/more human readable
+                            var creationDate = new Date(parseInt(creationTime));
                             console.log(creationDate);
+
+                            var html = '<tr>';
+                            html += '<td>' + creationDate + '</td>';
+                            html += '<td>' + obscuredWalletAddress + '</td>';
+                            html += '</tr>';
+
+                            $('#votes_table_tbody').append(html);
                         }
                     }
 
@@ -412,9 +420,11 @@
         <div class="container">
             <h1 class="mt-5">LionGov</h1>
 
-            <button class="btn btn-primary" id="btn-connect-wallet">
-                Connect wallet
-            </button>
+            <p>
+                <button class="btn btn-primary" id="btn-connect-wallet">
+                    Connect wallet
+                </button>
+            </p>
 
             <p class="lead">
                 This is your last chance. After this, there is no turning back. You take the blue pill—the story ends,
@@ -443,19 +453,19 @@
                 <button type="button" id="voteButton" class="btn btn-primary">Vote</button>
             </p>
 
-            <br/>
+            <br />
 
             <h4>Recent votes</h4>
             <table class="table table-sm">
                 <thead>
-                  <tr>
-                    <th scope="col">Time</th>
-                    <th scope="col">Wallet</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Wallet</th>
+                    </tr>
                 </thead>
                 <tbody id="votes_table_tbody">
                 </tbody>
-              </table>
+            </table>
         </div>
     </main>
 
