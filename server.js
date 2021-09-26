@@ -15,7 +15,7 @@ AWS.config.update({
 var dynamoDB = new AWS.DynamoDB();
 
 
-app.use(express.static('public'))
+app.use(express.static('dist'))
 
 // body-parser is deprecated, use below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));

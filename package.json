@@ -2,16 +2,27 @@
   "name": "liongov",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "dependencies": {
+    "assert": "^2.0.0",
     "aws-sdk": "^2.995.0",
+    "buffer": "^6.0.3",
+    "ethereumjs-util": "^7.1.0",
     "ethers": "^5.4.7",
     "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "stream": "0.0.2",
+    "use-wallet": "^0.10.0",
     "uuid": "^8.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack": "^5.54.0",
+    "webpack-cli": "^4.8.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
