@@ -43,34 +43,43 @@ module.exports = class Blockchain {
 
     user_address = user_address.toLowerCase() //must be lowercase
 
-    transactions.forEach(function (item, index, array) {
-      let amount = parseInt(item.value) / 10 ** 18; //18 decimals
+    console.log('user_address! ' + user_address);
+    console.log('chain! ' + chain);
+    console.log('timestamp! ' + timestamp);
+    console.log('transactions!');
+    console.log(transactions);
 
-      if (item.from_address == user_address) {
-        MM_calc -= amount;
-        MM_balance -= amount;
-        let blck_tmstamp = Date.parse(item.block_timestamp);
-        last_sell = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
-      }
-      if (item.to_address == user_address) {
-        MM_balance += amount;
-        MM_calc += amount;
-
-        if (MM_calc > 0) {
+    if (transactions && transactions.length > 0) {
+      transactions.forEach(function (item, index, array) {
+        let amount = parseInt(item.value) / 10 ** 18; //18 decimals
+  
+        if (item.from_address == user_address) {
+          MM_calc -= amount;
+          MM_balance -= amount;
           let blck_tmstamp = Date.parse(item.block_timestamp);
-          let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
-          //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
-          rows.push({
-            timestamp: item.block_timestamp,
-            token_amount: MM_calc,
-            days: (last_sell ? last_sell : datediff),
-            points: (last_sell ? last_sell : datediff) * MM_calc
-          });
-          MM_points += (last_sell ? last_sell : datediff) * MM_calc;
-          MM_calc = 0; //reset points
+          last_sell = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
         }
-      }
-    });
+        if (item.to_address == user_address) {
+          MM_balance += amount;
+          MM_calc += amount;
+  
+          if (MM_calc > 0) {
+            let blck_tmstamp = Date.parse(item.block_timestamp);
+            let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
+            //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
+            rows.push({
+              timestamp: item.block_timestamp,
+              token_amount: MM_calc,
+              days: (last_sell ? last_sell : datediff),
+              points: (last_sell ? last_sell : datediff) * MM_calc
+            });
+            MM_points += (last_sell ? last_sell : datediff) * MM_calc;
+            MM_calc = 0; //reset points
+          }
+        }
+      });
+    }
+
 
     return {
       points_detail: rows,

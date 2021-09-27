@@ -30,6 +30,9 @@ Moralis.serverURL = process.env.MORALIS_SERVER_URL;
   
   })();
 
+  Blkchain = new blkchain(null, Moralis);
+
+
 app.use(express.static('public'))
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
@@ -57,7 +60,7 @@ app.get('/getvotingpoints', (req, res) => {
 
         if (walletAddress) {
             console.log('walletAddress to get voting points of! ' + walletAddress);
-            Blkchain.getVoteWeight(walletAddress, 1632780532881).then(voteWeight => {
+            Blkchain.getVoteWeight(walletAddress, 1532780532881).then(voteWeight => {
                 console.log('voteWeight! ' + voteWeight);
 
                 res.end(JSON.stringify(voteWeight));
