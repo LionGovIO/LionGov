@@ -5,6 +5,13 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 
+var Web3 = require('web3');
+var web3 = new Web3('https://polygon-rpc.com/');
+const c = require('./public/blockchain/constants');
+const blkchain = require('./public/blockchain/blockchain');
+const Moralis = require('moralis/node');
+web3.eth.defaultChain = 'matic';
+
 const AWS = require("aws-sdk");
 AWS.config.update({
     region: 'us-east-1'
@@ -12,14 +19,44 @@ AWS.config.update({
 
 var dynamoDB = new AWS.DynamoDB();
 
+Moralis.initialize(process.env.MORALIS_APP_ID);
+
+Moralis.serverURL = process.env.MORALIS_SERVER_URL;
+
 app.use(express.static('public'))
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()) // To parse the incoming requests with JSON payloads
 
+var redisClient = null;
+var Blkchain = new blkchain(redisClient, Moralis);
+
 app.get('/', (req, res) => {
     res.send('Hello World!')
+});
+
+// TODO: add filtering/validation on all the APIS. In particular, want to prevent database injection attacks
+// TOOD: add API throttling (e.g. by IP address), there are various libraries for that
+// TODO: add DDOS protection (e.g. AWS provides some services for this). We can do this after we add a load balancer.
+
+app.get('/getvotingpoints', (req, res) => {
+    console.log('getvotingpoints!');
+    console.log(req.params);
+    console.log(req.query);
+
+    if (req.query) {
+        var walletAddress = req.query.walletAddress;
+
+        if (walletAddress) {
+            console.log('walletAddress to get voting points of! ' + walletAddress);
+            Blkchain.getVoteWeight(walletAddress, 100000, false).then(voteWeight => {
+                console.log('voteWeight! ' + voteWeight);
+
+                res.end(JSON.stringify(voteWeight));
+            });
+        }
+    }
 });
 
 // this function is privacy-first, does not reveal the full address in the query result
@@ -104,7 +141,7 @@ function privacyVoteQuery(data, callback) {
 
 // TODO: when you vote, refresh the table, your vote should show up as latest one
 
-app.get('/privacyvotequery', function(req, res) {
+app.get('/privacyvotequery', function (req, res) {
     // Retrieve the tag from our URL path
     console.log('privacyvotequery!');
     console.log(req.params);
@@ -117,7 +154,7 @@ app.get('/privacyvotequery', function(req, res) {
         };
 
         if (voteClass) {
-            privacyVoteQuery(queryInput, function(err, output) {
+            privacyVoteQuery(queryInput, function (err, output) {
                 console.log('output!');
                 console.log(output);
 
@@ -182,8 +219,8 @@ function submitVote(data, callback) {
         },
         ConditionExpression: conditionExpression,
         ExpressionAttributeValues: {
-            ":voteClass": {"S": voteClass},
-            ":walletAddress": {"S": walletAddress}
+            ":voteClass": { "S": voteClass },
+            ":walletAddress": { "S": walletAddress }
         }
         // prevent someone overriding the vote
         // prevent someone from submitting a vote if they already submitted a vote for a give voteClass

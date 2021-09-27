@@ -12,9 +12,11 @@
     "ethers": "^5.4.7",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
+    "moralis": "0.0.59",
     "stream": "0.0.2",
     "use-wallet": "^0.10.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "web3": "^1.5.3"
   },
   "devDependencies": {
     "webpack": "^5.54.0",
