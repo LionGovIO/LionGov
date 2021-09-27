@@ -13,18 +13,25 @@ module.exports = class Blockchain {
 
   }
 
-  async getAddrTokenTransactions (chain, token_address, token_first_block, user_address){ //token_address must be lower case
+  async getAddrTokenTransactions(chain, token_address, token_first_block, user_address) { //token_address must be lower case
 
-    const transactions = await this.Moralis.Web3API.account.getTokenTransfers({
-      chain: chain,
-      address: user_address,
-      from_block: token_first_block });
+    try {
 
-    return transactions.result.filter(item => (item.address == token_address.toLowerCase()));
+      const transactions = await this.Moralis.Web3API.account.getTokenTransfers({
+        chain: chain,
+        address: user_address,
+        from_block: token_first_block
+      });
 
+      return transactions.result.filter(item => (item.address == token_address.toLowerCase()));
+    } catch (e) {
+      console.error(e);
+
+      // TODO: propagate this error up to show that getting vote count failed
+    }
   }
 
-  getVoteWeightChain(transactions, user_address, chain, timestamp){
+  getVoteWeightChain(transactions, user_address, chain, timestamp) {
 
     let MM_in = 0;
     let MM_out = 0;
@@ -36,22 +43,22 @@ module.exports = class Blockchain {
 
     user_address = user_address.toLowerCase() //must be lowercase
 
-    transactions.forEach(function(item, index, array) {
+    transactions.forEach(function (item, index, array) {
       let amount = parseInt(item.value) / 10 ** 18; //18 decimals
 
-      if(item.from_address == user_address) {
+      if (item.from_address == user_address) {
         MM_calc -= amount;
         MM_balance -= amount;
         let blck_tmstamp = Date.parse(item.block_timestamp);
-        last_sell = Math.round((timestamp-blck_tmstamp)/(1000*60*60*24));
+        last_sell = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
       }
-      if(item.to_address == user_address) {
+      if (item.to_address == user_address) {
         MM_balance += amount;
         MM_calc += amount;
 
-        if (MM_calc > 0){
+        if (MM_calc > 0) {
           let blck_tmstamp = Date.parse(item.block_timestamp);
-          let datediff = Math.round((timestamp-blck_tmstamp)/(1000*60*60*24));
+          let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
           //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
           rows.push({
             timestamp: item.block_timestamp,
@@ -74,7 +81,7 @@ module.exports = class Blockchain {
 
   }
 
-  async getVoteWeight(user_address, timestamp, cache){
+  async getVoteWeight(user_address, timestamp) {
     let voteWeightdetail = [];
     let voteWeight = 0;
     let tokenBalance = 0;
@@ -95,14 +102,14 @@ module.exports = class Blockchain {
     */
 
     for (let i = 0; i < chain.length; i++) {
-      let txs = await this.getAddrTokenTransactions (chain[i], c.MM_contract[chain[i]].address, c.MM_contract[chain[i]].first_block, user_address);
-      voteWeightdetail.push(this.getVoteWeightChain (txs, user_address, chain[i], timestamp));
+      let txs = await this.getAddrTokenTransactions(chain[i], c.MM_contract[chain[i]].address, c.MM_contract[chain[i]].first_block, user_address);
+      voteWeightdetail.push(this.getVoteWeightChain(txs, user_address, chain[i], timestamp));
     }
     voteWeightdetail.forEach(item => {
       voteWeight += item.points_balance;
       tokenBalance += item.token_balance;
     });
-    result = {token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail};
+    result = { token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail };
 
     // Disable Redis for now
     /*

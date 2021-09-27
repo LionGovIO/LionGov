@@ -23,14 +23,21 @@ Moralis.initialize(process.env.MORALIS_APP_ID);
 
 Moralis.serverURL = process.env.MORALIS_SERVER_URL;
 
+
+(async () => {
+    var redisClient = null;
+    Blkchain = new blkchain(redisClient, Moralis);
+  
+  })();
+
 app.use(express.static('public'))
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()) // To parse the incoming requests with JSON payloads
 
-var redisClient = null;
-var Blkchain = new blkchain(redisClient, Moralis);
+// var redisClient = null;
+// var Blkchain = new blkchain(redisClient, Moralis);
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -50,7 +57,7 @@ app.get('/getvotingpoints', (req, res) => {
 
         if (walletAddress) {
             console.log('walletAddress to get voting points of! ' + walletAddress);
-            Blkchain.getVoteWeight(walletAddress, 100000, false).then(voteWeight => {
+            Blkchain.getVoteWeight(walletAddress, 1632780532881).then(voteWeight => {
                 console.log('voteWeight! ' + voteWeight);
 
                 res.end(JSON.stringify(voteWeight));
