@@ -289,6 +289,7 @@
                             var voteClass = item.voteClass;
                             var obscuredWalletAddress = item.obscuredWalletAddress;
                             var creationTime = item.creationTime; // in epoch milli
+                            var voteValue = item.voteValue;
 
                             // TODO: make creationDate prettier/more human readable
                             var creationDate = new Date(parseInt(creationTime));
@@ -297,6 +298,7 @@
                             var html = '<tr>';
                             html += '<td>' + creationDate + '</td>';
                             html += '<td>' + obscuredWalletAddress + '</td>';
+                            html += '<td>' + voteValue + '</td>';
                             html += '</tr>';
 
                             $('#votes_table_tbody').append(html);
@@ -427,7 +429,11 @@
                     Connect wallet
                 </button>
             </p>
-            <h1 class="mt-5">LionGov</h1>
+            <h1 class="mt-5">LionGov v1.0 (Alpha)</h1>
+
+            <br />
+
+            <h4>Proposal</h4>
 
             <p class="lead">
                 This is your last chance. After this, there is no turning back. You take the blue pill—the story ends,
@@ -435,7 +441,6 @@
                 Wonderland, and I show you how deep the rabbit hole goes. Remember: all I'm offering is the truth.
                 Nothing more.
             </p>
-            <p>
             <p>
                 Choose your option:
             </p>
@@ -456,9 +461,20 @@
                 <button type="button" id="voteButton" class="btn btn-primary">Vote</button>
             </p>
 
-            <br/>
+            <br />
 
-            <h4>Stats</h4>
+            <h4>Your Stats</h4>
+
+            <p>
+                <i>[To be implemented (vote calculation code done but need to integrate into website). Planning to show your vote if you made one, and your voting power/points (computed based on how much MM you have and how long you held it).]</i>
+            </p>
+            <p>
+                <i>[Also need to fix it so you can only vote one time (currently you are able to vote multiple times with same wallet).]</i>
+            </p>
+
+            <br />
+
+            <h4>Voting Stats</h4>
 
             <p>
 
@@ -466,7 +482,7 @@
 
             </p>
 
-            <br/>
+            <br />
 
             <h4>Recent Votes</h4>
             <p>
@@ -475,6 +491,7 @@
                     <tr>
                         <th scope="col">Time</th>
                         <th scope="col">Wallet</th>
+                        <th scope="col">Vote</th>
                     </tr>
                 </thead>
                 <tbody id="votes_table_tbody">

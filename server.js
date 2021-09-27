@@ -70,6 +70,7 @@ function privacyVoteQuery(data, callback) {
                     // do not return the VoteValue! ;)
                     var outputItem = {
                         voteClass: item.VoteClass.S,
+                        voteValue: item.VoteValue.S,
                         obscuredWalletAddress: obscuredWalletAddress,
                         creationTime: item.CreationTime.S
                     }
@@ -137,6 +138,9 @@ function submitVote(data, callback) {
     var signedVoteValue = data.signedVoteValue;
     var walletAddress = data.walletAddress;
 
+    console.log('voteClass: ' + voteClass);
+    console.log('walletAddress: ' + walletAddress);
+
     // TODO: add vote version number, so if we adapt how votes are created, we can use if/else 
     // on version for backward compatibility
 
@@ -146,6 +150,13 @@ function submitVote(data, callback) {
 
     // TODO: enforce vote only once right now. Reject votes from same wallet for the same vote class if vote
     // already exists in database.
+
+    // DynamoDB reference on condition expressions: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html
+
+    // TODO: need to verify wallet address is lowercase, otherwise reject it
+    // TODO: trim inputs of whitespaces, or reject inputs with whitespace padding
+    var conditionExpression = 'attribute_not_exists(VoteId) AND (NOT (VoteClass = :voteClass AND WalletAddress = :walletAddress))';
+    console.log('conditionExpression: ' + conditionExpression);
 
     var params = {
         TableName: "Votes",
@@ -169,7 +180,13 @@ function submitVote(data, callback) {
                 S: walletAddress
             }
         },
-        ConditionExpression: 'attribute_not_exists(VoteId)' // prevent someone from overriding the vote
+        ConditionExpression: conditionExpression,
+        ExpressionAttributeValues: {
+            ":voteClass": {"S": voteClass},
+            ":walletAddress": {"S": walletAddress}
+        }
+        // prevent someone overriding the vote
+        // prevent someone from submitting a vote if they already submitted a vote for a give voteClass
     };
 
     dynamoDB.putItem(params, function (err, data) {
