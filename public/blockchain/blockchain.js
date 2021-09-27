@@ -5,7 +5,9 @@ module.exports = class Blockchain {
   constructor(RedisClient, Moralis) {
 
     console.log("blockchain module loaded");
-    this.RedisClient = RedisClient;
+
+    // Disable Redis for now
+    // this.RedisClient = RedisClient;
 
     this.Moralis = Moralis;
 
@@ -80,6 +82,8 @@ module.exports = class Blockchain {
     let chain = Object.keys(c.MM_contract);
     user_address = user_address.toLowerCase()
 
+    // Disable Redis for now
+    /*
     if (cache){
       let redis_vote_key = "VoteWeight-" + user_address;
       let result = await this.RedisClient.get(redis_vote_key); //tries to fetch cache
@@ -88,6 +92,7 @@ module.exports = class Blockchain {
         return JSON.parse(result);
       }
     }
+    */
 
     for (let i = 0; i < chain.length; i++) {
       let txs = await this.getAddrTokenTransactions (chain[i], c.MM_contract[chain[i]].address, c.MM_contract[chain[i]].first_block, user_address);
@@ -99,11 +104,14 @@ module.exports = class Blockchain {
     });
     result = {token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail};
 
+    // Disable Redis for now
+    /*
     if(cache) { //Save cache
       this.RedisClient.set(redis_vote_key, JSON.stringify(result), {
         EX: 60*60*24 // 1 day in seconds
       });
     }
+    */
 
     return result;
   }
