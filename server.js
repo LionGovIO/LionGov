@@ -23,14 +23,15 @@ Moralis.initialize(process.env.MORALIS_APP_ID);
 
 Moralis.serverURL = process.env.MORALIS_SERVER_URL;
 
-
+/*
 (async () => {
     var redisClient = null;
     Blkchain = new blkchain(redisClient, Moralis);
-  
-  })();
 
-  Blkchain = new blkchain(null, Moralis);
+})();
+*/
+
+Blkchain = new blkchain(null, Moralis);
 
 
 app.use(express.static('public'))
@@ -59,6 +60,7 @@ app.get('/getvotingpoints', (req, res) => {
         var walletAddress = req.query.walletAddress;
 
         if (walletAddress) {
+            walletAddress = walletAddress.trim().toLowerCase();
             console.log('walletAddress to get voting points of! ' + walletAddress);
             Blkchain.getVoteWeight(walletAddress, Date.now()).then(voteWeight => {
                 console.log('voteWeight! ' + voteWeight);
@@ -119,6 +121,7 @@ function privacyVoteQuery(data, callback) {
                         voteClass: item.VoteClass.S,
                         voteValue: item.VoteValue.S,
                         obscuredWalletAddress: obscuredWalletAddress,
+                        voteWeight: item.VoteWeight.N,
                         creationTime: item.CreationTime.S
                     }
 
@@ -188,66 +191,92 @@ function submitVote(data, callback) {
     console.log('voteClass: ' + voteClass);
     console.log('walletAddress: ' + walletAddress);
 
-    // TODO: add vote version number, so if we adapt how votes are created, we can use if/else 
-    // on version for backward compatibility
 
-    // TODO: consider signing something besides just the vote to prevent injection attacks
-    // for example, if attacker steals signed vote, they could use that signed vote in another election
-    // should sign something like voteId + voteClass + voteValue
+    if (walletAddress) {
+        walletAddress = walletAddress.trim().toLowerCase();
+        console.log('walletAddress to submit vote of and get voting points of! ' + walletAddress);
 
-    // TODO: enforce vote only once right now. Reject votes from same wallet for the same vote class if vote
-    // already exists in database.
+        // TODO: using Date.now() for now, but should use start date of proposal, at least that's the plan right now
+        Blkchain.getVoteWeight(walletAddress, Date.now()).then(voteWeightInfo => {
+            console.log('voteWeightInfo! ' + voteWeightInfo);
+            if (voteWeightInfo) {
+                console.log(voteWeightInfo);
 
-    // DynamoDB reference on condition expressions: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html
-
-    // TODO: need to verify wallet address is lowercase, otherwise reject it
-    // TODO: trim inputs of whitespaces, or reject inputs with whitespace padding
-    var conditionExpression = 'attribute_not_exists(VoteId) AND (NOT (VoteClass = :voteClass AND WalletAddress = :walletAddress))';
-    console.log('conditionExpression: ' + conditionExpression);
-
-    var params = {
-        TableName: "Votes",
-        Item: {
-            "VoteId": {
-                S: voteId
-            },
-            "VoteClass": {
-                S: voteClass
-            },
-            "VoteValue": {
-                S: voteValue
-            },
-            "SignedVoteValue": {
-                S: signedVoteValue
-            },
-            "CreationTime": {
-                S: creationTime
-            },
-            "WalletAddress": {
-                S: walletAddress
-            }
-        },
-        ConditionExpression: conditionExpression,
-        ExpressionAttributeValues: {
-            ":voteClass": { "S": voteClass },
-            ":walletAddress": { "S": walletAddress }
-        }
-        // prevent someone overriding the vote
-        // prevent someone from submitting a vote if they already submitted a vote for a give voteClass
-    };
-
-    dynamoDB.putItem(params, function (err, data) {
-        if (err) {
-            console.log(err);
-            if (err.code == 'ConditionalCheckFailedException') {
-                callback('VoteId is already in use', null);
+                console.log('voteWeight! ' + voteWeightInfo.voteWeight);
             } else {
-                callback(err, null);
+                return; // TODO: propogate as error instead of failing silently
             }
-        } else {
-            callback(null, data);
-        }
-    });
+
+            var voteWeight = voteWeightInfo.voteWeight;
+
+            // TODO: add vote version number, so if we adapt how votes are created, we can use if/else 
+            // on version for backward compatibility
+
+            // TODO: consider signing something besides just the vote to prevent injection attacks
+            // for example, if attacker steals signed vote, they could use that signed vote in another election
+            // should sign something like voteId + voteClass + voteValue
+
+            // TODO: enforce vote only once right now. Reject votes from same wallet for the same vote class if vote
+            // already exists in database.
+
+            // DynamoDB reference on condition expressions: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html
+
+            // TODO: need to verify wallet address is lowercase, otherwise reject it
+            // TODO: trim inputs of whitespaces, or reject inputs with whitespace padding
+            var conditionExpression = 'attribute_not_exists(VoteId) AND (NOT (VoteClass = :voteClass AND WalletAddress = :walletAddress))';
+            console.log('conditionExpression: ' + conditionExpression);
+
+            var params = {
+                TableName: "Votes",
+                Item: {
+                    "VoteId": {
+                        S: voteId
+                    },
+                    "VoteClass": {
+                        S: voteClass
+                    },
+                    "VoteValue": {
+                        S: voteValue
+                    },
+                    "VoteWeight": {
+                        N: voteWeight.toString()
+                    },
+                    "SignedVoteValue": {
+                        S: signedVoteValue
+                    },
+                    "CreationTime": {
+                        S: creationTime
+                    },
+                    "WalletAddress": {
+                        S: walletAddress
+                    }
+                },
+                ConditionExpression: conditionExpression,
+                ExpressionAttributeValues: {
+                    ":voteClass": { "S": voteClass },
+                    ":walletAddress": { "S": walletAddress }
+                }
+                // prevent someone overriding the vote
+                // prevent someone from submitting a vote if they already submitted a vote for a give voteClass
+            };
+
+            console.log('params!!!');
+            console.log(params);
+
+            dynamoDB.putItem(params, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    if (err.code == 'ConditionalCheckFailedException') {
+                        callback('VoteId is already in use', null);
+                    } else {
+                        callback(err, null);
+                    }
+                } else {
+                    callback(null, data);
+                }
+            });
+        });
+    }
 }
 
 // POST method route

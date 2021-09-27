@@ -290,6 +290,7 @@
                             var obscuredWalletAddress = item.obscuredWalletAddress;
                             var creationTime = item.creationTime; // in epoch milli
                             var voteValue = item.voteValue;
+                            var voteWeight = item.voteWeight;
 
                             // TODO: make creationDate prettier/more human readable
                             var creationDate = new Date(parseInt(creationTime));
@@ -299,6 +300,7 @@
                             html += '<td>' + creationDate + '</td>';
                             html += '<td>' + obscuredWalletAddress + '</td>';
                             html += '<td>' + voteValue + '</td>';
+                            html += '<td>' + voteWeight + '</td>';
                             html += '</tr>';
 
                             $('#votes_table_tbody').append(html);
@@ -496,6 +498,7 @@
                         <th scope="col">Time</th>
                         <th scope="col">Wallet</th>
                         <th scope="col">Vote</th>
+                        <th scope="col">Weight (in points)</th>
                     </tr>
                 </thead>
                 <tbody id="votes_table_tbody">

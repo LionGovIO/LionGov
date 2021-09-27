@@ -15,6 +15,12 @@ module.exports = class Blockchain {
 
   async getAddrTokenTransactions(chain, token_address, token_first_block, user_address) { //token_address must be lower case
 
+    console.log('getAddrTokenTransactions!');
+    console.log('chain! ' + chain);
+    console.log('token_address! ' + token_address);
+    console.log('token_first_block! ' + token_first_block);
+    console.log('user_address! ' + user_address);
+
     try {
 
       const transactions = await this.Moralis.Web3API.account.getTokenTransfers({
@@ -27,6 +33,7 @@ module.exports = class Blockchain {
     } catch (e) {
       console.error(e);
 
+      // throw e;
       // TODO: propagate this error up to show that getting vote count failed
     }
   }
