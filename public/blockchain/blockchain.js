@@ -97,7 +97,7 @@ module.exports = class Blockchain {
       voteWeight += item.points_balance;
       tokenBalance += item.token_balance;
     });
-    result = {details: voteWeightdetail, voteWeight: voteWeight, token_balance: tokenBalance};
+    result = {token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail};
 
     if(cache) { //Save cache
       this.RedisClient.set(redis_vote_key, JSON.stringify(result), {
