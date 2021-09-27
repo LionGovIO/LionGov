@@ -41,7 +41,7 @@ module.exports = class Blockchain {
         MM_calc -= amount;
         MM_balance -= amount;
         let blck_tmstamp = Date.parse(item.block_timestamp);
-        last_sell = Math.round(timestamp-blck_tmstamp)/(1000*60*60*24);
+        last_sell = Math.round((timestamp-blck_tmstamp)/(1000*60*60*24));
       }
       if(item.to_address == user_address) {
         MM_balance += amount;
@@ -49,7 +49,7 @@ module.exports = class Blockchain {
 
         if (MM_calc > 0){
           let blck_tmstamp = Date.parse(item.block_timestamp);
-          let datediff = Math.round(timestamp-blck_tmstamp)/(1000*60*60*24);
+          let datediff = Math.round((timestamp-blck_tmstamp)/(1000*60*60*24));
           //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
           rows.push({
             timestamp: item.block_timestamp,
@@ -76,6 +76,7 @@ module.exports = class Blockchain {
     let voteWeightdetail = [];
     let voteWeight = 0;
     let tokenBalance = 0;
+    let result = false;
     let chain = Object.keys(c.MM_contract);
     user_address = user_address.toLowerCase()
 
@@ -96,7 +97,7 @@ module.exports = class Blockchain {
       voteWeight += item.points_balance;
       tokenBalance += item.token_balance;
     });
-    result = {details: voteWeightdetail, voteWeight: voteWeight, token_balance: tokenBalance};
+    result = {token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail};
 
     if(cache) { //Save cache
       this.RedisClient.set(redis_vote_key, JSON.stringify(result), {
