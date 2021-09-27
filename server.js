@@ -60,7 +60,7 @@ app.get('/getvotingpoints', (req, res) => {
 
         if (walletAddress) {
             console.log('walletAddress to get voting points of! ' + walletAddress);
-            Blkchain.getVoteWeight(walletAddress, 1532780532881).then(voteWeight => {
+            Blkchain.getVoteWeight(walletAddress, Date.now()).then(voteWeight => {
                 console.log('voteWeight! ' + voteWeight);
 
                 res.end(JSON.stringify(voteWeight));
