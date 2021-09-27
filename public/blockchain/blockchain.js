@@ -76,6 +76,7 @@ module.exports = class Blockchain {
     let voteWeightdetail = [];
     let voteWeight = 0;
     let tokenBalance = 0;
+    let result = false;
     let chain = Object.keys(c.MM_contract);
     user_address = user_address.toLowerCase()
 
