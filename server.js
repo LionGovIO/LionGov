@@ -363,6 +363,13 @@ app.post('/submitvote', function (req, res) {
       res.json({"error":"Invalid Address!"}); return;
     }
 
+    // verifyMessage (Message , signature) -> return in EIP55 address
+
+    if ( checksumAddress != ethers.utils.verifyMessage( postData.voteValue , postData.signedVoteValue )){
+      res.json({"error":"Invalid signature!"}); return;
+    }
+
+
     // TODO: reject invalid post params
     // prevent bad data from being injected in database
 
