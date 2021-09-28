@@ -358,9 +358,9 @@ app.post('/submitvote', function (req, res) {
 
     try {
       checksumAddress = ethers.utils.getAddress(postData.walletAddress); //EIP55
-      if(!checksumAddress) {res.json({"error":"No address informed"}); return;}
+      if(!checksumAddress) {res.json({"error":"No address informed!"}); return;}
     } catch (e) {
-      res.json({"error":"Invalid Address"}); return;
+      res.json({"error":"Invalid Address!"}); return;
     }
 
     // TODO: reject invalid post params
