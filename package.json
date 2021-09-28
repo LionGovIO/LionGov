@@ -8,6 +8,7 @@
     "assert": "^2.0.0",
     "aws-sdk": "^2.995.0",
     "buffer": "^6.0.3",
+    "compression": "^1.7.4",
     "ethereumjs-util": "^7.1.0",
     "ethers": "^5.4.7",
     "express": "^4.17.1",

@@ -90,6 +90,33 @@
                 alert('Crypto wallet not found')
             }
 
+
+            function getVoteWeight(walletAddress) {
+                console.log('getVoteWeight!!!!!!!');
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    console.log('state change!!!');
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log('query response!');
+                        console.log(xhttp.responseText);
+                        // Typical action to be performed when the document is ready:
+                        // document.getElementById("demo").innerHTML = xhttp.responseText;
+
+                        var result = JSON.parse(xhttp.responseText);
+
+                        console.log(result);
+
+                        var token_balance = result.token_balance;
+                        var voteWeight = result.voteWeight;
+
+                        $('#mm_balance_num').text(token_balance);
+                        $('#vote_weight_num').text(voteWeight);
+                    }
+                };
+                xhttp.open("GET", "/getvoteweight?walletAddress=" + walletAddress, true);
+                xhttp.send();
+            }
+
             function fetchAccountData(callback) {
                 // Get a Web3 instance for the wallet
                 web3 = new Web3(provider);
@@ -100,6 +127,8 @@
                     selectedAccount = accounts[0];
 
                     console.log('Connected wallet address: ' + accounts[0]);
+
+                    getVoteWeight(selectedAccount);
 
                     if (callback) {
                         callback(selectedAccount);
@@ -135,6 +164,25 @@
 
                 });
             }
+
+            // load your wallet stats if already connected
+            try {
+                if (web3.eth) {
+                    web3.eth.getAccounts().then(function (accounts) {
+                        console.log('Got accounts!!! ' + accounts);
+                        // MetaMask does not give you all accounts, only the selected account
+                        selectedAccount = accounts[0];
+
+                        console.log('Connected wallet address: ' + accounts[0]);
+
+                        getVoteWeight(selectedAccount);
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+
 
             $('#btn-connect-wallet').click(function () {
                 connectProvider(function () {
@@ -434,7 +482,8 @@
             <h1 class="mt-5">LionGov v1.0 (Alpha)</h1>
 
             <p>
-                LionGov is open source! Github repo: <a href="https://github.com/LionGovIO/LionGov">https://github.com/LionGovIO/LionGov</a>
+                LionGov is open source! Github repo: <a
+                    href="https://github.com/LionGovIO/LionGov">https://github.com/LionGovIO/LionGov</a>
             </p>
 
             <br />
@@ -472,10 +521,22 @@
             <h4>Your Stats</h4>
 
             <p>
-                <i>[To be implemented (vote calculation code done but need to integrate into website). Planning to show your vote if you made one, and your voting power/points (computed based on how much MM you have and how long you held it).]</i>
+            <div>
+                <i>MM balance:</i> <span id="mm_balance_num">N/A</span>
+            </div>
+            <div>
+                <i>Vote weight (in points):</i> <span id="vote_weight_num">N/A</span>
+            </div>
             </p>
+
             <p>
-                <i>[Also need to fix it so you can only vote one time (currently you are able to vote multiple times with same wallet).]</i>
+            <div>
+                <i>[TODO: show what vote you made]</i>
+            </div>
+            <div>
+                <i>[TODO: Need to fix it so you can only vote one time (currently you are able to vote multiple times
+                    with same wallet).]</i>
+            </div>
             </p>
 
             <br />

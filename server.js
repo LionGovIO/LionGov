@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
+const compression = require('compression');
 
 var Web3 = require('web3');
 var web3 = new Web3('https://polygon-rpc.com/');
@@ -36,6 +37,9 @@ Blkchain = new blkchain(null, Moralis);
 
 app.use(express.static('public'))
 
+// Compress all HTTP responses
+app.use(compression()); // TODO: add this compression to lionrun as well
+
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()) // To parse the incoming requests with JSON payloads
@@ -51,8 +55,8 @@ app.get('/', (req, res) => {
 // TOOD: add API throttling (e.g. by IP address), there are various libraries for that
 // TODO: add DDOS protection (e.g. AWS provides some services for this). We can do this after we add a load balancer.
 
-app.get('/getvotingpoints', (req, res) => {
-    console.log('getvotingpoints!');
+app.get('/getvoteweight', (req, res) => {
+    console.log('getvoteweight!');
     console.log(req.params);
     console.log(req.query);
 
