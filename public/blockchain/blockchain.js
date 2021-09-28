@@ -81,7 +81,7 @@ module.exports = class Blockchain {
               points: (last_sell ? last_sell : datediff) * MM_calc
             });
             MM_points += (last_sell ? last_sell : datediff) * MM_calc;
-            MM_calc = 0; //reset points
+            MM_calc = 0; //reset calculation counter
           }
         }
       });
