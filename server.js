@@ -6,6 +6,10 @@ const http = require('http');
 const server = http.createServer(app);
 const compression = require('compression');
 
+// Compress all HTTP responses
+// This compression should be the first use of app.use to guarantee compression is actually working
+app.use(compression()); // TODO: add this compression to lionrun as well
+
 var Web3 = require('web3');
 var web3 = new Web3('https://polygon-rpc.com/');
 const c = require('./public/blockchain/constants');
@@ -36,9 +40,6 @@ Blkchain = new blkchain(null, Moralis);
 
 
 app.use(express.static('public'))
-
-// Compress all HTTP responses
-app.use(compression()); // TODO: add this compression to lionrun as well
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
