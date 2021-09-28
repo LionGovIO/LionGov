@@ -349,7 +349,6 @@ function submitVote(data, callback) {
 
 // POST method route
 app.post('/submitvote', function (req, res) {
-    res.send('POST request to the homepage')
 
     var postData = req.body;
     //then work with your data
