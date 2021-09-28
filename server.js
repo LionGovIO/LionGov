@@ -75,12 +75,10 @@ const compression = require('compression');
 // This compression should be the first use of app.use to guarantee compression is actually working
 app.use(compression()); // TODO: add this compression to lionrun as well
 
-var Web3 = require('web3');
-var web3 = new Web3('https://polygon-rpc.com/');
+var ethers = require('ethers');
 const c = require('./public/blockchain/constants');
 const blkchain = require('./public/blockchain/blockchain');
 const Moralis = require('moralis/node');
-web3.eth.defaultChain = 'matic';
 
 const AWS = require("aws-sdk");
 AWS.config.update({
@@ -359,6 +357,12 @@ app.post('/submitvote', function (req, res) {
     console.log('postData!');
     console.log(postData);
 
+    try {
+      checksumAddress = ethers.utils.getAddress(postData.walletAddress); //EIP55
+      if(!checksumAddress) {res.json({"error":"No address informed"}); return;}
+    } catch (e) {
+      res.json({"error":"Invalid Address"}); return;
+    }
 
     // TODO: reject invalid post params
     // prevent bad data from being injected in database
