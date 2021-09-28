@@ -169,13 +169,16 @@
             try {
                 if (web3.eth) {
                     web3.eth.getAccounts().then(function (accounts) {
-                        console.log('Got accounts!!! ' + accounts);
-                        // MetaMask does not give you all accounts, only the selected account
-                        selectedAccount = accounts[0];
+                        if (ethereum.selectedAddress) {//still the best way to detect if metamask is connected.
+                          console.log('Got accounts!!! ' + accounts);
+                          // MetaMask does not give you all accounts, only the selected account
+                          selectedAccount = accounts[0];
 
-                        console.log('Connected wallet address: ' + accounts[0]);
+                          console.log('Connected wallet address: ' + accounts[0]);
+                          $('#btn-connect-wallet').text("Wallet connected");
 
-                        getVoteWeight(selectedAccount);
+                          getVoteWeight(selectedAccount);
+                        }
                     });
                 }
             } catch (e) {
@@ -187,6 +190,7 @@
             $('#btn-connect-wallet').click(function () {
                 connectProvider(function () {
                     console.log('Provider connected');
+                    $('#btn-connect-wallet').text("Wallet connected");
                 });
             });
 
