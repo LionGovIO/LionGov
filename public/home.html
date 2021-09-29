@@ -194,6 +194,119 @@
                 });
             });
 
+            function submitProposal() {
+                console.log('submitProposal 1!!!');
+
+                connectProvider((walletAddress) => {
+                    console.log('submitProposal 2!!!');
+                    // walletAddress = Web3.utils.toChecksumAddress(walletAddress);
+
+                    // we are normalizing the wallet address by lower casing it
+                    // argument is that this is fine for computer code / database, the checksum address is mainly for humans
+                    walletAddress = walletAddress.toLowerCase();
+
+                    console.log('walletAddress for submitProposal: ' + walletAddress);
+
+                    var signPromise = null;
+
+                    var message = walletAddress; // TODO: temp variable, remove/adjust, maybe a more "secure" message
+
+                    // TODO: add more signature verification on proposals, to make sure that wallet address actually submitted the proposal
+
+                    var bcaddr = walletAddress; // user blockchain address
+                    var password = '';
+                    web3.eth.personal.sign(message, bcaddr, password, function (err, signature) {
+                        console.log('submitProposal 3!!!');
+
+                        if (err) { console.log("Signature Denied"); }
+                        if (signature) {
+                            console.log('submitProposal 4!!!');
+
+                            console.log('signature! ' + signature);
+
+                            var signedWalletAddress = signature;
+
+                            // alert('signedVoteValue: ' + signedVoteValue);
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", '/submitproposal', true);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == XMLHttpRequest.DONE) {
+                                    console.log('submitProposal 5!!!');
+
+                                    console.log('response: ' + xhr.responseText);
+
+                                    if (xhr.status == 200) {
+                                        // TODO: go to a vote successful page, helps a bit to prevent people to vote multiple times
+                                        // TODO: when doing vote calculation, need to get rid of other votes from the same person, only pick 1 (probably the latest one)
+                                        alert('Proposal submitted successfully')
+                                    } else {
+                                        alert('Proposal submission failed, please try again')
+                                    }
+                                }
+                            }
+
+                            xhr.send(JSON.stringify({
+                                techlead: 'knows dae wae! 😎',
+                                signedWalletAddress: signedWalletAddress,
+                                walletAddress: walletAddress,
+                                title: 'title123',
+                                description: 'description123'
+                            }));
+                        }
+                    });
+
+                    /*
+                    signPromise = signer.signMessage(message);
+
+                    console.log('signPromise: ' + signPromise);
+
+                    signPromise.then((signedTransaction) => {
+
+                        console.log('signedTransaction: ' + signedTransaction);
+                        // "0xf86c808504a817c8008252089488a5c2d9919e46f883eb62f7b8dd9d0cc45bc2
+                        //    90880de0b6b3a76400008025a05e766fa4bbb395108dc250ec66c2f88355d240
+                        //    acdc47ab5dfaad46bcf63f2a34a05b2cb6290fd8ff801d07f6767df63c1c3da7
+                        //    a7b83b53cd6cea3d3075ef9597d5"
+
+                        var signedVoteValue = signedTransaction;
+
+                        // alert('signedVoteValue: ' + signedVoteValue);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", '/submitvote', true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == XMLHttpRequest.DONE) {
+                                console.log('response: ' + xhr.responseText);
+
+                                if (xhr.status == 200) {
+                                    // TODO: go to a vote successful page, helps a bit to prevent people to vote multiple times
+                                    // TODO: when doing vote calculation, need to get rid of other votes from the same person, only pick 1 (probably the latest one)
+                                    alert('Vote submitted successfully')
+                                } else {
+                                    alert('Vote submission failed, please try again')
+                                }
+                            }
+                        }
+
+                        xhr.send(JSON.stringify({
+                            voteClass: voteClass,
+                            voteValue: voteValue,
+                            signedVoteValue: signedVoteValue,
+                            walletAddress: walletAddress
+                        }));
+                    });
+                    */
+                });
+            }
+
+            // TODO: remove this call, just for testing
+            submitProposal();
+
             function submitVote(voteClass, voteValue) {
                 connectProvider((walletAddress) => {
                     // walletAddress = Web3.utils.toChecksumAddress(walletAddress);
