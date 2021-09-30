@@ -373,6 +373,16 @@ app.post('/submitproposal', function (req, res) {
         console.log(err);
         console.log(result);
 
+        if (err) {
+
+        } else {
+            var techlead = {
+                million: "token to the moon!!!!"
+            };
+
+            res.json(techlead);
+        }
+
         // TODO: if error, alert client in UI
     });
 

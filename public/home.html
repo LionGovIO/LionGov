@@ -170,14 +170,14 @@
                 if (web3.eth) {
                     web3.eth.getAccounts().then(function (accounts) {
                         if (ethereum.selectedAddress) {//still the best way to detect if metamask is connected.
-                          console.log('Got accounts!!! ' + accounts);
-                          // MetaMask does not give you all accounts, only the selected account
-                          selectedAccount = accounts[0];
+                            console.log('Got accounts!!! ' + accounts);
+                            // MetaMask does not give you all accounts, only the selected account
+                            selectedAccount = accounts[0];
 
-                          console.log('Connected wallet address: ' + accounts[0]);
-                          $('#btn-connect-wallet').text("Wallet connected");
+                            console.log('Connected wallet address: ' + accounts[0]);
+                            $('#btn-connect-wallet').text("Wallet connected");
 
-                          getVoteWeight(selectedAccount);
+                            getVoteWeight(selectedAccount);
                         }
                     });
                 }
@@ -194,7 +194,7 @@
                 });
             });
 
-            function submitProposal() {
+            function submitProposal(title, description) {
                 console.log('submitProposal 1!!!');
 
                 connectProvider((walletAddress) => {
@@ -252,7 +252,7 @@
                                 techlead: 'knows dae wae! 😎',
                                 signedWalletAddress: signedWalletAddress,
                                 walletAddress: walletAddress,
-                                title: 'title123',
+                                title: title,
                                 description: 'description123'
                             }));
                         }
@@ -304,8 +304,19 @@
                 });
             }
 
-            // TODO: remove this call, just for testing
-            submitProposal();
+            $("#proposal_form").submit(function (event) {
+                // alert("Handler for .submit() called.");
+
+                var title = $('#proposal_title_input').val();
+                var description = $('#proposal_description_input').val();
+
+                // alert(title);
+                // alert(description);
+
+                submitProposal(title, description);
+
+                event.preventDefault();
+            });
 
             function submitVote(voteClass, voteValue) {
                 connectProvider((walletAddress) => {
@@ -601,6 +612,31 @@
             <p>
                 LionGov is open source! Github repo: <a
                     href="https://github.com/LionGovIO/LionGov">https://github.com/LionGovIO/LionGov</a>
+            </p>
+
+            <br />
+
+            <p>
+            <h4>Submit Proposal</h4>
+
+            <p>
+                Note: This creates a proposal with "Yes" or "No" as the options. More proposal types will be supported
+                in the future.
+            </p>
+            <p>
+            <form id="proposal_form">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Title</label>
+                    <input type="text" class="form-control" id="proposal_title_input" aria-describedby="emailHelp"
+                        placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Description</label>
+                    <input type="text" class="form-control" id="proposal_description_input" placeholder="">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            </p>
             </p>
 
             <br />
