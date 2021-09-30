@@ -318,6 +318,62 @@
                 event.preventDefault();
             });
 
+            function proposalIdClick() {
+
+            }
+
+            window.proposalIdClick = proposalIdClick;
+
+            function techleadViewProposals() {
+                console.log('Yo TechLead!!!!!!!');
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    console.log('state change!!!');
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log('query response!');
+                        console.log(xhttp.responseText);
+                        // Typical action to be performed when the document is ready:
+                        // document.getElementById("demo").innerHTML = xhttp.responseText;
+
+                        var result = JSON.parse(xhttp.responseText);
+
+                        var items = result.items;
+                        if (items) {
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                console.log(item);
+
+                                var proposalId = item.proposalId;
+                                var proposalType = item.proposalType;
+                                var creationTime = item.creationTime;
+                                var title = item.title;
+                                var description = item.description;
+
+                                // TODO: make creationDate prettier/more human readable
+                                var creationDate = new Date(parseInt(creationTime));
+                                console.log(creationDate);
+
+                                var html = '<tr>';
+                                html += '<td>' + creationTime + '</td>';
+                                html += '<td onclick="proposalIdClick()"><a href="#' + proposalId + '">' + proposalId + '</a></td>';
+                                html += '<td>' + title + '</td>';
+                                html += '<td>' + description + '</td>';
+                                html += '</tr>';
+
+                                $('#proposals_table_tbody').append(html);
+                            }
+                        }
+
+                        //var totalVoteCount = result.count;
+                        //$('#total_vote_count_num').text(totalVoteCount);
+                    }
+                };
+                xhttp.open("GET", "/privacyproposalquery", true);
+                xhttp.send();
+            }
+
+            techleadViewProposals();
+
             function submitVote(voteClass, voteValue) {
                 connectProvider((walletAddress) => {
                     // walletAddress = Web3.utils.toChecksumAddress(walletAddress);
@@ -640,6 +696,31 @@
             </p>
 
             <br />
+
+            <p>
+            <h4>View Proposals</h4>
+            <p>
+                Note: This list may be truncated, need to support viewing of all proposal. Also, ideally should make the
+                proposal ID more human friendly.
+            </p>
+
+            <p>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Proposal ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="proposals_table_tbody">
+                </tbody>
+            </table>
+            </p>
+            </p>
+
+            <br/>
 
             <h4>Proposal</h4>
 
