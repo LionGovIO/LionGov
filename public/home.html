@@ -521,7 +521,12 @@
                 if (radioValue) {
                     // alert("Your are a - " + radioValue);
 
-                    var voteClass = globalSelectedProposal.proposalId;
+                    var voteClass = null;
+                    if (globalSelectedProposal) {
+                        voteClass = globalSelectedProposal.proposalId;
+                    } else {
+                        voteClass = 'matrix';
+                    }
 
                     submitVote(voteClass, radioValue);
                 }
