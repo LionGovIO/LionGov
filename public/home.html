@@ -253,7 +253,7 @@
                                 signedWalletAddress: signedWalletAddress,
                                 walletAddress: walletAddress,
                                 title: title,
-                                description: 'description123'
+                                description: description
                             }));
                         }
                     });
@@ -318,8 +318,31 @@
                 event.preventDefault();
             });
 
-            function proposalIdClick() {
+            var globalProposals = {};
 
+            var globalSelectedProposal = null;
+
+            function proposalIdClick(proposalId) {
+                // alert(proposalId);
+
+                // TECHLEAD!!!!!!!!!!!
+
+                var item = globalProposals[proposalId];
+
+                globalSelectedProposal = item;
+
+                var proposalId = item.proposalId;
+                var proposalType = item.proposalType;
+                var creationTime = item.creationTime;
+                var title = item.title;
+                var description = item.description;
+
+                $('#single_proposal_title').text(title);
+                $('#single_proposal_description').html('');
+                $('#single_proposal_description').text(description);
+
+                var voteClass = proposalId;
+                techleadVotesTablleeeeee(voteClass);
             }
 
             window.proposalIdClick = proposalIdClick;
@@ -349,13 +372,15 @@
                                 var title = item.title;
                                 var description = item.description;
 
+                                globalProposals[proposalId] = item;
+
                                 // TODO: make creationDate prettier/more human readable
                                 var creationDate = new Date(parseInt(creationTime));
                                 console.log(creationDate);
 
                                 var html = '<tr>';
                                 html += '<td>' + creationTime + '</td>';
-                                html += '<td onclick="proposalIdClick()"><a href="#' + proposalId + '">' + proposalId + '</a></td>';
+                                html += '<td onclick="proposalIdClick(\'' + proposalId + '\');"><a href="#' + proposalId + '">' + proposalId + '</a></td>';
                                 html += '<td>' + title + '</td>';
                                 html += '<td>' + description + '</td>';
                                 html += '</tr>';
@@ -496,56 +521,65 @@
                 if (radioValue) {
                     // alert("Your are a - " + radioValue);
 
-                    submitVote('matrix', radioValue);
+                    var voteClass = globalSelectedProposal.proposalId;
+
+                    submitVote(voteClass, radioValue);
                 }
             });
 
-            console.log('Yo!!!!!!!');
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                console.log('state change!!!');
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log('query response!');
-                    console.log(xhttp.responseText);
-                    // Typical action to be performed when the document is ready:
-                    // document.getElementById("demo").innerHTML = xhttp.responseText;
+            function techleadVotesTablleeeeee(currentVoteClass) {
+                // clear recent votes table
+                $('#votes_table_tbody').html('');
 
-                    var result = JSON.parse(xhttp.responseText);
+                console.log('Yo!!!!!!!');
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    console.log('state change!!!');
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log('query response!');
+                        console.log(xhttp.responseText);
+                        // Typical action to be performed when the document is ready:
+                        // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-                    var items = result.items;
-                    if (items) {
-                        for (var i = 0; i < items.length; i++) {
-                            var item = items[i];
-                            console.log(item);
+                        var result = JSON.parse(xhttp.responseText);
 
-                            var voteClass = item.voteClass;
-                            var obscuredWalletAddress = item.obscuredWalletAddress;
-                            var creationTime = item.creationTime; // in epoch milli
-                            var voteValue = item.voteValue;
-                            var voteWeight = item.voteWeight;
+                        var items = result.items;
+                        if (items) {
+                            for (var i = 0; i < items.length; i++) {
+                                var item = items[i];
+                                console.log(item);
 
-                            // TODO: make creationDate prettier/more human readable
-                            var creationDate = new Date(parseInt(creationTime));
-                            console.log(creationDate);
+                                var voteClass = item.voteClass;
+                                var obscuredWalletAddress = item.obscuredWalletAddress;
+                                var creationTime = item.creationTime; // in epoch milli
+                                var voteValue = item.voteValue;
+                                var voteWeight = item.voteWeight;
 
-                            var html = '<tr>';
-                            html += '<td>' + creationDate + '</td>';
-                            html += '<td>' + obscuredWalletAddress + '</td>';
-                            html += '<td>' + voteValue + '</td>';
-                            html += '<td>' + voteWeight + '</td>';
-                            html += '</tr>';
+                                // TODO: make creationDate prettier/more human readable
+                                var creationDate = new Date(parseInt(creationTime));
+                                console.log(creationDate);
 
-                            $('#votes_table_tbody').append(html);
+                                var html = '<tr>';
+                                html += '<td>' + creationDate + '</td>';
+                                html += '<td>' + obscuredWalletAddress + '</td>';
+                                html += '<td>' + voteValue + '</td>';
+                                html += '<td>' + voteWeight + '</td>';
+                                html += '</tr>';
+
+                                $('#votes_table_tbody').append(html);
+                            }
                         }
-                    }
 
-                    var totalVoteCount = result.count;
-                    $('#total_vote_count_num').text(totalVoteCount);
-                }
-            };
-            var currentVoteClass = 'matrix';
-            xhttp.open("GET", "/privacyvotequery?voteClass=" + currentVoteClass, true);
-            xhttp.send();
+                        var totalVoteCount = result.count;
+                        $('#total_vote_count_num').text(totalVoteCount);
+                    }
+                };
+                // var currentVoteClass = 'matrix';
+                xhttp.open("GET", "/privacyvotequery?voteClass=" + currentVoteClass, true);
+                xhttp.send();
+            }
+
+            techleadVotesTablleeeeee('matrix');
         }
 
         // TODO: surface error messages if vote failed. Especially, this is in case there is high traffic and we get throttled
@@ -720,29 +754,39 @@
             </p>
             </p>
 
-            <br/>
+            <div style="margin-top: 40px; margin-bottom: 40px;">
+                <hr />
+            </div>
 
             <h4>Proposal</h4>
 
+            <p class="lead" style="margin-top: 20px;">
+                <b id="single_proposal_title">The Ultimate Question of the Multiverse</b>
+            </p>
+
             <p class="lead">
+            <div id="single_proposal_description">
                 This is your last chance. After this, there is no turning back. You take the blue pill—the story ends,
                 you wake up in your bed and believe whatever you want to believe. You take the red pill—you stay in
                 Wonderland, and I show you how deep the rabbit hole goes. Remember: all I'm offering is the truth.
                 Nothing more.
-            </p>
-            <p>
-                Choose your option:
+
+                <p>
+                    Choose your option, Yes for <span style="color: blue;">Blue pill</span>, No for <span
+                        style="color: red;">Red pill</span>:
+                </p>
+            </div>
             </p>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault1" value="blue">
+                <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault1" value="Yes">
                 <label class="form-check-label" for="flexRadioDefault1">
-                    <span style="color: blue;">Blue pill</span>
+                    <span>Yes</span>
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault2" value="red">
+                <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault2" value="No">
                 <label class="form-check-label" for="flexRadioDefault2">
-                    <span style="color: red;">Red pill</span>
+                    <span>No</span>
                 </label>
             </div>
             </p>
