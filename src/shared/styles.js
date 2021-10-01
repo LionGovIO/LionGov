@@ -19,3 +19,37 @@ export const BigButton = styled.button`
     color: var(--million);
   }
 `
+
+export const Input = styled.input`
+  border: none;
+  background-color: var(--light-gray);
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: block;
+  transition: .3s;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px var(--background);
+  }
+`
+
+export const Textarea = styled.textarea`
+  border: none;
+  background-color: var(--light-gray);
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: block;
+  transition: .3s box-shadow;
+  outline: none;
+  max-width: 90%;
+  min-width: 80%;
+  min-height: 100px;
+  resize: both;
+
+  &:focus {
+    box-shadow: 0 0 0 2px var(--background);
+  }
+`

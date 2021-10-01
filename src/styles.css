@@ -1,11 +1,13 @@
 :root {
-  --background: #0A0A0A;
+  --background: #221333;
+  --dark: #1D1E21;
   --million: #eca900;
   --secondary: #E8E7EE;
   --primary: #3C6E71;
+  --light-gray: #6c757d59;
 }
 
 body {
-  background-color: var(--background);
+  background-color: var(--dark);
   color: white;
 }

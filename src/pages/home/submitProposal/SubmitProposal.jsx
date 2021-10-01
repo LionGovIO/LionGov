@@ -1,4 +1,5 @@
 import React from 'react'
+import {Input, Textarea} from '../../../shared/styles'
 import { SubmitProposalContainer, Heading } from './SubmitProposal.styles'
 
 export function SubmitProposal() {
@@ -14,10 +15,9 @@ export function SubmitProposal() {
       <form id="proposal_form">
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Title</label>
-          <input
+          <Input
             style={{ maxWidth: "300px" }}
             type="text"
-            className="form-control"
             id="proposal_title_input"
             aria-describedby="emailHelp"
             placeholder=""
@@ -25,9 +25,8 @@ export function SubmitProposal() {
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputPassword1">Description</label>
-          <input
+          <Textarea
             type="text"
-            className="form-control"
             id="proposal_description_input"
             placeholder=""
           />
