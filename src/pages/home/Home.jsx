@@ -1,5 +1,8 @@
-import { React } from 'react'
+import React, { useEffect } from 'react'
+import { Header } from '../../components/header/Header'
+import { HomeContainer } from './Home.styles'
 import { init } from './init'
+import { SubmitProposal } from './submitProposal/SubmitProposal'
 
 export function Home() {
   useEffect(() => {
@@ -7,59 +10,9 @@ export function Home() {
   })
 
   return (
-    <div className="container">
-      <div style={{ marginTop: '20px' }}>
-        <a href="https://www.liongov.io/">🏠 LionGov.io Home Page</a>
-      </div>
-      <div>
-        <button className="btn btn-outline-primary" id="btn-connect-wallet">
-          Connect wallet
-        </button>
-      </div>
-      <h1 className="mt-5">LionGov v1.2 (Alpha)</h1>
-
-      <div>
-        LionGov is open source! Github repo:{' '}
-        <a href="https://github.com/LionGovIO/LionGov">
-          https://github.com/LionGovIO/LionGov
-        </a>
-      </div>
-
-      <br />
-
-      <div>
-        <h4>Submit Proposal</h4>
-
-        <div>
-          Note: This creates a proposal with "Yes" or "No" as the options. More
-          proposal types will be supported in the future.
-        </div>
-      </div>
-      <form id="proposal_form">
-        <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Title</label>
-          <input
-            type="text"
-            className="form-control"
-            id="proposal_title_input"
-            aria-describedby="emailHelp"
-            placeholder=""
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Description</label>
-          <input
-            type="text"
-            className="form-control"
-            id="proposal_description_input"
-            placeholder=""
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
-      <br />
+    <HomeContainer>
+      <Header />
+      <SubmitProposal />
 
       <div>
         <h4>View Proposals</h4>
@@ -171,7 +124,7 @@ export function Home() {
 
       <h4>Recent Votes</h4>
       <div>
-        <table className="table table-sm">
+        <table style={{ color: 'white' }} className="table table-sm">
           <thead>
             <tr>
               <th scope="col">Time</th>
@@ -183,6 +136,6 @@ export function Home() {
           <tbody id="votes_table_tbody"></tbody>
         </table>
       </div>
-    </div>
+    </HomeContainer>
   )
 }

@@ -103,6 +103,7 @@ Blkchain = new blkchain(null, Moralis);
 
 
 app.use(express.static('public'))
+app.use(express.static('dist'))
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
