@@ -7,7 +7,7 @@ v1.1 - Integrated @imsys' code to do vote weight calculation; store vote weight 
 v1.0 - Web app that signs votes and stores in database; thanks @imsys for authentication and vote calculation code! need to integrate the vote calculation part still
 
 
-## Setting the database DynamoDB
+## Setting the DynamoDB database
 
 - To use it, create an account in AWS, you can use it the Free Tier while developing.
 
