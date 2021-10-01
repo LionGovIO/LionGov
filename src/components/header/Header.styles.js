@@ -47,7 +47,7 @@ export const SocialIcon = styled.a`
 
   &:hover {
     svg {
-      color: var(--primary);
+      color: var(--million);
     }
   }
 `

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Header } from '../../components/header/Header'
 import { HomeContainer } from './Home.styles'
 import { init } from './init'
+import {SubmitProposal} from './submitProposal/SubmitProposal'
 
 export function Home() {
   useEffect(() => {
@@ -12,48 +13,8 @@ export function Home() {
     <>
       <Header />
       <HomeContainer>
-        <div>
-          LionGov is open source! Github repo:{' '}
-          <a href="https://github.com/LionGovIO/LionGov">
-            https://github.com/LionGovIO/LionGov
-          </a>
-        </div>
 
-        <br />
-
-        <div>
-          <h4>Submit Proposal</h4>
-
-          <div>
-            Note: This creates a proposal with "Yes" or "No" as the options.
-            More proposal types will be supported in the future.
-          </div>
-        </div>
-        <form id="proposal_form">
-          <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Title</label>
-            <input
-              type="text"
-              className="form-control"
-              id="proposal_title_input"
-              aria-describedby="emailHelp"
-              placeholder=""
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Description</label>
-            <input
-              type="text"
-              className="form-control"
-              id="proposal_description_input"
-              placeholder=""
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
-        <br />
+        <SubmitProposal />
 
         <div>
           <h4>View Proposals</h4>
@@ -166,7 +127,7 @@ export function Home() {
 
         <h4>Recent Votes</h4>
         <div>
-          <table className="table table-sm">
+          <table style={{ color: "white" }} className="table table-sm">
             <thead>
               <tr>
                 <th scope="col">Time</th>

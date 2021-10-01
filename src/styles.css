@@ -1,6 +1,8 @@
 :root {
   --background: #0A0A0A;
-  --primary: #eca900;
+  --million: #eca900;
+  --secondary: #E8E7EE;
+  --primary: #3C6E71;
 }
 
 body {

@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 
 export const BigButton = styled.button`
-  background-color: var(--primary);
+  background-color: var(--million);
   color: var(--background);
   outline: none;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--million);
   border-radius: 4px;
   font-size: 18px;
   font-weight: bold;
@@ -16,6 +16,6 @@ export const BigButton = styled.button`
 
   &:hover {
     background-color: var(--background);
-    color: var(--primary);
+    color: var(--million);
   }
 `
