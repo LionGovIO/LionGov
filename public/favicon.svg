@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: CorelDRAW -->
+
+<svg:svg
+   height="156"
+   id="svg2"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   sodipodi:docname="Government_icon-4.svg"
+   sodipodi:version="0.32"
+   space="preserve"
+   style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+   viewBox="0 0 9.5444396 9.5444309"
+   width="156"
+   version="1.1"
+   inkscape:export-filename="/home/arthur/Pictures/LionGov-prop1.png"
+   inkscape:export-xdpi="300.13"
+   inkscape:export-ydpi="300.13"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <script />
+  <svg:metadata
+     id="metadata2">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>government</rdf:li>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>symbol</rdf:li>
+            <rdf:li>law</rdf:li>
+            <rdf:li>parliament</rdf:li>
+            <rdf:li>state</rdf:li>
+            <rdf:li>capitol</rdf:li>
+            <rdf:li>president</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org/">
+            <dc:title>Open Clip Art Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>mo</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>mo</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date>18 09 2005</dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </svg:metadata>
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     id="base"
+     inkscape:current-layer="svg2"
+     inkscape:cx="85.278922"
+     inkscape:cy="126.86618"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="2105"
+     inkscape:window-width="3782"
+     inkscape:window-x="58"
+     inkscape:window-y="31"
+     inkscape:zoom="4.9895096"
+     pagecolor="#ffffff"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:window-maximized="1"
+     units="px"
+     width="308px"
+     scale-x="0.23124" />
+  <svg:defs
+     id="defs4">
+    <svg:linearGradient
+       inkscape:collect="always"
+       id="linearGradient14346">
+      <svg:stop
+         style="stop-color:#7b6600;stop-opacity:1"
+         offset="0"
+         id="stop14342" />
+      <svg:stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop14344" />
+    </svg:linearGradient>
+    <svg:linearGradient
+       inkscape:collect="always"
+       id="linearGradient13938">
+      <svg:stop
+         style="stop-color:#7b6600;stop-opacity:1"
+         offset="0"
+         id="stop14152" />
+      <svg:stop
+         style="stop-color:#aa8800;stop-opacity:0"
+         offset="1"
+         id="stop14154" />
+    </svg:linearGradient>
+    <svg:style
+       id="style6"
+       type="text/css">
+   
+    .fil0 {fill:#EF7900}
+   
+  </svg:style>
+    <svg:linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient14346"
+       id="linearGradient12920"
+       x1="0.45725393"
+       y1="-0.11699599"
+       x2="-11.481797"
+       y2="-12.849771"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.3810884,-0.92605089)" />
+    <svg:linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13938"
+       id="linearGradient13940"
+       x1="-8.1652222"
+       y1="-3.8472281"
+       x2="1.4068505"
+       y2="-3.8472281"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.3810884,-0.92605089)" />
+  </svg:defs>
+  <svg:ellipse
+     style="opacity:1;mix-blend-mode:normal;fill:url(#linearGradient12920);fill-opacity:1;stroke:url(#linearGradient13940);stroke-width:0.10174565;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+     id="path847"
+     cx="-4.7602739"
+     cy="-4.7732787"
+     rx="4.6890259"
+     ry="4.6970024"
+     transform="scale(-1)" />
+  <svg:g
+     id="Layer_x0020_1"
+     style="fill:#ffffff;stroke:#716b0b;stroke-opacity:0.68562514;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(1.3810884,0.92605089)">
+    <svg:path
+       class="fil0"
+       d="m 1.16462,2.25428 h 0.551014 l 0.084702,2.96538 -0.709851,2.31e-5 0.074135,-2.96541 z M 0.645308,5.32626 h 5.46776 v 0.381541 h 0.327616 l -2.31e-5,0.381541 h 0.31772 V 6.470837 L -9.1237e-6,6.4708139 V 6.0893419 H 0.31771088 v -0.381541 h 0.327593 v -0.381541 z m 5.75292,-3.89995 -3.0191,-1.42632 -3.01915,1.42632 2.312e-5,0.233179 6.03821998,2.31e-5 v -0.233202 z m -5.4562,0.339872 h 4.87434 v 0.381472 h -4.87434 z m 4.0901,0.488095 h 0.551014 l 0.084725,2.96541 -0.709851,-2.31e-5 0.074111,-2.96538 z m -1.28917,0 0.551014,2.31e-5 0.084725,2.96536 -0.709874,2.31e-5 0.074135,-2.96541 z m -1.28917,0 0.550991,-2.31e-5 0.084771,2.96541 H 2.379653 l 0.074135,-2.96538 z"
+       id="path10"
+       style="fill:#ffffff;stroke:#716b0b;stroke-opacity:0.68562514;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none" />
+  </svg:g>
+</svg:svg>
