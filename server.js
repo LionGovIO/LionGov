@@ -562,10 +562,14 @@ function submitProposal(data, callback) {
             if (err) {
                 console.log(err);
                 if (err.code == 'ConditionalCheckFailedException') {
-                    callback('Primary key is already in use', null);
+                    err.msg = 'Primary key is already in use';
                 } else {
-                    callback(err, null);
+                    err.msg = err.message;
                 }
+
+                err.class = "DynamoDB";
+                callback({error:err}, null);
+
             } else {
                 callback(null, data);
             }
