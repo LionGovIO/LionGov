@@ -15,12 +15,6 @@ module.exports = class Blockchain {
 
   async getAddrTokenTransactions(chain, token_address, token_first_block, user_address) { //token_address must be lower case
 
-    console.log('getAddrTokenTransactions!');
-    console.log('chain! ' + chain);
-    console.log('token_address! ' + token_address);
-    console.log('token_first_block! ' + token_first_block);
-    console.log('user_address! ' + user_address);
-
     try {
 
       const transactions = await this.Moralis.Web3API.account.getTokenTransfers({
@@ -31,12 +25,11 @@ module.exports = class Blockchain {
 
       return transactions.result.filter(item => (item.address == token_address.toLowerCase()));
     } catch (e) {
+      console.error("Moralis API connection error!");
       console.error(e);
 
       return {"error": {msg: "Moralis API connection error.", class: "Moralis"}};
 
-      // throw e;
-      // TODO: propagate this error up to show that getting vote count failed
     }
   }
 
@@ -51,12 +44,6 @@ module.exports = class Blockchain {
     let rows = [];
 
     user_address = user_address.toLowerCase() //must be lowercase
-
-    console.log('user_address! ' + user_address);
-    console.log('chain! ' + chain);
-    console.log('timestamp! ' + timestamp);
-    console.log('transactions!');
-    console.log(transactions);
 
     if (transactions && transactions.length > 0) {
       transactions.forEach(function (item, index, array) {
