@@ -237,13 +237,6 @@ function privacyProposalQuery(data, callback) {
 // semi-private since it doesn't reveal who created the proposal
 // TODO: come up with better / more consisten names for all these APIs!!! ;)
 
-// Wasasa wasasaa wasasaaaaaapp!!!!!!!!!!!!!!!!!
-// This sentence says nothing!!! No code reviews right now yayayayayaaya!!! I am freeeeeeeeee!!!
-// COMMENT ON MY SPACING / NAMING JUST ONCE, I DARE UUUU!!!!!!
-// LOOK AT THE VARIABLES BELOWWWWWWWWWW
-var supercalifragilisticexpialidocious_123_CamelCase_MOOOOOONNNN = "123123123123123123"; // METAKOVAN IS AWESOMEEEEEEEE
-var metakovan = "Crypto is the new America." // 100%
-
 app.get('/privacyproposalquery', function (req, res) {
     // Retrieve the tag from our URL path
     console.log('privacyproposalquery!');
