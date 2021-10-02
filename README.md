@@ -22,3 +22,9 @@ export MORALIS_APP_ID=
 - To use it, create an account in AWS, you can use it the Free Tier while developing.
 
 - You can then set up the credentions locally by installing [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) and running `aws configure`. Or just by setting the credentials in [config files](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+
+### Building dependencies and starting the service
+
+- `npm install` - Build the dependencies
+- `yarn build` - Do the webpack build process
+- `yarn start` or `node server.js` - Start the service
