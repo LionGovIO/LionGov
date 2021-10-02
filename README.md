@@ -10,7 +10,7 @@ v1.0 - Web app that signs votes and stores in database; thanks @imsys for authen
 
 ### Moralis API key
 
-Grap a [Moralis API key](https://moralis.io/) and export them as environmental variable. Save it in your `~/.bashrc`
+Grap a [Moralis API key](https://moralis.io/) and export them as an environmental variable. Save it in your `~/.bashrc`
 
 ```
 export MORALIS_SERVER_URL=
