@@ -33,6 +33,8 @@ module.exports = class Blockchain {
     } catch (e) {
       console.error(e);
 
+      return {"error": {msg: "Moralis API connection error.", class: "Moralis"}};
+
       // throw e;
       // TODO: propagate this error up to show that getting vote count failed
     }
@@ -119,6 +121,7 @@ module.exports = class Blockchain {
 
     for (let i = 0; i < chain.length; i++) {
       let txs = await this.getAddrTokenTransactions(chain[i], c.MM_contract[chain[i]].address, c.MM_contract[chain[i]].first_block, user_address);
+      if (txs.error){return txs;}
       voteWeightdetail.push(this.getVoteWeightChain(txs, user_address, chain[i], timestamp));
     }
     voteWeightdetail.forEach(item => {

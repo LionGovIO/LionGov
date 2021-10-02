@@ -657,12 +657,13 @@ function submitVote(data, callback) {
         // TODO: using Date.now() for now, but should use start date of proposal, at least that's the plan right now
         Blkchain.getVoteWeight(walletAddress, Date.now()).then(voteWeightInfo => {
             console.log('voteWeightInfo! ' + voteWeightInfo);
-            if (voteWeightInfo) {
-                console.log(voteWeightInfo);
-
-                console.log('voteWeight! ' + voteWeightInfo.voteWeight);
-            } else {
-                return; // TODO: propogate as error instead of failing silently
+            if (!voteWeightInfo) {
+                callback({error:{msg:"Blockchain object empty! contact devs!"}}, null);
+                return;
+            }
+            if(voteWeightInfo.error){
+                callback(voteWeightInfo, null);
+                return;
             }
 
             var voteWeight = voteWeightInfo.voteWeight;
@@ -720,10 +721,14 @@ function submitVote(data, callback) {
                 if (err) {
                     console.log(err);
                     if (err.code == 'ConditionalCheckFailedException') {
-                        callback('Primary key is already in use', null);
+                        err.msg = 'Primary key is already in use';
                     } else {
-                        callback(err, null);
+                        err.msg = err.message;
                     }
+
+                    err.class = "DynamoDB";
+                    callback({error:err}, null);
+
                 } else {
                     callback(null, data);
                 }
@@ -766,7 +771,13 @@ app.post('/submitvote', function (req, res) {
         console.log(err);
         console.log(result);
 
-        // TODO: if error, alert client in UI
+        if (err){
+          res.json(err); return;
+        }
+        else {
+          res.json({success: true}); return;
+        }
+        // TODO: error handling in client
     });
 
 })
