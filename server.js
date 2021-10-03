@@ -71,7 +71,8 @@ const http = require('http');
 const server = http.createServer(app);
 const compression = require('compression');
 const requireDir = require("requiredir");
-const Controllers = requireDir('./controllers');
+const controllers = requireDir('./controllers');
+let Controllers = {};
 
 // Compress all HTTP responses
 // This compression should be the first use of app.use to guarantee compression is actually working
@@ -108,11 +109,13 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
+let controller_this = {Blkchain, dynamoDB}; //Obj that will be accessible in controller 'this'
 
 // Load routes and controllers
 
-Object.keys(Controllers).forEach((Contr_name) => {
-  Controller = Controllers[Contr_name];
+Object.keys(controllers).forEach((Contr_name) => {
+  if(Contr_name == "length" || Contr_name == "toArray"){return;}
+  Controller = Controllers[Contr_name] = new controllers[Contr_name](controller_this);
   let namel = Contr_name.toLowerCase();
   if(Controller.get) {
     app.get('/' + namel, Controller.get);
