@@ -47,9 +47,9 @@ module.exports = class getVoteStats extends ControllerClass {
       console.error(e);
     }
 
-    console.log('yooo');
-    console.log(allData);
-    console.log('yooo...');
+    this.debug('yooo');
+    this.debug(allData);
+    this.debug('yooo...');
 
     var output = {
       sum: {},
@@ -60,7 +60,7 @@ module.exports = class getVoteStats extends ControllerClass {
     if (items && items.length >= 1) {
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        console.log(item);
+        this.debug(item);
 
         var voteClass = item.VoteClass.S;
         var voteValue = item.VoteValue.S;
@@ -98,9 +98,9 @@ module.exports = class getVoteStats extends ControllerClass {
 
   get = async (req, res) => {
     // Retrieve the tag from our URL path
-    console.log('getvotestats!');
-    console.log(req.params);
-    console.log(req.query);
+    this.debug('getvotestats!');
+    this.debug(req.params);
+    this.debug(req.query);
 
     if (req.query) {
       var voteClass = req.query.voteClass;

@@ -69,10 +69,13 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
+const _debug = require('debug');
 const compression = require('compression');
 const requireDir = require("requiredir");
 const controllers = requireDir('./controllers');
 let Controllers = {};
+debug = _debug("liongov");
+debug('Debugging liongov');
 
 // Compress all HTTP responses
 // This compression should be the first use of app.use to guarantee compression is actually working
@@ -109,12 +112,13 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-let controller_this = {Blkchain, dynamoDB}; //Obj that will be accessible in controller 'this'
+let controller_this = {Blkchain, dynamoDB, _debug}; //Obj that will be accessible in controller 'this'
 
 // Load routes and controllers
 
 Object.keys(controllers).forEach((Contr_name) => {
   if(Contr_name == "length" || Contr_name == "toArray"){return;}
+  controller_this.debug = debug.extend(Contr_name);
   Controller = Controllers[Contr_name] = new controllers[Contr_name](controller_this);
   let namel = Contr_name.toLowerCase();
   if(Controller.get) {

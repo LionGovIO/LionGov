@@ -28,3 +28,7 @@ export MORALIS_APP_ID=
 - `npm install` - Build the dependencies
 - `yarn build` - Do the webpack build process
 - `yarn start` or `node server.js` - Start the service
+
+## Debugging
+
+Run the server with `DEBUG=liongov* node --inspect server.js` and go to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".

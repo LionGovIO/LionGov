@@ -6,7 +6,7 @@ module.exports = class privacyProposalQuery extends ControllerClass {
   // this function is privacy-first, does not reveal the full address in the query result
   _privacyProposalQuery = (data, callback) => {
 
-    console.log('###### privacyProposalQuery 1 !!!!!!!');
+    this.debug('###### privacyProposalQuery 1 !!!!!!!');
 
     var params = {
       // KeyConditionExpression: "ProposalId <> 'coffeezilla'", // TODO: make a better query / scan, just a temp hack
@@ -93,10 +93,10 @@ module.exports = class privacyProposalQuery extends ControllerClass {
 
   get = (req, res) => {
     // Retrieve the tag from our URL path
-    console.log('privacyproposalquery!');
-    console.log(req.params);
-    console.log(req.query);debugger;
-    console.log(this.testb);
+    this.debug('privacyproposalquery!');
+    this.debug(req.params);
+    this.debug(req.query);debugger;
+    this.debug(this.testb);
     debugger;
 
     this._privacyProposalQuery({}, function(err, output) {

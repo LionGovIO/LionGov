@@ -88,9 +88,9 @@ module.exports = class privacyVoteQuery extends ControllerClass {
 
   privacyVoteQuery = (req, res) => {
     // Retrieve the tag from our URL path
-    console.log('privacyvotequery!');
-    console.log(req.params);
-    console.log(req.query);
+    this.debug('privacyvotequery!');
+    this.debug(req.params);
+    this.debug(req.query);
 
     if (req.query) {
       var voteClass = req.query.voteClass;
