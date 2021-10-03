@@ -31,4 +31,4 @@ export MORALIS_APP_ID=
 
 ## Debugging
 
-Run the server with `DEBUG=liongov* node --inspect server.js` and go to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".
+Run the server with `DEBUG=liongov* node --inspect server.js` or `yarn debug` and go to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".

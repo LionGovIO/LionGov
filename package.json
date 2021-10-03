@@ -44,7 +44,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config config/webpack.prod.js",
     "dev": "webpack serve --config config/webpack.dev.js",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "inspect": "nodemon --inspect server.js",
+    "debug": "DEBUG=liongov* nodemon --inspect server.js"
   },
   "repository": {
     "type": "git",
