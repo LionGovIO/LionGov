@@ -27,8 +27,10 @@ export MORALIS_APP_ID=
 
 - `npm install` - Build the dependencies
 - `yarn build` - Do the webpack build process
-- `yarn start` or `node server.js` - Start the service
+- `yarn start` - Start the service
 
-## Debugging
+## Debugging / development mode
 
-Run the server with `DEBUG=liongov* node --inspect server.js` or `yarn debug` and go to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".
+Open two console instanses:
+- Run the server with `yarn debug`. You can debug the server side by going to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".
+- Run the front end with `yarn dev` and open the browser at http://localhost:8080/ you should be able to develop/debug using javascript source files. (unminified)
