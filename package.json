@@ -15,7 +15,7 @@
     "ethers": "^5.4.7",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
-    "moralis": "0.0.59",
+    "moralis": "0.0.68",
     "nodemon": "^2.0.13",
     "requiredir": "^1.0.7",
     "stream": "0.0.2",
