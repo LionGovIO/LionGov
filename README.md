@@ -25,7 +25,7 @@ export MORALIS_APP_ID=
 
 ### Building dependencies and starting the service
 
-- `npm install` - Build the dependencies
+- `yarn` - Build the dependencies
 - `yarn build` - Do the webpack build process
 - `yarn start` - Start the service
 
