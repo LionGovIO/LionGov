@@ -55,5 +55,6 @@
   "bugs": {
     "url": "https://github.com/LionGovIO/LionGov/issues"
   },
-  "homepage": "https://www.liongov.io/"
+  "homepage": "https://www.liongov.io/",
+  "packageManager": "yarn@3.0.2"
 }

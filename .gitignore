@@ -65,6 +65,14 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
+# Yarn berry cache
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Yarn Integrity file
 .yarn-integrity
 
