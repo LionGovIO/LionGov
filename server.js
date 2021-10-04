@@ -99,6 +99,14 @@ Moralis.serverURL = process.env.MORALIS_SERVER_URL;
 
 Blkchain = new blkchain(null, Moralis); // Global scope
 
+if(process.env.NODE_ENV == 'development'){
+  // Allows CROS to development, it's necessary to debug frontend with backend.
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+}
 
 app.use(express.static('public'))
 app.use(express.static('dist'))
