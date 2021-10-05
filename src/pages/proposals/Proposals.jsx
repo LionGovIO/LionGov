@@ -25,7 +25,7 @@ export function Proposals() {
     }
     xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
     xhttp.send()
-  })
+  }, [])
 
 
 
