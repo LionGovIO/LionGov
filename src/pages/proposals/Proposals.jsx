@@ -6,37 +6,29 @@ import { receipt } from '../../assets/svg/receipt'
 import { ProposalComp } from './ProposalComp'
 import { BASE_URL } from '../../shared/urls.js'
 
-
-function ListProposals() {
-  var xhttp = new XMLHttpRequest()
-  xhttp.onreadystatechange = () => {
-
-    if (this.readyState == 4 && this.status == 200) {
-      console.log(xhttp.responseText)
-      // Typical action to be performed when the document is ready:
-      // document.getElementById("demo").innerHTML = xhttp.responseText;
-
-      var result = JSON.parse(xhttp.responseText)
-
-      var items = result.items
-
-      setList(proposalitems)
-
-      list = items
-
-    }
-  }
-  xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
-  xhttp.send()
-
-}
-
 export function Proposals() {
   useEffect(() => {
-    ListProposals()
+    var xhttp = new XMLHttpRequest()
+    xhttp.onreadystatechange = () => {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(xhttp.responseText)
+        // Typical action to be performed when the document is ready:
+        // document.getElementById("demo").innerHTML = xhttp.responseText;
+
+        var result = JSON.parse(xhttp.responseText)
+
+        var items = result.items
+
+        setList(proposalitems)
+
+        list = items
+      }
+    }
+    xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
+    xhttp.send()
   })
 
-  const [list, setList] = React.useState();
+  const [list, setList] = React.useState()
 
   return (
     <div className="container-xl">
@@ -49,7 +41,7 @@ export function Proposals() {
         </div>
       </div>
 
-      {list.map(item => (
+      {list.map((item) => (
         <ProposalComp key={item.proposalId} proposal={item} />
       ))}
 
