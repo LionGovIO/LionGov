@@ -23,9 +23,10 @@ export function Sidebar() {
           >
             <img
               className="logo-icon me-2"
-              src="/liongov-right.png"
+              src="/favicon.svg"
               style={{ height: '58px', width: 'auto', padding: 'auto' }}
             ></img>
+            <span className="logo-text">LionGov</span>
           </a>
         </div>
 
