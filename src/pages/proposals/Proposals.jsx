@@ -3,13 +3,40 @@ import { Link } from 'react-router-dom'
 import { arrowRight } from '../../assets/svg/arrowRight'
 import { barChartLine } from '../../assets/svg/barChartLine'
 import { receipt } from '../../assets/svg/receipt'
+import { ProposalComp } from './ProposalComp'
+import { BASE_URL } from '../../shared/urls.js'
 
-//import { init } from './init'
+
+function ListProposals() {
+  var xhttp = new XMLHttpRequest()
+  xhttp.onreadystatechange = () => {
+
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(xhttp.responseText)
+      // Typical action to be performed when the document is ready:
+      // document.getElementById("demo").innerHTML = xhttp.responseText;
+
+      var result = JSON.parse(xhttp.responseText)
+
+      var items = result.items
+
+      setList(proposalitems)
+
+      list = items
+
+    }
+  }
+  xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
+  xhttp.send()
+
+}
 
 export function Proposals() {
-  /*  useEffect(() => {
-    init()
-  })*/
+  useEffect(() => {
+    ListProposals()
+  })
+
+  const [list, setList] = React.useState();
 
   return (
     <div className="container-xl">
@@ -21,55 +48,11 @@ export function Proposals() {
           </div>
         </div>
       </div>
-      <div className="app-card app-card-notification shadow-sm mb-4">
-        <div className="app-card-header px-4 py-3">
-          <div className="row g-3 align-items-center">
-            <div className="col-12 col-lg-auto text-center text-lg-start">
-              <div className="app-icon-holder">{receipt}</div>
-            </div>
-            {/*//col*/}
-            <div className="col-12 col-lg-auto text-center text-lg-start">
-              <div className="notification-type mb-2">
-                <span className="badge bg-info">Proposal</span>
-              </div>
-              <h4 className="notification-title mb-1">Do project x!</h4>
-              <ul className="notification-meta list-inline mb-0">
-                <li className="list-inline-item">2 hrs ago</li>
-                <li className="list-inline-item">|</li>
-                <li className="list-inline-item">0x689741g5io</li>
-              </ul>
-            </div>
-            {/*//col*/}
-          </div>
-          {/*//row*/}
-        </div>
-        {/*//app-card-header*/}
-        <div className="app-card-body p-4">
-          <div className="notification-content">
-            We have resource x and y, we could use them to do X.
-          </div>
-        </div>
-        {/*//app-card-body*/}
-        <div className="app-card-footer px-4 py-3">
-          <a className="action-link" href="#">
-            Vote!
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              className="bi bi-arrow-right ms-2"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-              />
-            </svg>
-          </a>
-        </div>
-        {/*//app-card-footer*/}
-      </div>
+
+      {list.map(item => (
+        <ProposalComp key={item.proposalId} proposal={item} />
+      ))}
+
       {/*//app-card*/}
       <div className="app-card app-card-notification shadow-sm mb-4">
         <div className="app-card-header px-4 py-3">
