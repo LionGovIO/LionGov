@@ -1,4 +1,4 @@
-import { BASE_URL } from '../../shared/urls'
+import { BASE_URL } from './shared/urls'
 
 export function init() {
   var web3 = null
@@ -111,7 +111,7 @@ export function init() {
 
       /*
                     const signer = provider.getSigner();
- 
+
                     signer.getAddress().then((walletAddress) => {
                         console.log('signer wallet address: ' + walletAddress);
                     });
@@ -566,4 +566,92 @@ export function init() {
   }
 
   techleadVotesTablleeeeee('matrix')
+
+  function getVoteStats(currentVoteClass) {
+      // clear recent votes table
+      // $('#votes_table_tbody').html('');
+
+      console.log('getVoteStats!')
+
+      var xhttp = new XMLHttpRequest()
+      xhttp.onreadystatechange = function () {
+          console.log('state change!!!')
+          if (this.readyState == 4 && this.status == 200) {
+              console.log('query response!')
+              console.log(xhttp.responseText)
+              // Typical action to be performed when the document is ready:
+              // document.getElementById("demo").innerHTML = xhttp.responseText;
+
+              var result = JSON.parse(xhttp.responseText)
+
+              console.log(result)
+
+              // TODO: for now, assume 'Yes' and 'No' are the vote values
+              var sum = result.sum
+              var count = result.count
+
+              var yes_weight = 0
+              var no_weight = 0
+
+              if (sum['Yes']) {
+                  yes_weight = sum['Yes']
+              }
+
+              if (sum['No']) {
+                  no_weight = sum['No']
+              }
+
+              var total_weight = yes_weight + no_weight
+
+
+              // Add pie chart
+
+              if (window.myChart instanceof Chart) {
+                  window.myChart.destroy()
+              }
+
+              var ctx = document.getElementById('myChart').getContext('2d')
+
+              window.myChart = new Chart(ctx, {
+                  type: 'pie',
+                  data: {
+                      labels: ['Yes', 'No'],
+                      datasets: [{
+                          label: '# of Votes',
+                          data: [yes_weight, no_weight],
+                          backgroundColor: [
+                              '#ff6484',
+                              '#36a2eb'
+                          ]
+                      }]
+                  },
+                  options: {
+                      plugins: {
+                          title: {
+                              display: true,
+                              text: 'Total Vote Weight'
+                          }
+                      }
+                  }
+                  // responsive: true,
+                  // maintainAspectRatio: false
+              })
+
+
+              var totalVoteCount = count
+              $('#total_vote_count_num').text(totalVoteCount)
+
+              $('#total_vote_weight_num').text(total_weight)
+          }
+      }
+      // var currentVoteClass = 'matrix'
+      xhttp.open(
+        "GET",
+        BASE_URL + "/getvotestats?voteClass=" + currentVoteClass,
+        true
+      )
+      xhttp.send()
+  }
+
+  getVoteStats('matrix')
 }

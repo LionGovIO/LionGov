@@ -6,6 +6,9 @@ import { Header } from './components/header/Header'
 import { Sidebar } from './components/sidebar/Sidebar'
 import "./styles.css"
 import "./template.css"
+import { init } from './init'
+
+init()
 
 export function App() {
 

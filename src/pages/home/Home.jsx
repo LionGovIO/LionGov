@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react'
 
 import { HomeContainer } from './Home.styles'
-import { init } from './init'
 import { SubmitProposal } from './submitProposal/SubmitProposal'
 
 export function Home() {
-  useEffect(() => {
-    init()
-  })
 
   return (
     <HomeContainer>
