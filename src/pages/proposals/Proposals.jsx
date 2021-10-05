@@ -9,7 +9,7 @@ import { BASE_URL } from '../../shared/urls.js'
 export function Proposals() {
   useEffect(() => {
     var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = () => {
+    xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         console.log(xhttp.responseText)
         // Typical action to be performed when the document is ready:
@@ -17,18 +17,19 @@ export function Proposals() {
 
         var result = JSON.parse(xhttp.responseText)
 
-        var items = result.items
+        var list = result.items
 
-        setList(proposalitems)
+        setList(list)
 
-        list = items
       }
     }
     xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
     xhttp.send()
   })
 
-  const [list, setList] = React.useState()
+
+
+  const [list, setList] = React.useState([])
 
   return (
     <div className="container-xl">
