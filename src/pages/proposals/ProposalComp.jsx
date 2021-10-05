@@ -15,7 +15,7 @@ export const ProposalComp = ({ proposal }) => (
           </div>
           <h4 className="notification-title mb-1">{proposal.title}</h4>
           <ul className="notification-meta list-inline mb-0">
-            <li className="list-inline-item">{proposal.creationTime}</li>
+            <li className="list-inline-item">{(new Date(parseInt(proposal.creationTime))).toLocaleString()}</li>
             <li className="list-inline-item">|</li>
             <li className="list-inline-item">0x689741g5io</li>
           </ul>
