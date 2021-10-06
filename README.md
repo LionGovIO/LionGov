@@ -30,6 +30,54 @@ export LIONGOV_CACHE_REDIS=redis://localhost
 
 - You can then set up the credentions locally by installing [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) and running `aws configure`. Or just by setting the credentials in [config files](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
 
+If you install the AWS CLI, you can quickly set up all the tables with the following commands:
+
+Votes Table:
+
+```bash
+aws dynamodb create-table --table-name Votes --attribute-definitions \
+        AttributeName=VoteClass,AttributeType=S \
+        AttributeName=WalletAddress,AttributeType=S \
+	AttributeName=CreationTime,AttributeType=S \
+    --key-schema \
+        AttributeName=VoteClass,KeyType=HASH \
+        AttributeName=WalletAddress,KeyType=RANGE \
+    --global-secondary-indexes \
+        IndexName=VoteClass-CreationTime-index,KeySchema=["\
+{AttributeName=VoteClass,KeyType=HASH}","\
+{AttributeName=CreationTime,KeyType=RANGE}"],\
+Projection="{ProjectionType=ALL}",ProvisionedThroughput="\
+{ReadCapacityUnits=1,WriteCapacityUnits=1}"\
+    --provisioned-throughput \
+        ReadCapacityUnits=1,WriteCapacityUnits=1
+```
+
+Proposals Table:
+```bash
+aws dynamodb create-table --table-name Proposals --attribute-definitions \
+        AttributeName=VoteClass,AttributeType=S \
+        AttributeName=ProposalId,AttributeType=S \
+    --key-schema \
+        AttributeName=VoteClass,KeyType=HASH \
+    --provisioned-throughput \
+        ReadCapacityUnits=1,WriteCapacityUnits=1
+```
+
+Cache Table: (Optional)
+```bash
+aws dynamodb create-table --table-name Cache --attribute-definitions \
+        AttributeName=Key,AttributeType=S \
+    --key-schema \
+        AttributeName=Key,KeyType=HASH \
+    --provisioned-throughput \
+        ReadCapacityUnits=1,WriteCapacityUnits=1
+```
+
+Set Cache TTL attribute.
+```bash
+aws dynamodb update-time-to-live --table-name Cache --time-to-live-specification "Enabled=true, AttributeName=ttl"
+```
+
 ### Building dependencies and starting the service
 
 - `yarn` - Build the dependencies
