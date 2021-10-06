@@ -74,17 +74,17 @@ export function Sidebar() {
               >
                 <ul className="submenu-list list-unstyled">
                   <li className="submenu-item">
-                    <a className="submenu-link" href="notifications.html">
+                    <a className="submenu-link" href="/">
                       All proposals
                     </a>
                   </li>
                   <li className="submenu-item">
-                    <a className="submenu-link" href="notifications.html">
+                    <a className="submenu-link" href="/">
                       My proposals
                     </a>
                   </li>
                   <li className="submenu-item">
-                    <a className="submenu-link" href="account.html">
+                    <a className="submenu-link" href="/SubmitProposal">
                       Submit proposal
                     </a>
                   </li>
