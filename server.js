@@ -82,8 +82,8 @@ debug('Debugging liongov');
 app.use(compression()); // TODO: add this compression to lionrun as well
 
 const ethers = require('ethers');
-const c = require('./public/blockchain/constants');
-const blkchain = require('./public/blockchain/blockchain');
+const c = require('./public/constants');
+const blkchain = require('./libs/blockchain');
 const Moralis = require('moralis/node');
 
 const AWS = require("aws-sdk");

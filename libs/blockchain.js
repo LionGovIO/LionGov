@@ -1,5 +1,5 @@
 
-const c = require('./constants');
+const c = require('../public/constants');
 
 module.exports = class Blockchain {
   constructor(RedisClient, Moralis) {
@@ -48,7 +48,7 @@ module.exports = class Blockchain {
     if (transactions && transactions.length > 0) {
       transactions.forEach(function (item, index, array) {
         let amount = parseInt(item.value) / 10 ** 18; //18 decimals
-  
+
         if (item.from_address == user_address) {
           MM_calc -= amount;
           MM_balance -= amount;
@@ -58,7 +58,7 @@ module.exports = class Blockchain {
         if (item.to_address == user_address) {
           MM_balance += amount;
           MM_calc += amount;
-  
+
           if (MM_calc > 0) {
             let blck_tmstamp = Date.parse(item.block_timestamp);
             let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
