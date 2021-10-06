@@ -14,7 +14,7 @@ module.exports = class getVoteWeight extends ControllerClass {
       if (walletAddress) {
         walletAddress = walletAddress.trim().toLowerCase();
         this.debug('walletAddress to get voting points of! ' + walletAddress);
-        Blkchain.getVoteWeight(walletAddress, Date.now()).then(voteWeight => {
+        Blkchain.getVoteWeight(walletAddress, Date.now(), true).then(voteWeight => {
           console.log('voteWeight! ' + voteWeight);
 
           res.end(JSON.stringify(voteWeight));

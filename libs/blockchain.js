@@ -1,13 +1,27 @@
 
 const c = require('../public/constants');
+let redis = false;
+
+if(process.env.LIONGOV_CACHE_REDIS){
+  redis = require('redis');
+}
 
 module.exports = class Blockchain {
-  constructor(RedisClient, Moralis) {
+  constructor(Moralis) {
 
     console.log("blockchain module loaded");
 
-    // Disable Redis for now
-    // this.RedisClient = RedisClient;
+    if(parseInt(process.env.LIONGOV_CACHE_TIME) > 0){
+      console.log("Caching enabled");
+    }
+
+    if (redis){
+      this.RedisClient = redis.createClient({url: process.env.LIONGOV_CACHE_REDIS});
+      this.RedisClient.on('error', (err) => console.log('Redis Client Error', err));
+      this.RedisClient.connect().then(function(){
+        console.log('Reddis Cache enabled and successfully connected');
+      });
+    }
 
     this.Moralis = Moralis;
 
@@ -86,45 +100,116 @@ module.exports = class Blockchain {
 
   }
 
-  async getVoteWeight(user_address, timestamp) {
+  async getVoteWeight(user_address, timestamp, cache = false) {
     let voteWeightdetail = [];
     let voteWeight = 0;
     let tokenBalance = 0;
     let result = false;
+    let cache_key = false;
     let chain = Object.keys(c.MM_contract);
     user_address = user_address.toLowerCase()
 
-    // Disable Redis for now
-    /*
-    if (cache){
-      let redis_vote_key = "VoteWeight-" + user_address;
-      let result = await this.RedisClient.get(redis_vote_key); //tries to fetch cache
+    /////////////////////////////////
+    // Retrieves cache if possible //
+    /////////////////////////////////
+    if (cache && parseInt(process.env.LIONGOV_CACHE_TIME) > 0){
+      cache_key = "VoteWeight-" + user_address;
 
-      if (result){
-        return JSON.parse(result);
+      if(redis){
+        let result = await this.RedisClient.get(cache_key); //tries to fetch cache
+
+        if (result){
+          return JSON.parse(result);
+        }
+
+      } else {
+
+        //DynamoDB
+        let params = {
+          AttributesToGet: [
+             'Value', 'ttl'
+           ],
+          TableName: 'Cache',
+          Key : {
+            'Key' : {
+              'S' : cache_key
+            }
+          },
+        };
+
+        let r = await dynamoDB.getItem(params, async function(err, data) {
+          if (err) {console.error(err);}
+        }).promise();;
+
+        if(Object.keys(r).length && r.Item){
+
+          debug('seconds left in cache: '+ (parseInt(r.Item.ttl.N) - Math.round(Date.now() / 1000)))
+
+          return JSON.parse(r.Item.Value.S);
+        }
       }
     }
-    */
 
-    for (let i = 0; i < chain.length; i++) {
-      let txs = await this.getAddrTokenTransactions(chain[i], c.MM_contract[chain[i]].address, c.MM_contract[chain[i]].first_block, user_address);
+
+    //Go through all transactions
+    for (const cha of chain) {
+      let txs = await this.getAddrTokenTransactions(cha, c.MM_contract[cha].address, c.MM_contract[cha].first_block, user_address);
       if (txs.error){return txs;}
-      voteWeightdetail.push(this.getVoteWeightChain(txs, user_address, chain[i], timestamp));
+      voteWeightdetail.push(this.getVoteWeightChain(txs, user_address, cha, timestamp));
     }
+
+    //Sum balances
     voteWeightdetail.forEach(item => {
       voteWeight += item.points_balance;
       tokenBalance += item.token_balance;
     });
     result = { token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail };
 
-    // Disable Redis for now
-    /*
-    if(cache) { //Save cache
-      this.RedisClient.set(redis_vote_key, JSON.stringify(result), {
-        EX: 60*60*24 // 1 day in seconds
-      });
-    }
-    */
+
+    //////////////////
+    // Stores cache //
+    //////////////////
+    if (cache && parseInt(process.env.LIONGOV_CACHE_TIME) > 0){
+      if(redis) { //Save cache
+        if (this.RedisClient.connected){
+          this.RedisClient.set(cache_key, JSON.stringify(result), {
+            EX: parseInt(process.env.LIONGOV_CACHE_TIME) // in seconds
+          });
+        }
+      } else { //dynamoDB Cache
+
+        let params = {
+          TableName: "Cache",
+          Item: {
+            "Key": {
+              S: cache_key
+            },
+            "Value": {
+              S: JSON.stringify(result)
+            },
+            "ttl": {
+              N: (Math.round(Date.now() / 1000) + parseInt(process.env.LIONGOV_CACHE_TIME)).toString()
+            },
+          },
+          ExpressionAttributeNames: {
+            "#ky":"Key"
+          },
+          ConditionExpression: 'attribute_not_exists(#ky)'
+        };
+
+        dynamoDB.putItem(params, function(err, data) {
+          if (err) {
+            debug(err);
+            // ConditionalCheckFailedException: The conditional request failed
+            // This is the return when it was already stored
+          } else {
+            debug(cache_key + ' cached in dynamoDB');
+          }
+        });
+
+      }
+    } // end Caching
+
 
     return result;
   }

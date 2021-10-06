@@ -97,7 +97,7 @@ Moralis.initialize(process.env.MORALIS_APP_ID);
 
 Moralis.serverURL = process.env.MORALIS_SERVER_URL;
 
-Blkchain = new blkchain(null, Moralis); // Global scope
+Blkchain = new blkchain(Moralis); // Global scope
 
 if(process.env.NODE_ENV == 'development'){
   // Allows CROS to development, it's necessary to debug frontend with backend.
