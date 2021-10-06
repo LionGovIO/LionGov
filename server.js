@@ -121,7 +121,11 @@ app.use(express.json()) // To parse the incoming requests with JSON payloads
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World!');
+});
+
+app.get('/healthcheck.html', (req, res) => {
+  res.send('Health check!');
 });
 
 let controller_this = {Blkchain, dynamoDB, _debug}; //Obj that will be accessible in controller 'this'
@@ -151,7 +155,6 @@ Object.keys(controllers).forEach((Contr_name) => {
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/dist/index.html');
 });
-
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
