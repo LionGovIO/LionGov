@@ -1,6 +1,7 @@
 
 let ControllerClass = require('../libs/ControllerClass');
 
+const { v4: uuidv4 } = require('uuid');
 const ethers = require('ethers');
 
 module.exports = class submitProposal extends ControllerClass {
@@ -109,9 +110,11 @@ module.exports = class submitProposal extends ControllerClass {
       return;
     }
 
+    let message = "New proposal:\n"+postData.title+"\n"+postData.description
+
     // verifyMessage (Message , signature) -> return in EIP55 address
 
-    if (checksumAddress != ethers.utils.verifyMessage(postData.walletAddress, postData.signedWalletAddress)) {
+    if (checksumAddress != ethers.utils.verifyMessage(message, postData.signedWalletAddress)) {
       this.debug("%%%%%%%%%%%%%%%%%%%%%%%%%% rejected by your ex.......be sadddddddddd :(");
 
       // TODO: this check isn't working, need to fix it and return error, @imsys halllppp meee plzzzzzzzzzz
