@@ -1,10 +1,12 @@
 import React from 'react'
-import {Input, Textarea} from '../../../shared/styles'
+import {Input, Textarea} from '../../shared/styles'
 import { SubmitProposalContainer, Heading } from './SubmitProposal.styles'
 
 export function SubmitProposal() {
   return (
-    <SubmitProposalContainer>
+    <div className="container-xl">
+      <div>
+    <SubmitProposalContainer className="app-card shadow-sm">
       <div>
         <Heading>Submit Proposal</Heading>
         <div>
@@ -12,23 +14,24 @@ export function SubmitProposal() {
           proposal types will be supported in the future.
         </div>
       </div>
-      <form id="proposal_form">
-        <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Title</label>
+      <form id="proposal_form" className="">
+        <div className="form-group mb-3">
+          <label htmlFor="proposal_title_input" className="form-label">Title</label>
           <Input
-            style={{ maxWidth: "300px" }}
             type="text"
             id="proposal_title_input"
-            aria-describedby="emailHelp"
             placeholder=""
+            className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Description</label>
+        <div className="form-group mb-3">
+          <label htmlFor="proposal_description_input" className="form-label">Description</label>
           <Textarea
+            style={{ "min-height": "150px" }}
             type="text"
             id="proposal_description_input"
             placeholder=""
+            className="form-control"
           />
         </div>
         <button type="submit" className="btn btn-primary">
@@ -36,5 +39,7 @@ export function SubmitProposal() {
         </button>
       </form>
     </SubmitProposalContainer>
+    </div>
+  </div>
   )
 }
