@@ -87,6 +87,6 @@ aws dynamodb update-time-to-live --table-name Cache --time-to-live-specification
 ## Debugging / development mode
 
 Open two console instanses:
-- Run the server with `yarn debug`. You can debug the server side by going to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".
+- Run the server with `yarn debug`. You can debug the server side by going to Google Chorme (or Chromium) `chrome://inspect/`, there should appear an "inspect" option there under "Remote Target".
 - Run the front end with `yarn dev` and open the browser at http://localhost:8080/ you should be able to develop/debug using javascript source files. (unminified)
 
