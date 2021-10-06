@@ -44,7 +44,7 @@
     "dev": "webpack serve --config config/webpack.dev.js",
     "start": "nodemon server.js",
     "inspect": "NODE_ENV=development nodemon --inspect server.js",
-    "debug": "NODE_ENV=development DEBUG=liongov* nodemon --inspect server.js"
+    "debug": "NODE_ENV=development DEBUG=\"liongov*\" nodemon --inspect server.js"
   },
   "repository": {
     "type": "git",
