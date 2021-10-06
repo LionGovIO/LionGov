@@ -31,7 +31,7 @@ export function Proposals() {
 
   return (
     <div className="container-xl">
-      <Link to="home">Home</Link>
+      <Link to="/">Home</Link>
       <div className="position-relative mb-3">
         <div className="row g-3 justify-content-between">
           <div className="col-auto">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { receipt } from '../../assets/svg/receipt'
+import { BrowserRouter as Link } from 'react-router-dom'
 
 export const ProposalComp = ({ proposal }) => (
   <div className="app-card app-card-notification shadow-sm mb-4">

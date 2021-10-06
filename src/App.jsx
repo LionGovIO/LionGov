@@ -16,20 +16,22 @@ export function App() {
 
   return (
     <div>
-      <Header />
-      <Sidebar />
-      <div className="app-wrapper">
-        <div className="app-content pt-3 p-md-3 p-lg-4">
-          <Router>
-            <Switch>
-              <Route path="/home" component={Home} />
-              <Route exact path="/" component={Proposals} />
-              <Route path="/SubmitProposal" component={SubmitProposal} />
-              <Route path="/WeightPoints" component={WeightPoints} />
-            </Switch>
-          </Router>
+      <Router>
+        <Header />
+        <Sidebar />
+        <div className="app-wrapper">
+          <div className="app-content pt-3 p-md-3 p-lg-4">
+
+              <Switch>
+                <Route path="/home" component={Home} />
+                <Route exact path="/" component={Proposals} />
+                <Route path="/SubmitProposal" component={SubmitProposal} />
+                <Route path="/WeightPoints" component={WeightPoints} />
+              </Switch>
+
+          </div>
         </div>
-      </div>
+      </Router>
     </div>
   )
 }

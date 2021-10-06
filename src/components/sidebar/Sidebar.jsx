@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { cardList } from '../../assets/svg/cardList'
 import { chevronDown } from '../../assets/svg/chevronDown'
 import { columnsGap } from '../../assets/svg/columnsGap'
@@ -16,9 +17,9 @@ export function Sidebar() {
           ×
         </a>
         <div className="app-branding">
-          <a
+          <Link
             className="app-logo"
-            href="/"
+            to="/"
             style={{ 'textAlign': 'center' }}
           >
             <img
@@ -27,30 +28,30 @@ export function Sidebar() {
               style={{ height: '58px', width: 'auto', padding: 'auto' }}
             ></img>
             <span className="logo-text">LionGov</span>
-          </a>
+          </Link>
         </div>
 
         <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
           <ul className="app-menu list-unstyled accordion" id="menu-accordion">
             <li className="nav-item">
-              <a className="nav-link active" href="/">
+              <Link className="nav-link active" to="/">
                 <span className="nav-icon">{houseDoor}</span>
                 <span className="nav-link-text">Overview</span>
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/">
+              <Link className="nav-link" to="/">
                 <span className="nav-icon">{folder}</span>
                 <span className="nav-link-text">Docs</span>
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/">
+              <Link className="nav-link" to="/">
                 <span className="nav-icon">{cardList}</span>
                 <span className="nav-link-text">Governance</span>
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item has-submenu">
@@ -74,29 +75,29 @@ export function Sidebar() {
               >
                 <ul className="submenu-list list-unstyled">
                   <li className="submenu-item">
-                    <a className="submenu-link" href="/">
+                    <Link className="submenu-link" to="/">
                       All proposals
-                    </a>
+                    </Link>
                   </li>
                   <li className="submenu-item">
-                    <a className="submenu-link" href="/">
+                    <Link className="submenu-link" to="/">
                       My proposals
-                    </a>
+                    </Link>
                   </li>
                   <li className="submenu-item">
-                    <a className="submenu-link" href="/SubmitProposal">
+                    <Link className="submenu-link" to="/SubmitProposal">
                       Submit proposal
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/WeightPoints">
+              <Link className="nav-link" to="/WeightPoints">
                 <span className="nav-icon">{columnsGap}</span>
                 <span className="nav-link-text">Weight points</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -105,10 +106,10 @@ export function Sidebar() {
           <nav className="app-nav app-nav-footer">
             <ul className="app-menu footer-menu list-unstyled">
               <li className="nav-item">
-                <a className="nav-link" href="/">
+                <Link className="nav-link" to="/">
                   <span className="nav-icon">{gear}</span>
                   <span className="nav-link-text">Settings</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
