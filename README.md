@@ -17,6 +17,13 @@ export MORALIS_SERVER_URL=
 export MORALIS_APP_ID=
 ```
 
+It's possible to cache the voting points weight and save stressing Moralis servers. Just set `LIONGOV_CACHE_TIME` to the time in seconds you believe to be necessary. It will store in DynamoDB. If you prefer to store in Redis, just set `LIONGOV_CACHE_REDIS` with the connection string to the server, and the app will use it instead of DynamoDB. In caching (TTL - Time to live), Redis is much more time precise than DynamoDB, in Dynamo it may take some more minutes than what is set in the configuration.
+
+```
+export LIONGOV_CACHE_TIME=600   # 10 minutes
+export LIONGOV_CACHE_REDIS=redis://localhost
+```
+
 ### DynamoDB database
 
 - To use it, create an account in AWS, you can use it the Free Tier while developing.
@@ -34,3 +41,4 @@ export MORALIS_APP_ID=
 Open two console instanses:
 - Run the server with `yarn debug`. You can debug the server side by going to Google Chorme (or Chromium) [chrome://inspect/](chrome://inspect/), there should appear an "inspect" option there under "Remote Target".
 - Run the front end with `yarn dev` and open the browser at http://localhost:8080/ you should be able to develop/debug using javascript source files. (unminified)
+
