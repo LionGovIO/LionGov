@@ -93,7 +93,7 @@ export function Sidebar() {
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/">
+              <a className="nav-link" href="/WeightPoints">
                 <span className="nav-icon">{columnsGap}</span>
                 <span className="nav-link-text">Weight points</span>
               </a>
