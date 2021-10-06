@@ -22,8 +22,8 @@ export const PointsTable = ({ PointsInChain }) => (
                 <span>{(new Date(txbuy.timestamp)).toLocaleDateString()}</span>
                 <span className="note">{(new Date(txbuy.timestamp)).toLocaleTimeString()}</span></td>
   						<td className="cell">{txbuy.days}</td>
-  						<td className="cell">{txbuy.token_amount}</td>
-  						<td className="cell">{txbuy.points}</td>
+  						<td className="cell">{Number(txbuy.token_amount).toFixed(18).replace(/\.?0+$/,"")}</td>
+  						<td className="cell">{Number(txbuy.points).toFixed(18).replace(/\.?0+$/,"")}</td>
   					</tr>
           ))}
 
