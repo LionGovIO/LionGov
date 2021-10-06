@@ -17,7 +17,7 @@ export const PointsTable = ({ PointsInChain }) => (
 				</thead>
 				<tbody>
           {PointsInChain.points_detail.map((txbuy) => (
-  					<tr>
+  					<tr key={Math.random()}>
               <td className="cell">
                 <span>{(new Date(txbuy.timestamp)).toLocaleDateString()}</span>
                 <span className="note">{(new Date(txbuy.timestamp)).toLocaleTimeString()}</span></td>
