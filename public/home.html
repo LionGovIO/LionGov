@@ -40,6 +40,8 @@
 
 
     <script>
+        const hardcodedProposal = '422ad39a-781e-4321-b3d0-7ee63bbcd29e';
+
         function init() {
 
             var web3 = null;
@@ -205,7 +207,7 @@
 
                     var signPromise = null;
 
-                    var message = "New proposal:\n"+title+"\n"+description; // TODO: temp variable, remove/adjust, maybe a more "secure" message
+                    var message = "New proposal:\n" + title + "\n" + description; // TODO: temp variable, remove/adjust, maybe a more "secure" message
 
                     // TODO: add more signature verification on proposals, to make sure that wallet address actually submitted the proposal
 
@@ -333,9 +335,9 @@
                 var title = item.title;
                 var description = item.description;
 
-                $('#single_proposal_title').text(title);
-                $('#single_proposal_description').html('');
-                $('#single_proposal_description').text(description);
+                //$('#single_proposal_title').text(title);
+                //$('#single_proposal_description').html('');
+                //$('#single_proposal_description').text(description);
 
                 var voteClass = proposalId;
 
@@ -524,7 +526,7 @@
                     if (globalSelectedProposal) {
                         voteClass = globalSelectedProposal.proposalId;
                     } else {
-                        voteClass = 'matrix';
+                        voteClass = hardcodedProposal;
                     }
 
                     submitVote(voteClass, radioValue);
@@ -583,7 +585,7 @@
                 xhttp.send();
             }
 
-            techleadVotesTablleeeeee('matrix');
+            techleadVotesTablleeeeee(hardcodedProposal);
 
             function getVoteStats(currentVoteClass) {
                 // clear recent votes table
@@ -629,7 +631,7 @@
                         }
 
                         var ctx = document.getElementById('myChart').getContext('2d');
-                        
+
                         window.myChart = new Chart(ctx, {
                             type: 'pie',
                             data: {
@@ -667,7 +669,7 @@
                 xhttp.send();
             }
 
-            getVoteStats('matrix');
+            getVoteStats(hardcodedProposal);
         }
 
         // TODO: surface error messages if vote failed. Especially, this is in case there is high traffic and we get throttled
@@ -794,6 +796,10 @@
 
             <br />
 
+            <div style="display: none;">
+
+            <br />
+
             <p>
             <h4>Submit Proposal</h4>
 
@@ -846,25 +852,66 @@
                 <hr />
             </div>
 
+        </div>
+
             <h4>Proposal</h4>
 
+            <div class="alert alert-primary" role="alert">
+
             <p class="lead" style="margin-top: 20px;">
-                <b id="single_proposal_title">The Ultimate Question of the Multiverse</b>
+                <b id="single_proposal_title">Should the AntiChin-Furries & CHIN Council settle their dispute with an
+                    epic rap battle? (Vote for a more rare NFT Lion Run airdrop)</b>
             </p>
 
             <p class="lead">
             <div id="single_proposal_description">
-                This is your last chance. After this, there is no turning back. You take the blue pill—the story ends,
-                you wake up in your bed and believe whatever you want to believe. You take the red pill—you stay in
-                Wonderland, and I show you how deep the rabbit hole goes. Remember: all I'm offering is the truth.
-                Nothing more.
+                <p>
+                    The Million Token community has been enthralled with a new epic drama. It's up to you to decide
+                    whether they should settle their dispute with a rap battle. Vote Yes to settle this in a rap battle.
+                    Vote No if they need to settle this in another way.
+                </p>
 
                 <p>
-                    Choose your option, Yes for <span style="color: blue;">Blue pill</span>, No for <span
-                        style="color: red;">Red pill</span>:
+                    The accusation from the AntiChin-Furries: They shouldn't get a million council seat because they do
+                    not have any service or use case. The word "chin" comes from the name of an actual user (Chin#9747)
+                    who is a ceritifed Dungeon Master known to have practiced MM FUD. This user was bitten by a
+                    radioactive lemur and now spreading a virus throughout the community. Symptoms include cheese
+                    overdose and severe price bleeding.
+                </p>
+
+                <p>
+                    The defense from the CHIN Council: CHINs don't war. CHINS are an eternal love that will encapsulate
+                    everyone sooner or later and make them happy. CHINs have a CHINMAP which includes milestones such as
+                    Cheese Steaking and World Domination. They claim the 'chinening' has begun. They are a group of
+                    brazen, loyal MM holders, out there to bring love and peace to the community.
+                </p>
+
+                <p>
+                    AntiChin-Furries Links:<br/>
+                    <a href="https://discord.gg/6KVNbRNt">https://discord.gg/6KVNbRNt</a><br/>
+                    <a href="http://sayno2chin.com/">http://sayno2chin.com/</a>
+                </p>
+
+                <p>
+                    CHIN Council Links:<br/>
+                    <a href="https://discord.gg/JBzRjf5c9d">https://discord.gg/JBzRjf5c9d</a><br/>
+                    <a href="https://chin.community/">https://chin.community/</a>
+                </p>
+
+                <p>
+                    <b>
+                        Everyone who votes on this proposal (yes or no) will receive high priority for a more rare NFT
+                        in the randomization. The goal is to reduce risk of airdropping rare NFTs on dead addresses.
+                    </b>
+                </p>
+
+                <p>
+                    Vote Yes if you want them to settle this in a rap battle. Vote No if you want them to settle this in
+                    another way.
                 </p>
             </div>
             </p>
+        </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault1" value="Yes">
                 <label class="form-check-label" for="flexRadioDefault1">
@@ -879,8 +926,9 @@
             </div>
             </p>
             <p>
-                <button type="button" id="voteButton" class="btn btn-primary">Vote</button>
+                <button type="button" id="voteButton" class="btn btn-primary btn-lg">Vote</button>
             </p>
+            
 
             <br />
 
