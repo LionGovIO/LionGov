@@ -2,6 +2,8 @@
 
 let ControllerClass = require('../libs/ControllerClass');
 
+const ethers = require('ethers');
+
 module.exports = class submitVote extends ControllerClass {
 
   _submitVote = (data, callback) => {
@@ -112,6 +114,7 @@ module.exports = class submitVote extends ControllerClass {
   post = (req, res) => {
 
     var postData = req.body;
+    let checksumAddress = null;
     //then work with your data
 
     this.debug('postData!');

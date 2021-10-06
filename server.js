@@ -81,7 +81,7 @@ debug('Debugging liongov');
 // This compression should be the first use of app.use to guarantee compression is actually working
 app.use(compression()); // TODO: add this compression to lionrun as well
 
-var ethers = require('ethers');
+const ethers = require('ethers');
 const c = require('./public/blockchain/constants');
 const blkchain = require('./public/blockchain/blockchain');
 const Moralis = require('moralis/node');
