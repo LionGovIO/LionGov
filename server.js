@@ -143,6 +143,11 @@ Object.keys(controllers).forEach((Contr_name) => {
 
 // TODO: show error to client when voting twice
 
+//Redirect all left routes to React
+app.get('*', function(req, res){
+  res.sendFile(__dirname + '/dist/index.html');
+});
+
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
