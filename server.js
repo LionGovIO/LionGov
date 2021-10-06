@@ -121,7 +121,7 @@ app.use(express.json()) // To parse the incoming requests with JSON payloads
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.sendFile(__dirname + '/public/home.html');
 });
 
 app.get('/healthcheck.html', (req, res) => {
@@ -153,7 +153,7 @@ Object.keys(controllers).forEach((Contr_name) => {
 
 //Redirect all left routes to React
 app.get('*', function(req, res){
-  res.sendFile(__dirname + '/dist/index.html');
+  res.sendFile(__dirname + '/public/home.html');
 });
 
 server.listen(3000, () => {
