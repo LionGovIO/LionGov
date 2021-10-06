@@ -18,7 +18,7 @@ export function Sidebar() {
         <div className="app-branding">
           <a
             className="app-logo"
-            href="index.html"
+            href="/"
             style={{ 'textAlign': 'center' }}
           >
             <img
@@ -33,21 +33,21 @@ export function Sidebar() {
         <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
           <ul className="app-menu list-unstyled accordion" id="menu-accordion">
             <li className="nav-item">
-              <a className="nav-link active" href="index.html">
+              <a className="nav-link active" href="/">
                 <span className="nav-icon">{houseDoor}</span>
                 <span className="nav-link-text">Overview</span>
               </a>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="docs.html">
+              <a className="nav-link" href="/">
                 <span className="nav-icon">{folder}</span>
                 <span className="nav-link-text">Docs</span>
               </a>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="orders.html">
+              <a className="nav-link" href="/">
                 <span className="nav-icon">{cardList}</span>
                 <span className="nav-link-text">Governance</span>
               </a>
@@ -93,7 +93,7 @@ export function Sidebar() {
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="docs.html">
+              <a className="nav-link" href="/">
                 <span className="nav-icon">{columnsGap}</span>
                 <span className="nav-link-text">Weight points</span>
               </a>
@@ -105,7 +105,7 @@ export function Sidebar() {
           <nav className="app-nav app-nav-footer">
             <ul className="app-menu footer-menu list-unstyled">
               <li className="nav-item">
-                <a className="nav-link" href="settings.html">
+                <a className="nav-link" href="/">
                   <span className="nav-icon">{gear}</span>
                   <span className="nav-link-text">Settings</span>
                 </a>
