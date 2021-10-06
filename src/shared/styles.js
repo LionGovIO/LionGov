@@ -19,7 +19,7 @@ export const BigButton = styled.button`
     color: var(--million);
   }
 `
-
+/*
 export const Input = styled.input`
   border: none;
   background-color: var(--light-gray);
@@ -33,8 +33,13 @@ export const Input = styled.input`
   &:focus {
     box-shadow: 0 0 0 2px var(--background);
   }
+`*/
+
+export const Input = styled.input`
+
 `
 
+/*
 export const Textarea = styled.textarea`
   border: none;
   background-color: var(--light-gray);
@@ -52,4 +57,8 @@ export const Textarea = styled.textarea`
   &:focus {
     box-shadow: 0 0 0 2px var(--background);
   }
+` */
+
+export const Textarea = styled.textarea`
+
 `
