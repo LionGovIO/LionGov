@@ -9,7 +9,7 @@ import { houseDoor } from '../../assets/svg/houseDoor'
 
 export function Sidebar() {
   return (
-    <div id="app-sidepanel" className="app-sidepanel">
+    <div id="app-sidepanel" className="app-sidepanel" style={{'z-index': '1'}}>
       <div id="sidepanel-drop" className="sidepanel-drop" />
       <div className="sidepanel-inner d-flex flex-column">
         <a href="#" id="sidepanel-close" className="sidepanel-close d-xl-none">
