@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { HomeContainer } from './Home.styles'
-import { SubmitProposal } from './submitProposal/SubmitProposal'
+//import { SubmitProposal } from './submitProposal/SubmitProposal'
 
 export function Home() {
 
