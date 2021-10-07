@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { arrowRight } from '../../assets/svg/arrowRight'
 import { barChartLine } from '../../assets/svg/barChartLine'
 import { receipt } from '../../assets/svg/receipt'
@@ -7,71 +7,57 @@ import { receipt } from '../../assets/svg/receipt'
 import { BASE_URL } from '../../shared/urls.js'
 //import { BrowserRouter as Link, useParams } from 'react-router-dom'
 
-function getProposal(currentVoteClass) {
-    // clear recent votes table
-    // $('#votes_table_tbody').html('');
 
-    xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log(xhttp.responseText)
-        // Typical action to be performed when the document is ready:
-        // document.getElementById("demo").innerHTML = xhttp.responseText;
+function getVotesTable(currentVoteClass, setList) {
 
-        result = JSON.parse(xhttp.responseText)
+  let xhttp = new XMLHttpRequest()
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
 
-        console.log(result)
+      let result = JSON.parse(xhttp.responseText)
 
+      let items = result.items
+
+      if (items) {
+        setList(items);
       }
+
     }
-
-    // var currentVoteClass = 'matrix'
-    xhttp.open(
-      "GET",
-      BASE_URL + "/singleproposalquery?proposal=" + currentVoteClass,
-      true
-    )
-    xhttp.send()
+  }
+  xhttp.open(
+    'GET',
+    BASE_URL + '/privacyvotequery?voteClass=' + currentVoteClass,
+    true
+  )
+  xhttp.send()
 }
-
 
 
 export function Proposal() {
   let { ProposalId } = useParams();
 
-console.log("ProposalId!!!!!!!!!!!!!!!");
-
-  console.log(ProposalId);
 
   useEffect(() => {
-    var xhttp = new XMLHttpRequest()
+    let xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        console.log(xhttp.responseText)
-        // Typical action to be performed when the document is ready:
-        // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-        var proposal = JSON.parse(xhttp.responseText)
+        let proposal = JSON.parse(xhttp.responseText)
 
+        setProposal(proposal)
 
-console.log("proposal!!!!!!!!!!!!!!!1");
-
-console.log(proposal);
-
-        //setProposal(proposal)
-
-      //  getVoteStats(currentVoteClass)
+        getVotesTable(ProposalId, setList)
 
       }
     }
-    console.log("proposal id:"+ ProposalId);
+
     xhttp.open('GET', BASE_URL + '/singleproposalquery?proposal='+encodeURI(ProposalId), true)
     xhttp.send()
   }, [])
 
 
-//  const [proposal, setProposal] = React.useState({});
-  //const [list, setList] = React.useState([])
+  const [proposal, setProposal] = React.useState({})
+  const [list, setList] = React.useState([])
 
   return (
     <div className="container-xl">
@@ -95,11 +81,11 @@ console.log(proposal);
               <div className="notification-type mb-2">
                 <span className="badge bg-info">Proposal</span>
               </div>
-              <h4 className="notification-title mb-1">{proposal.title}</h4>
+              <h4 className="notification-title mb-1">{proposal.Title}</h4>
               <ul className="notification-meta list-inline mb-0">
-                <li className="list-inline-item">{(new Date(parseInt(proposal.creationTime))).toLocaleString()}</li>
+                <li className="list-inline-item">{(new Date(parseInt(proposal.CreationTime))).toLocaleString()}</li>
                 <li className="list-inline-item">|</li>
-                <li className="list-inline-item">0x689741g5io</li>
+                <li className="list-inline-item">{proposal.WalletAddress}</li>
               </ul>
             </div>
             {/*//col*/}
@@ -109,27 +95,12 @@ console.log(proposal);
         {/*//app-card-header*/}
         <div className="app-card-body p-4">
           <div className="notification-content">
-            {proposal.description}
+            {proposal.Description}
           </div>
         </div>
         {/*//app-card-body*/}
         <div className="app-card-footer px-4 py-3">
-          <a className="action-link" href="#">
-            Vote!
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              className="bi bi-arrow-right ms-2"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-              />
-            </svg>
-          </a>
+
         </div>
       </div>
 
@@ -147,18 +118,17 @@ console.log(proposal);
                 </tr>
               </thead>
               <tbody>
-                <tr>
-
-                  { /*votes.map((vote) => (
-                    <td className="cell">#15346</td>
-                    <td className="cell">aaaa</td>
-                    <td className="cell">John Sanders</td>
-                    <td className="cell"><span>17 Oct</span><span className="note">2:16 PM</span></td>
-
-                    <ProposalComp key={vote.proposalId} proposal={item} />
-                  )) */}
-
-                </tr>
+                { list.map((item) => (
+                  <tr key={Math.random()}>
+                    <td className="cell">{item.obscuredWalletAddress}</td>
+                    <td className="cell">{item.voteValue}</td>
+                    <td className="cell">{item.voteWeight}</td>
+                    <td className="cell">
+                      <span>{(new Date(parseInt(item.creationTime))).toLocaleDateString()}</span>
+                      <span className="note">{(new Date(parseInt(item.creationTime))).toLocaleTimeString()}</span>
+                    </td>
+                  </tr>
+                )) }
               </tbody>
             </table>
           </div>

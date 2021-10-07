@@ -452,64 +452,6 @@ export function init() {
     }
   })
 
-  function techleadVotesTablleeeeee(currentVoteClass) {
-    // clear recent votes table
-    $('#votes_table_tbody').html('')
-
-    console.log('Yo!!!!!!!')
-    var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function () {
-      console.log('state change!!!')
-      if (this.readyState == 4 && this.status == 200) {
-        console.log('query response!')
-        console.log(xhttp.responseText)
-        // Typical action to be performed when the document is ready:
-        // document.getElementById("demo").innerHTML = xhttp.responseText;
-
-        var result = JSON.parse(xhttp.responseText)
-
-        var items = result.items
-        if (items) {
-          for (var i = 0; i < items.length; i++) {
-            var item = items[i]
-            console.log(item)
-
-            var voteClass = item.voteClass
-            var obscuredWalletAddress = item.obscuredWalletAddress
-            var creationTime = item.creationTime // in epoch milli
-            var voteValue = item.voteValue
-            var voteWeight = item.voteWeight
-
-            // TODO: make creationDate prettier/more human readable
-            var creationDate = new Date(parseInt(creationTime))
-            console.log(creationDate)
-
-            var html = '<tr>'
-            html += '<td>' + creationDate + '</td>'
-            html += '<td>' + obscuredWalletAddress + '</td>'
-            html += '<td>' + voteValue + '</td>'
-            html += '<td>' + voteWeight + '</td>'
-            html += '</tr>'
-
-            $('#votes_table_tbody').append(html)
-          }
-        }
-
-        var totalVoteCount = result.count
-        $('#total_vote_count_num').text(totalVoteCount)
-      }
-    }
-    // var currentVoteClass = 'matrix';
-    xhttp.open(
-      'GET',
-      BASE_URL + '/privacyvotequery?voteClass=' + currentVoteClass,
-      true
-    )
-    xhttp.send()
-  }
-
-  //techleadVotesTablleeeeee('matrix')
-
 
 
 }
