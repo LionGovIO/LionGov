@@ -794,124 +794,189 @@
                     href="https://github.com/LionGovIO/LionGov">https://github.com/LionGovIO/LionGov</a>
             </p>
 
-            <br />
-
             <div style="display: none;">
 
-            <br />
+                <br />
 
-            <p>
-            <h4>Submit Proposal</h4>
+                <p>
+                <h4>Submit Proposal</h4>
 
-            <p>
-                Note: This creates a proposal with "Yes" or "No" as the options. More proposal types will be supported
-                in the future.
-            </p>
-            <p>
-            <form id="proposal_form">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Title</label>
-                    <input type="text" class="form-control" id="proposal_title_input" aria-describedby="emailHelp"
-                        placeholder="">
+                <p>
+                    Note: This creates a proposal with "Yes" or "No" as the options. More proposal types will be
+                    supported
+                    in the future.
+                </p>
+                <p>
+                <form id="proposal_form">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Title</label>
+                        <input type="text" class="form-control" id="proposal_title_input" aria-describedby="emailHelp"
+                            placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Description</label>
+                        <input type="text" class="form-control" id="proposal_description_input" placeholder="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </p>
+                </p>
+
+                <br />
+
+                <p>
+                <h4>View Proposals</h4>
+                <p>
+                    Note: This list may be truncated, need to support viewing of all proposal. Also, ideally should make
+                    the
+                    proposal ID more human friendly.
+                </p>
+
+                <p>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Time</th>
+                            <th scope="col">Proposal ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proposals_table_tbody">
+                    </tbody>
+                </table>
+                </p>
+                </p>
+
+                <div style="margin-top: 40px; margin-bottom: 40px;">
+                    <hr />
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Description</label>
-                    <input type="text" class="form-control" id="proposal_description_input" placeholder="">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            </p>
-            </p>
 
-            <br />
-
-            <p>
-            <h4>View Proposals</h4>
-            <p>
-                Note: This list may be truncated, need to support viewing of all proposal. Also, ideally should make the
-                proposal ID more human friendly.
-            </p>
-
-            <p>
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Time</th>
-                        <th scope="col">Proposal ID</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
-                    </tr>
-                </thead>
-                <tbody id="proposals_table_tbody">
-                </tbody>
-            </table>
-            </p>
-            </p>
-
-            <div style="margin-top: 40px; margin-bottom: 40px;">
-                <hr />
             </div>
 
-        </div>
+            <br/>
 
-            <h4>Proposal</h4>
+            <div class="card text-center" style="width: 550px;">
+                <div class="card-body">
+                    <h5 class="card-title">Proposal Voting Time Remaining</h5>
+                    <p id="demo" class="display-4"></p>
+                </div>
+            </div>
+
+            <br/>
+
+            <script>
+                const countDownDate = new Date("Sat Oct 09 2021 21:30:00 GMT-0500").getTime();
+            </script>
+
+            <script>
+                // Set the date we're counting down to
+                // var countDownDate = new Date("Tue Oct 05 2021 21:30:00 GMT-0500").getTime();
+
+                // Update the count down every 1 second
+                var x = setInterval(function () {
+
+                    // Get today's date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and the count down date
+                    var distance = countDownDate - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Display the result in the element with id="demo"
+                    document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+                        + minutes + "m " + seconds + "s ";
+
+                    // If the count down is finished, write some text
+                    if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("demo").innerHTML = "Proposal voting has ended!";
+                    }
+                }, 1000);
+            </script>
+
+            <div class="alert alert-info" role="alert">
+                Everyone who votes on this proposal (yes or no) will receive high priority for a more rare NFT in the
+                randomization. The goal is to reduce risk of airdropping rare NFTs on dead addresses.
+            </div>
+
+            <div style="height: 2px;">
+            </div>
+
+            <hr />
+
+
+            <h3>Proposal</h3>
 
             <div class="alert alert-primary" role="alert">
 
-            <p class="lead" style="margin-top: 20px;">
-                <b id="single_proposal_title">Should the AntiChin-Furries & CHIN Council settle their dispute with an
-                    epic rap battle? (Vote for a more rare NFT Lion Run airdrop)</b>
-            </p>
-
-            <p class="lead">
-            <div id="single_proposal_description">
-                <p>
-                    The Million Token community has been enthralled with a new epic drama. It's up to you to decide
-                    whether they should settle their dispute with a rap battle. Vote Yes to settle this in a rap battle.
-                    Vote No if they need to settle this in another way.
+                <p class="lead" style="margin-top: 20px;">
+                    <b id="single_proposal_title">Should the AntiChin-Furries & CHIN Council settle their dispute with
+                        an
+                        epic rap battle? (Vote for a more rare NFT Lion Run airdrop)</b>
                 </p>
 
-                <p>
-                    The accusation from the AntiChin-Furries: They shouldn't get a million council seat because they do
-                    not have any service or use case. The word "chin" comes from the name of an actual user (Chin#9747)
-                    who is a ceritifed Dungeon Master known to have practiced MM FUD. This user was bitten by a
-                    radioactive lemur and now spreading a virus throughout the community. Symptoms include cheese
-                    overdose and severe price bleeding.
-                </p>
+                <p class="lead">
+                <div id="single_proposal_description">
+                    <p>
+                        The Million Token community has been enthralled with a new epic drama. It's up to you to decide
+                        whether they should settle their dispute with a rap battle. Vote Yes to settle this in a rap
+                        battle.
+                        Vote No if they need to settle this in another way.
+                    </p>
 
-                <p>
-                    The defense from the CHIN Council: CHINs don't war. CHINS are an eternal love that will encapsulate
-                    everyone sooner or later and make them happy. CHINs have a CHINMAP which includes milestones such as
-                    Cheese Steaking and World Domination. They claim the 'chinening' has begun. They are a group of
-                    brazen, loyal MM holders, out there to bring love and peace to the community.
-                </p>
+                    <p>
+                        The accusation from the AntiChin-Furries: They shouldn't get a million council seat because they
+                        do
+                        not have any service or use case. The word "chin" comes from the name of an actual user
+                        (Chin#9747)
+                        who is a ceritifed Dungeon Master known to have practiced MM FUD. This user was bitten by a
+                        radioactive lemur and now spreading a virus throughout the community. Symptoms include cheese
+                        overdose and severe price bleeding.
+                    </p>
 
-                <p>
-                    AntiChin-Furries Links:<br/>
-                    <a href="https://discord.gg/6KVNbRNt">https://discord.gg/6KVNbRNt</a><br/>
-                    <a href="http://sayno2chin.com/">http://sayno2chin.com/</a>
-                </p>
+                    <p>
+                        The defense from the CHIN Council: CHINs don't war. CHINS are an eternal love that will
+                        encapsulate
+                        everyone sooner or later and make them happy. CHINs have a CHINMAP which includes milestones
+                        such as
+                        Cheese Steaking and World Domination. They claim the 'chinening' has begun. They are a group of
+                        brazen, loyal MM holders, out there to bring love and peace to the community.
+                    </p>
 
-                <p>
-                    CHIN Council Links:<br/>
-                    <a href="https://discord.gg/JBzRjf5c9d">https://discord.gg/JBzRjf5c9d</a><br/>
-                    <a href="https://chin.community/">https://chin.community/</a>
-                </p>
+                    <p>
+                        AntiChin-Furries Links:<br />
+                        <a href="https://discord.gg/6KVNbRNt">https://discord.gg/6KVNbRNt</a><br />
+                        <a href="http://sayno2chin.com/">http://sayno2chin.com/</a>
+                    </p>
 
-                <p>
-                    <b>
-                        Everyone who votes on this proposal (yes or no) will receive high priority for a more rare NFT
-                        in the randomization. The goal is to reduce risk of airdropping rare NFTs on dead addresses.
-                    </b>
-                </p>
+                    <p>
+                        CHIN Council Links:<br />
+                        <a href="https://discord.gg/JBzRjf5c9d">https://discord.gg/JBzRjf5c9d</a><br />
+                        <a href="https://chin.community/">https://chin.community/</a>
+                    </p>
 
-                <p>
-                    Vote Yes if you want them to settle this in a rap battle. Vote No if you want them to settle this in
-                    another way.
+                    <p>
+                        <b>
+                            Everyone who votes on this proposal (yes or no) will receive high priority for a more rare
+                            NFT
+                            in the randomization. The goal is to reduce risk of airdropping rare NFTs on dead addresses.
+                        </b>
+                    </p>
+
+                    <p>
+                        Vote Yes if you want them to settle this in a rap battle. Vote No if you want them to settle
+                        this in
+                        another way.
+                    </p>
+                </div>
                 </p>
             </div>
-            </p>
-        </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="voteOptions" id="flexRadioDefault1" value="Yes">
                 <label class="form-check-label" for="flexRadioDefault1">
@@ -929,16 +994,18 @@
                 <button type="button" id="voteButton" class="btn btn-primary btn-lg">Vote</button>
             </p>
 
-            <br/>
+            <br />
 
             <p>
                 Notes:
-                <ul>
-                    <li>You can only vote once with your wallet (currently if you vote twice, it will say it succeeded, but your vote won't go through / won't show up in the Recent Votes section).</li>
-                    <li>After voting, please refresh the page to see updates in the Voting Stats and Recent Votes sections. (We'll probably automate this in the future.)</li>
-                </ul>
+            <ul>
+                <li>You can only vote once with your wallet (currently if you vote twice, it will say it succeeded, but
+                    your vote won't go through / won't show up in the Recent Votes section).</li>
+                <li>After voting, please refresh the page to see updates in the Voting Stats and Recent Votes sections.
+                    (We'll probably automate this in the future.)</li>
+            </ul>
             </p>
-            
+
 
             <br />
 
