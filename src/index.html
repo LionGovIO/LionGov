@@ -39,105 +39,18 @@
     <script type="text/javascript"
         src="https://unpkg.com/@walletconnect/web3-provider@1.6.5/dist/umd/index.min.js"></script>
 
-    <!--
-    <script src="/bundle.js"></script>
-    -->
-
     <script>
+/*
 
+        Welcome!
 
-        // TODO: surface error messages if vote failed. Especially, this is in case there is high traffic and we get throttled
+        LionGov is Open Source!
 
-        /*
+        Check it at:
 
-        // Connect with wallet: https://stackoverflow.com/questions/60785630/how-to-connect-ethers-js-with-metamask
-        // enable() is deprecated: https://ethereum.stackexchange.com/questions/92095/web3-current-best-practice-to-connect-metamask-to-chrome/92097
-        let provider;
-        // window.ethereum.enable().then(provider = new ethers.providers.Web3Provider(window.ethereum));
-        // primaryChain.request({ method: 'eth_requestAccounts' }).then(provider = new ethers.providers.Web3Provider(primaryChain));
+        https://github.com/LionGovIO/LionGov
 
-        primaryChain.request({ method: 'eth_requestAccounts' }).then(provider = new ethers.providers.Web3Provider(primaryChain));
-
-        const signer = provider.getSigner();
-
-        function submitVote(voteClass, voteValue) {
-            signer.getAddress().then((walletAddress) => {
-                console.log('walletAddress: ' + walletAddress);
-
-                var from = walletAddress;
-                var message = voteValue;
-
-                // console.log('msgHash: ' + msgHash);
-
-                var signPromise = null;
-
-                // Note: Why we don't support Binance wallet (uses old eth_sign message which may be insecure)
-                // Binance only supports eth_sign now
-                // Note that eth_sign shows following warning on MetaMask: "Signing this message can have dangerous side effects. Only sign messages from sites you fully trust with your entire account. This dangerous method will be removed in a future version."
-                // This reddit explains that eth_sign can be used to sign things maliciously: https://www.reddit.com/r/ethdev/comments/llvdqa/any_risk_in_simply_signing_a_message_on_ethereum/
-                // Binance doc on eth_sign: https://docs.binance.org/smart-chain/wallet/wallet_api.html#using-the-provider
-                //
-                // signPromise = primaryChain.request({
-                //     method: "eth_sign",
-                //     params: [from, message]
-                // });
-
-                signPromise = signer.signMessage(message);
-
-                console.log('signPromise: ' + signPromise);
-
-                signPromise.then((signedTransaction) => {
-
-                    console.log('signedTransaction: ' + signedTransaction);
-                    // "0xf86c808504a817c8008252089488a5c2d9919e46f883eb62f7b8dd9d0cc45bc2
-                    //    90880de0b6b3a76400008025a05e766fa4bbb395108dc250ec66c2f88355d240
-                    //    acdc47ab5dfaad46bcf63f2a34a05b2cb6290fd8ff801d07f6767df63c1c3da7
-                    //    a7b83b53cd6cea3d3075ef9597d5"
-
-                    var signedVoteValue = signedTransaction;
-
-                    // alert('signedVoteValue: ' + signedVoteValue);
-
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", '/submitvote', true);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == XMLHttpRequest.DONE) {
-                            console.log('response: ' + xhr.responseText);
-
-                            if (xhr.status == 200) {
-                                // TODO: go to a vote successful page, helps a bit to prevent people to vote multiple times
-                                // TODO: when doing vote calculation, need to get rid of other votes from the same person, only pick 1 (probably the latest one)
-                                alert('Vote submitted successfully')
-                            } else {
-                                alert('Vote submission failed, please try again')
-                            }
-                        }
-                    }
-
-                    xhr.send(JSON.stringify({
-                        voteClass: voteClass,
-                        voteValue: voteValue,
-                        signedVoteValue: signedVoteValue,
-                        walletAddress: walletAddress
-                    }));
-                });
-            });
-        }
-
-
-        $(document).ready(function () {
-            $("#voteButton").click(function () {
-                var radioValue = $("input[name='voteOptions']:checked").val();
-                if (radioValue) {
-                    // alert("Your are a - " + radioValue);
-
-                    submitVote('matrix', radioValue);
-                }
-            });
-        });
-        */
+*/
     </script>
 
 </head>
