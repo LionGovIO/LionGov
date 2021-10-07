@@ -455,7 +455,7 @@
                                     if (xhr.status == 200) {
                                         // TODO: go to a vote successful page, helps a bit to prevent people to vote multiple times
                                         // TODO: when doing vote calculation, need to get rid of other votes from the same person, only pick 1 (probably the latest one)
-                                        alert('Vote submitted successfully, please refresh the page to see the update in the Voting Stats section')
+                                        alert('Vote submitted successfully, please refresh the page to see the update in the Voting Stats and Recent Votes sections')
                                     } else {
                                         alert('Vote submission failed, please try again')
                                     }
@@ -927,6 +927,16 @@
             </p>
             <p>
                 <button type="button" id="voteButton" class="btn btn-primary btn-lg">Vote</button>
+            </p>
+
+            <br/>
+
+            <p>
+                Notes:
+                <ul>
+                    <li>You can only vote once with your wallet (currently if you vote twice, it will say it succeeded, but your vote won't go through / won't show up in the Recent Votes section).</li>
+                    <li>After voting, please refresh the page to see updates in the Voting Stats and Recent Votes sections. (We'll probably automate this in the future.)</li>
+                </ul>
             </p>
             
 
