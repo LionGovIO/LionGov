@@ -1,6 +1,6 @@
 import React from 'react';
 import { receipt } from '../../assets/svg/receipt'
-import { BrowserRouter as Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export const ProposalComp = ({ proposal }) => (
   <div className="app-card app-card-notification shadow-sm mb-4">
@@ -33,9 +33,8 @@ export const ProposalComp = ({ proposal }) => (
     </div>
     {/*//app-card-body*/}
     <div className="app-card-footer px-4 py-3">
-      <Link className="action-link" to='/proposals'>
-        Vote!{proposal.proposalId}
-
+      <Link className="action-link" to={'/proposal/' + proposal.proposalId}>
+        Vote!
         <svg
           width="1em"
           height="1em"
