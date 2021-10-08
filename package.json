@@ -39,6 +39,9 @@
     "webpack-dev-server": "^4.3.0",
     "webpack-merge": "^5.8.0"
   },
+  "optionalDependencies": {
+    "redis": "next"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config config/webpack.prod.js",
