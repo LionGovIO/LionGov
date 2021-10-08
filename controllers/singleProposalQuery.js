@@ -3,34 +3,23 @@ let ControllerClass = require('../libs/ControllerClass');
 
 module.exports = class singleProposalQuery extends ControllerClass {
 
-  get = (req, res) => {
-    // Retrieve the tag from our URL path
-    this.debug('singleProposalQuery!');
-
-    this.debug(req.query);
-
-    if (!req.query || !req.query.proposal) {
-      res.json({"error": "Request not valid!"});
-      res.end(); return;
-    }
-    let proposal = req.query.proposal;
-
+  _singleProposalQuery = (ProposalId, callback) => {
     dynamoDB.getItem({
       TableName: 'Proposals',
       Key : {
         'ProposalId' : {
-          'S' : proposal
+          'S' : ProposalId
         }
       }
     }, function(err, data) {
       if (err) {
         debug(err);
-        res.json({"error": "Database failed to fetch!"});
-        res.end(); return;
+        callback({"error": "Database failed to fetch!"});
+        return;
       } else {
         if (!(Object.keys(data).length)){
-          res.json({"error": "No data"});
-          res.end(); return;
+          callback({"error": "No data"});
+          return;
         }
 
         //Successfully fetched data
@@ -46,10 +35,28 @@ module.exports = class singleProposalQuery extends ControllerClass {
           WalletAddress : r.WalletAddress.S
         }
 
-        res.json(Proposal);
-        res.end();
+        callback(Proposal);
+        return;
 
       }
+    });
+  }
+
+  get = (req, res) => {
+    // Retrieve the tag from our URL path
+    this.debug('singleProposalQuery!');
+
+    this.debug(req.query);
+
+    if (!req.query || !req.query.proposal) {
+      res.json({"error": "Request not valid!"});
+      res.end(); return;
+    }
+    let proposalId = req.query.proposal;
+
+    this._singleProposalQuery(proposalId, function(Proposal){
+      res.json(Proposal);
+      res.end();
     });
 
   }

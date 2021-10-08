@@ -145,6 +145,10 @@ Object.keys(controllers).forEach((Contr_name) => {
   }
 });
 
+// Some prerender to get Proposal title in social links
+app.get('/proposal/:uid', Controllers.proposal.get);
+
+
 // TODO: add filtering/validation on all the APIS. In particular, want to prevent database injection attacks
 // TOOD: add API throttling (e.g. by IP address), there are various libraries for that
 // TODO: add DDOS protection (e.g. AWS provides some services for this). We can do this after we add a load balancer.
