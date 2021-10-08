@@ -1,5 +1,5 @@
 import React from 'react'
-import { BigButton } from '../../shared/styles'
+import ConnectWalletBtn  from './ConnectWalletBtn'
 import {
   HeaderContainer,
   LinksConnectWallet,
@@ -29,7 +29,7 @@ export function Header() {
                   </div>{/*//app-search-box*/}
                   <div className="app-utilities col-auto">
                     <div className="app-utility-item">
-                      <BigButton id="btn-connect-wallet">Connect wallet</BigButton>
+                      <ConnectWalletBtn/>
                     </div>{/*//app-utility-item*/}
                   </div>{/*//app-utilities*/}
                 </div>{/*//row*/}

@@ -10,8 +10,11 @@ import { Sidebar } from './components/sidebar/Sidebar'
 import "./styles.css"
 import "./template.css"
 import { init } from './init'
+import WalletClass from './Wallet'
 
-init()
+global.Wallet = new WalletClass();
+//init()
+
 
 export function App() {
 

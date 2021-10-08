@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 
 export const BigButton = styled.button`
+`
+/*
+export const BigButton = styled.button`
   background-color: var(--million);
   color: var(--background);
   outline: none;
@@ -18,7 +21,9 @@ export const BigButton = styled.button`
     background-color: var(--background);
     color: var(--million);
   }
-`
+`*/
+
+
 /*
 export const Input = styled.input`
   border: none;

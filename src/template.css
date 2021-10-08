@@ -105,7 +105,7 @@ button.close:focus {
   font-weight: 600;
   padding: 0.4rem 1rem;
   font-size: 0.875rem;
-  border: none;
+/*  border: none;*/
 }
 .btn:hover,
 .btn:active,
