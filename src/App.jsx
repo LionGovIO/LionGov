@@ -1,5 +1,6 @@
-import React  from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+//import React  from 'react'
+
+/*
 import { Home } from './pages/home/Home'
 import { Proposals } from './pages/proposals/Proposals'
 import { Proposal } from './pages/proposal/Proposal'
@@ -14,10 +15,24 @@ import WalletClass from './Wallet'
 
 global.Wallet = new WalletClass();
 //init()
+*/
 
 
+import _ from 'lodash';
+console.log(_.head([1, 2, 3]));
+
+//
 export function App() {
+//
+//
+    return (
+       <div>
+         test
+       </div>
+    )
 
+
+/*
   return (
     <div>
       <Router>
@@ -38,5 +53,5 @@ export function App() {
         </div>
       </Router>
     </div>
-  )
-}
+  )*/
+ }
