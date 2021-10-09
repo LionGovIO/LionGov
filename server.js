@@ -66,6 +66,7 @@ dddhhhhhhhhhdddhhhhhhhhhhhhhhhhddhhhddmmmmmmmmddddddddddyyhdddhhdddmmdhhhhhyyyyy
 const { v4: uuidv4 } = require('uuid');
 
 const express = require('express');
+const expressStaticGzip = require("express-static-gzip");
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -76,10 +77,6 @@ const controllers = requireDir('./controllers');
 let Controllers = {};
 debug = _debug("liongov");
 debug('Debugging liongov');
-
-// Compress all HTTP responses
-// This compression should be the first use of app.use to guarantee compression is actually working
-app.use(compression()); // TODO: add this compression to lionrun as well
 
 const ethers = require('ethers');
 const c = require('./public/constants');
@@ -112,8 +109,15 @@ if(process.env.NODE_ENV == 'development'){
   });
 }
 
+// Sends precompressed files whenever possible
+app.use("/", expressStaticGzip("dist/", {
+    enableBrotli: true,
+    orderPreference: ['br', 'gz']
+}));
+// Compress on the fly all the rest.
+app.use(compression());
+
 app.use(express.static('public'))
-app.use(express.static('dist'))
 
 // body-parser is deprecated, using below instead: https://stackoverflow.com/questions/66525078/bodyparser-is-deprecated
 app.use(express.urlencoded({ extended: true }));
