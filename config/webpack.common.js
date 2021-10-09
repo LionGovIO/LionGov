@@ -1,58 +1,64 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
-    app: "./src/index.js",
+    app: './src/index.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/index.html",
+      template: 'src/index.html',
     }),
     new CopyPlugin({
       patterns: [
         {
-          from: "src/assets",
-          to: "assets",
+          from: 'src/assets',
+          to: 'assets',
           globOptions: {
-            ignore: [
-              "**/*.jsx",
-            ],
+            ignore: ['**/*.jsx'],
           },
-        }
+        },
       ],
     }),
   ],
   output: {
-    filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "../dist"),
-    publicPath: "/",
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/',
     clean: true,
   },
   resolve: {
-      extensions: [".js", ".jsx"]
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: "asset/resource",
+        type: 'asset/resource',
       },
       {
         test: /\.m?jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-react", "@babel/preset-env"],
+            presets: ['@babel/preset-react', '@babel/preset-env'],
           },
         },
       },
     ],
   },
-};
+  externalsType: 'script',
+  externals: {
+    'react-router-dom': [
+      'https://unpkg.com/react-router-dom/umd/react-router-dom.min.js',
+      'ReactRouterDOM',
+    ],
+    'babel': ["https://unpkg.com/babel-standalone@6.26.0/babel.js", "Babel"],
+  },
+}

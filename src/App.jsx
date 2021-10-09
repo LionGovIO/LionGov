@@ -1,5 +1,6 @@
 import React  from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import { Home } from './pages/home/Home'
 import { Proposals } from './pages/proposals/Proposals'
 import { Proposal } from './pages/proposal/Proposal'
@@ -17,7 +18,6 @@ global.Wallet = new WalletClass();
 
 
 export function App() {
-
   return (
     <div>
       <Router>
@@ -25,7 +25,6 @@ export function App() {
         <Sidebar />
         <div className="app-wrapper">
           <div className="app-content pt-3 p-md-3 p-lg-4">
-
               <Switch>
                 <Route path="/home" component={Home} />
                 <Route exact path="/" component={Proposals} />
@@ -33,10 +32,9 @@ export function App() {
                 <Route path="/proposal/:ProposalId" component={Proposal} />
                 <Route path="/WeightPoints" component={WeightPoints} />
               </Switch>
-
           </div>
         </div>
       </Router>
     </div>
   )
-}
+ }
