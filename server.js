@@ -85,13 +85,6 @@ const Moralis = require('moralis/node');
 
 const AWS = require("aws-sdk");
 
-// Don't set the region explicitly now for flexibility. Can consider doing it later if needed.
-/*
-AWS.config.update({
-  region: 'us-east-1'
-});
-*/
-
 dynamoDB = new AWS.DynamoDB(); // Global scope
 
 Moralis.initialize(process.env.MORALIS_APP_ID);
