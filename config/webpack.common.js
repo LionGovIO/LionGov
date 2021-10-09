@@ -53,12 +53,4 @@ module.exports = {
       },
     ],
   },
-  externalsType: 'script',
-  externals: {
-    'react-router-dom': [
-      'https://unpkg.com/react-router-dom/umd/react-router-dom.min.js',
-      'ReactRouterDOM',
-    ],
-    'babel': ["https://unpkg.com/babel-standalone@6.26.0/babel.js", "Babel"],
-  },
 }
