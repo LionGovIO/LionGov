@@ -22,11 +22,12 @@ export function SubmitProposal() {
       let walletAddress = Wallet.selectedAccount.toLowerCase()
 
       let signPromise = null
+      let timestamp = Date.now()
 
       let message = "New proposal:\n" +
-                    data.proposal_title_input + "\n" +
-                    data.proposal_description_input;
-                    // TODO: temp variable, remove/adjust, maybe a more "secure" message
+                    'Title: ' + data.proposal_title_input + "\n" +
+                    'Description: ' + data.proposal_description_input + "\n" +
+                    'Timestamp: ' + timestamp;
 
       // TODO: add more signature verification on proposals, to make sure that wallet address actually submitted the proposal
 
@@ -71,10 +72,11 @@ export function SubmitProposal() {
 
             xhr.send(
               JSON.stringify({
-                signedWalletAddress: signature,
+                signature: signature,
                 walletAddress: walletAddress,
                 title: data.proposal_title_input,
                 description: data.proposal_description_input,
+                timestamp: timestamp,
               })
             )
           }
