@@ -31,7 +31,7 @@ export function SubmitProposal() {
       // TODO: add more signature verification on proposals, to make sure that wallet address actually submitted the proposal
 
       let password = ''
-      web3.eth.personal.sign(
+      Wallet.web3.eth.personal.sign(
         message,
         walletAddress,
         password,
