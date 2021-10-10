@@ -50,8 +50,6 @@ export function Proposal() {
 
       let walletAddress = Wallet.selectedAccount.toLowerCase()
 
-      let signPromise = null
-
       let timestamp = Date.now()
 
       let message = 'Proposal id: ' + ProposalId + '\n' +

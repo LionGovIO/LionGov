@@ -21,7 +21,6 @@ export function SubmitProposal() {
 
       let walletAddress = Wallet.selectedAccount.toLowerCase()
 
-      let signPromise = null
       let timestamp = Date.now()
 
       let message = "New proposal:\n" +
