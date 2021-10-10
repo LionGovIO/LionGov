@@ -79,7 +79,7 @@ module.exports = class submitProposal extends ControllerClass {
           }, null);
 
         } else {
-          callback(null, data);
+          callback(null, {proposalId: proposalId});
         }
       });
     }
@@ -143,16 +143,16 @@ module.exports = class submitProposal extends ControllerClass {
       console.log(result);
 
       if (err) {
-
-      } else {
-        var techlead = {
-          million: "token to the moon!!!!"
-        };
-
-        res.json(techlead);
+        res.json(err);
+        res.end();
+        return;
+      }
+      if (result) {
+        res.json(result);
+        res.end();
+        return;
       }
 
-      // TODO: if error, alert client in UI
     });
 
   }
