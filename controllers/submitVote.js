@@ -21,14 +21,16 @@ module.exports = class submitVote extends ControllerClass {
       checksumAddress = ethers.utils.getAddress(data.walletAddress); //EIP55
       if (!checksumAddress) {
         res.json({
-          "error": "No address informed!"
+          "error": {msg: "No address informed!"}
         });
+        res.end();
         return;
       }
     } catch (e) {
       res.json({
-        "error": "Invalid Address!"
+        "error": {msg: "Invalid Address!"}
       });
+      res.end();
       return;
     }
 
@@ -38,6 +40,7 @@ module.exports = class submitVote extends ControllerClass {
       res.json({
         "error": {msg: 'Signature expired! Try submitting again or checking your system clock.'}
       });
+      res.end();
       return;
     }
 
@@ -52,6 +55,7 @@ module.exports = class submitVote extends ControllerClass {
       res.json({
         "error": {msg: "Invalid signature!"}
       });
+      res.end();
       return;
     }
 
@@ -62,6 +66,7 @@ module.exports = class submitVote extends ControllerClass {
         res.json({
           "error": {msg: "Invalid proposal id!"}
         });
+        res.end();
         return;
       }
 
