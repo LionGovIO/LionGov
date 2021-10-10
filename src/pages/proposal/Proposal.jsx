@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { arrowRight } from '../../assets/svg/arrowRight'
 import { barChartLine } from '../../assets/svg/barChartLine'
 import { receipt } from '../../assets/svg/receipt'
+import { useForm } from "react-hook-form"
 //import { ProposalComp } from '../proposals/ProposalComp'
 import { BASE_URL } from '../../shared/urls.js'
 //import { BrowserRouter as Link, useParams } from 'react-router-dom'
@@ -35,7 +36,84 @@ function getVotesTable(currentVoteClass, setList) {
 
 export function Proposal() {
   let { ProposalId } = useParams();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onSubmit = data => {
 
+    console.log(data);
+
+    Wallet.onConnect().then( () => {
+
+      if(!Wallet.selectedAccount){
+        alert('Please connect your wallet to continue!');
+        return;
+      }
+
+      let walletAddress = Wallet.selectedAccount.toLowerCase()
+
+      let signPromise = null
+
+      let timestamp = Date.now()
+
+      let message = 'Proposal id: ' + ProposalId + '\n' +
+                    'Proposal title: '+ proposal.Title + '\n' +
+                    'Option: ' + data.option + '\n' +
+                    'Timestamp: ' + timestamp;
+
+      let password = ''
+      web3.eth.personal.sign(
+        message,
+        walletAddress,
+        password,
+        function (err, signature) {
+
+          if (err) {
+            alert('Signature Denied');
+            return;
+          }
+          if (signature) {
+
+            console.log('signature! ' + signature)
+
+            let xhr = new XMLHttpRequest()
+            xhr.open('POST', BASE_URL + '/submitvote', true)
+            xhr.setRequestHeader('Content-Type', 'application/json')
+
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState == XMLHttpRequest.DONE) {
+
+                console.log('response: ' + xhr.responseText)
+                let result = JSON.parse(xhr.responseText);
+
+                if (xhr.status == 200 && !result.error) {
+                  alert('Vote submitted successfully')
+                  getVotesTable(ProposalId, setList) //update vote table
+                } else {
+                  if(result.error && result.error.code == 'ConditionalCheckFailedException'){
+                    alert('You have already voted!')
+                  }
+                  else {
+                    alert('Vote submission failed, please try again' +
+                          (result.error ? '\n' + xhr.responseText : ''));
+                  }
+                }
+              }
+            }
+
+            xhr.send(
+              JSON.stringify({
+                voteClass: ProposalId,
+                voteValue: data.option,
+                signature: signature,
+                walletAddress: walletAddress,
+                timestamp: timestamp,
+                proposalTitle: proposal.Title
+              })
+            )
+          }
+        }
+      );
+    });
+  }
 
   useEffect(() => {
     let xhttp = new XMLHttpRequest()
@@ -100,6 +178,37 @@ export function Proposal() {
         </div>
         {/*//app-card-body*/}
         <div className="app-card-footer px-4 py-3">
+
+          <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-group mb-3">
+              <label htmlFor="field-yes">
+                <input
+                    {...register("option", { required: true })}
+                    type="radio"
+                    name="option"
+                    value="yes"
+                    id="field-yes"
+                />
+                Yes
+              </label>
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="field-no">
+                <input
+                    {...register("option", { required: true })}
+                    type="radio"
+                    name="option"
+                    value="no"
+                    id="field-no"
+                />
+                No
+              </label>
+              {errors.option?.type === 'required' && "You need to choose one option."}
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Vote
+            </button>
+          </form>
 
         </div>
       </div>

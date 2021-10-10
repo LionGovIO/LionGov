@@ -470,8 +470,10 @@
                             xhr.send(JSON.stringify({
                                 voteClass: voteClass,
                                 voteValue: voteValue,
-                                signedVoteValue: signedVoteValue,
+                                signature: signedVoteValue,
                                 walletAddress: walletAddress
+                                // Add Timestamp
+                                // Add Proposal title
                             }));
                         }
                     });
