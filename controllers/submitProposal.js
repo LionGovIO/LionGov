@@ -108,6 +108,16 @@ module.exports = class submitProposal extends ControllerClass {
       return;
     }
 
+    let signature_valid_for = 5 * 60 * 1000; //5 min in milliseconds
+
+    if (postData.timestamp < (Date.now() - signature_valid_for)){
+      res.json({
+        "error": {msg: 'Signature expired! Try submitting again or checking your system clock.'}
+      });
+      res.end();
+      return;
+    }
+
     let message = "New proposal:\n" +
                   'Title: ' + postData.title + "\n" +
                   'Description: ' + postData.description + "\n" +
