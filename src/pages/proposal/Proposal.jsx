@@ -95,8 +95,8 @@ export function Proposal() {
                       alert('Vote submission failed\n' + xhr.response)
                     }
                   } else {
-                    alert('Vote submitted successfully')
                     getVotesTable(ProposalId, setList) //update vote table
+                    alert('Vote submitted successfully')
                   }
 
                 } else if (xhr.status == 500) {
