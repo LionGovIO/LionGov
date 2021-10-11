@@ -87,9 +87,9 @@ export function WeightPoints(){
         </div>
       </div>
 
-      { listTotal.map((PointsInChain) => (
-        <PointsTable key={PointsInChain.chain} PointsInChain={PointsInChain} />
-      ))}
+      { listTotal.map((PointsInChain) => {
+        return (PointsInChain.token_balance > 0 ? (<PointsTable key={PointsInChain.chain} PointsInChain={PointsInChain} />): '')
+      })}
 
     </div>
   )
