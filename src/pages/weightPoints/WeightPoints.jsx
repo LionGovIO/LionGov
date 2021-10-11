@@ -8,30 +8,60 @@ import { BASE_URL } from '../../shared/urls.js'
 
 
 export function WeightPoints() {
-  useEffect(() => {
-    var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log(xhttp.responseText)
-        // Typical action to be performed when the document is ready:
-        // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-        var result = JSON.parse(xhttp.responseText)
+  let getVoteWeightTable = () => {
+    Wallet.onConnect().then( () => {
 
-        console.log(result)
+      if(!Wallet.selectedAccount){
+        alert('Please connect your wallet to continue!');
 
-        setList(result.details)
+        Wallet.onConnectCallBack = () => {
+          getVoteWeightTable();
+          Wallet.onConnectCallBack = null;
+        }
+
+        return;
+      }
+
+      console.log('/getvoteweight?walletAddress=' + encodeURI(Wallet.selectedAccount));
+
+      let xhttp = new XMLHttpRequest()
+      xhttp.responseType = 'json';
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          if (xhttp.status == 200) {
+            let result = xhttp.response;
+            console.log(result)
+
+            if (result.error) {
+              if(result.error.msg){
+                alert(result.error.msg)
+              } else {
+                alert('Error\n' + xhttp.response)
+              }
+            } else { //If successful
+              setList(result.details)  // update table
+            }
+
+          } else if (xhttp.status == 500) {
+            alert('Internor Error, please inform the devs!\n' + xhttp.response);
+          } else {
+            alert('Error!\n' + xhttp.response);
+          }
+        }
 
       }
-    }
-    xhttp.open(
-      'GET',
-      BASE_URL + '/getvoteweight?walletAddress=0xd9f24B3A298a14d9b64a8155b590809CE682B3Bb' , //walletAddress
-      true
-    )
-    xhttp.send()
-  }, [])
+      xhttp.open(
+        'GET',
+        BASE_URL + '/getvoteweight?walletAddress=' + encodeURI(Wallet.selectedAccount),
+        true
+      )
+      xhttp.send()
 
+    });
+  }
+
+  useEffect(getVoteWeightTable, [])
 
   const [listTotal, setList] = React.useState([])
 

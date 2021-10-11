@@ -1,6 +1,8 @@
 
 let ControllerClass = require('../libs/ControllerClass');
 
+const ethers = require('ethers');
+
 module.exports = class getVoteWeight extends ControllerClass {
 
   get = (req, res) => {
@@ -8,18 +10,38 @@ module.exports = class getVoteWeight extends ControllerClass {
     this.debug(req.params);
     this.debug(req.query);
 
+    let checksumAddress;
+
     if (req.query) {
-      var walletAddress = req.query.walletAddress;
+      let walletAddress = req.query.walletAddress;
 
-      if (walletAddress) {
-        walletAddress = walletAddress.trim().toLowerCase();
-        this.debug('walletAddress to get voting points of! ' + walletAddress);
-        Blkchain.getVoteWeight(walletAddress, Date.now(), true).then(voteWeight => {
-          console.log('voteWeight! ' + voteWeight);
-
-          res.end(JSON.stringify(voteWeight));
+      try {
+        checksumAddress = ethers.utils.getAddress(walletAddress.trim()); //EIP55
+        if (!checksumAddress) {
+          res.json({
+            "error": {msg: "No address informed!"}
+          });
+          res.end();
+          return;
+        }
+      } catch (e) {
+        this.debug(e);
+        res.json({
+          "error": {msg: "Invalid Address!"}
         });
+        res.end();
+        return;
       }
+
+      walletAddress = checksumAddress.trim().toLowerCase();
+
+      this.debug('walletAddress to get voting points of! ' + walletAddress);
+      Blkchain.getVoteWeight(walletAddress, Date.now(), true).then(voteWeight => {
+        console.log('voteWeight! ' + voteWeight);
+
+        res.end(JSON.stringify(voteWeight));
+      });
+
     }
   }
 }
