@@ -13,7 +13,7 @@ export const PointsTable = ({ PointsInChain }) => (
 						<th className="cell">Days</th>
 						<th className="cell">Days counted</th>
 						<th className="cell">MM</th>
-						<th className="cell">Points</th>
+						<th className="cell">Vote Weight</th>
 					</tr>
 				</thead>
 				<tbody>
