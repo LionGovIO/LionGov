@@ -1,13 +1,15 @@
 import React from 'react'
 import {Input, Textarea} from '../../shared/styles'
 import { SubmitProposalContainer, Heading } from './SubmitProposal.styles'
-//import { Redirect } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { BASE_URL } from '../../shared/urls.js'
 
 export function SubmitProposal() {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const history = useHistory();
+
   const onSubmit = data => {
 
     console.log(data);
@@ -66,9 +68,8 @@ export function SubmitProposal() {
                       alert('Proposal submission failed\n' + xhr.response)
                     }
                   } else {
+                    history.push('/proposal/' + result.proposalId);
                     alert('Proposal submitted successfully!')
-                    window.location.href = '/proposal/'+ result.proposalId;
-                    //return (<Redirect to={'/proposal/' + result.proposalId}/>)
                   }
 
                 } else if (xhr.status == 500) {
