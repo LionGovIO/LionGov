@@ -5,12 +5,21 @@ import { barChartLine } from '../../assets/svg/barChartLine'
 import { receipt } from '../../assets/svg/receipt'
 import { PointsTable } from './PointsTable'
 import { BASE_URL } from '../../shared/urls.js'
+import { useParams } from 'react-router-dom'
 
 
-export function WeightPoints() {
+export function WeightPoints(){
+  let params = document.location.pathname.match(/[^\/]+/g);
 
-  let getVoteWeightTable = () => {
-    Wallet.onConnect().then( () => {
+  //Allows to see the voting weight of other addresses
+  let address = (Web3.utils.isAddress(params[1]) ? params[1] : null)
+
+  let getVoteWeightTable = async () => {
+
+    if (!address) { //if we did not specify an address, tries to get the user wallet address
+
+      await Wallet.onConnect()
+        console.log(address);
 
       if(!Wallet.selectedAccount){
         alert('Please connect your wallet to continue!');
@@ -23,42 +32,44 @@ export function WeightPoints() {
         return;
       }
 
-      console.log('/getvoteweight?walletAddress=' + encodeURI(Wallet.selectedAccount));
+      address = Wallet.selectedAccount;
 
-      let xhttp = new XMLHttpRequest()
-      xhttp.responseType = 'json';
-      xhttp.onreadystatechange = function () {
-        if (xhttp.readyState == XMLHttpRequest.DONE) {
-          if (xhttp.status == 200) {
-            let result = xhttp.response;
-            console.log(result)
+    }
 
-            if (result.error) {
-              if(result.error.msg){
-                alert(result.error.msg)
-              } else {
-                alert('Error\n' + xhttp.response)
-              }
-            } else { //If successful
-              setList(result.details)  // update table
+    let xhttp = new XMLHttpRequest()
+    xhttp.responseType = 'json';
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        if (xhttp.status == 200) {
+          let result = xhttp.response;
+          console.log(result)
+
+          if (result.error) {
+            if(result.error.msg){
+              alert(result.error.msg)
+            } else {
+              alert('Error\n' + xhttp.response)
             }
-
-          } else if (xhttp.status == 500) {
-            alert('Internor Error, please inform the devs!\n' + xhttp.response);
-          } else {
-            alert('Error!\n' + xhttp.response);
+          } else { //If successful
+            setList(result.details)  // update table
           }
+
+        } else if (xhttp.status == 500) {
+          alert('Internor Error, please inform the devs!\n' + xhttp.response);
+        } else {
+          alert('Error!\n' + xhttp.response);
         }
-
       }
-      xhttp.open(
-        'GET',
-        BASE_URL + '/getvoteweight?walletAddress=' + encodeURI(Wallet.selectedAccount),
-        true
-      )
-      xhttp.send()
 
-    });
+    }
+    xhttp.open(
+      'GET',
+      BASE_URL + '/getvoteweight?walletAddress=' + encodeURI(address),
+      true
+    )
+    xhttp.send()
+
+
   }
 
   useEffect(getVoteWeightTable, [])
