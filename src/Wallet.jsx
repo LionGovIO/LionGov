@@ -14,6 +14,8 @@ class WalletClass {
   // The button attaches a function to this variable
   changeButton;
 
+  onConnectCallBack; //You can attach a function to be called onConnect
+
   constructor () {
     this.Web3Modal = window.Web3Modal.default;
     this.WalletConnectProvider = window.WalletConnectProvider.default;
@@ -52,6 +54,7 @@ class WalletClass {
   connected = () => {
     this.selectedAccount = ethereum.selectedAddress;
     this.changeButton(obscureAddress(ethereum.selectedAddress));
+    if(this.onConnectCallBack){this.onConnectCallBack(ethereum.selectedAddress);}
   }
 
   disconnected = () => {
