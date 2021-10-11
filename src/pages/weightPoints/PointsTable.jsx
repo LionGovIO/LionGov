@@ -29,6 +29,14 @@ export const PointsTable = ({ PointsInChain }) => (
   					</tr>
           ))}
 
+          <tr key={Math.random()} style={{fontWeight: 'bold'}}>
+            <td className="cell" style={{textAlign: 'center'}}>Total</td>
+            <td className="cell" style={{textAlign: 'center'}}></td>
+            <td className="cell" style={{textAlign: 'center'}}></td>
+            <td className="cell">{Number(PointsInChain.token_balance).toFixed(18).replace(/\.?0+$/,"")}</td>
+            <td className="cell">{Number(PointsInChain.points_balance).toFixed(18).replace(/\.?0+$/,"")}</td>
+          </tr>
+
 				</tbody>
 			</table>
         </div>

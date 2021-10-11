@@ -51,7 +51,7 @@ export function WeightPoints(){
               alert('Error\n' + xhttp.response)
             }
           } else { //If successful
-            setList(result.details)  // update table
+            setList(result)  // update table
           }
 
         } else if (xhttp.status == 500) {
@@ -74,7 +74,7 @@ export function WeightPoints(){
 
   useEffect(getVoteWeightTable, [])
 
-  const [listTotal, setList] = React.useState([])
+  const [listTotal, setList] = React.useState({details: [], token_balance:null, voteWeight: null})
 
   return (
     <div className="container-xl">
@@ -87,9 +87,11 @@ export function WeightPoints(){
         </div>
       </div>
 
-      { listTotal.map((PointsInChain) => {
+      { (listTotal.details.map((PointsInChain) => {
         return (PointsInChain.token_balance > 0 ? (<PointsTable key={PointsInChain.chain} PointsInChain={PointsInChain} />): '')
-      })}
+      }) )}
+
+      <center>Total: <b>{listTotal.token_balance} MM</b> -> Weight: <b>{listTotal.voteWeight}</b></center>
 
     </div>
   )
