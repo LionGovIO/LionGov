@@ -8,10 +8,10 @@ export const PointsTable = ({ PointsInChain }) => (
 	    <div className="table-responsive">
 	        <table className="table app-table-hover mb-0 text-left">
 				<thead>
-					<tr>
-						<th className="cell">Date</th>
-						<th className="cell">Days</th>
-						<th className="cell">Days counted</th>
+					<tr >
+						<th className="cell" style={{textAlign: 'center'}}>Date</th>
+						<th className="cell" style={{textAlign: 'center'}}>Days passed</th>
+						<th className="cell" style={{textAlign: 'center'}}>Days counted</th>
 						<th className="cell">MM</th>
 						<th className="cell">Vote Weight</th>
 					</tr>
@@ -19,11 +19,11 @@ export const PointsTable = ({ PointsInChain }) => (
 				<tbody>
           {PointsInChain.points_detail.map((txbuy) => (
   					<tr key={Math.random()}>
-              <td className="cell">
+              <td className="cell" style={{textAlign: 'center'}}>
                 <span>{(new Date(txbuy.timestamp)).toLocaleDateString()}</span>
                 <span className="note">{(new Date(txbuy.timestamp)).toLocaleTimeString()}</span></td>
-              <td className="cell">{Math.round((Date.now() - (new Date(txbuy.timestamp)).getTime()) / (1000 * 60 * 60 * 24))}</td>
-  						<td className="cell">{txbuy.days}</td>
+              <td className="cell" style={{textAlign: 'center'}}>{Math.round((Date.now() - (new Date(txbuy.timestamp)).getTime()) / (1000 * 60 * 60 * 24))}</td>
+  						<td className="cell" style={{textAlign: 'center'}}>{txbuy.days}</td>
   						<td className="cell">{Number(txbuy.token_amount).toFixed(18).replace(/\.?0+$/,"")}</td>
   						<td className="cell">{Number(txbuy.points).toFixed(18).replace(/\.?0+$/,"")}</td>
   					</tr>
