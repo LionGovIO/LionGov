@@ -12,10 +12,11 @@ import { BASE_URL } from '../../shared/urls.js'
 function getVotesTable(currentVoteClass, setList) {
 
   let xhttp = new XMLHttpRequest()
+  xhttp.responseType = 'json';
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
 
-      let result = JSON.parse(xhttp.responseText)
+      let result = xhttp.response
 
       let items = result.items
 
@@ -73,16 +74,17 @@ export function Proposal() {
             console.log('signature! ' + signature)
 
             let xhr = new XMLHttpRequest()
+            xhr.responseType = 'json';
             xhr.open('POST', BASE_URL + '/submitvote', true)
             xhr.setRequestHeader('Content-Type', 'application/json')
 
             xhr.onreadystatechange = function () {
               if (xhr.readyState == XMLHttpRequest.DONE) {
 
-                console.log('response: ' + xhr.responseText)
+                console.log('response: ' + xhr.response)
 
                 if (xhr.status == 200) {
-                  let result = JSON.parse(xhr.responseText);
+                  let result = xhr.response;
 
                   if (result.error) {
                     if(result.error.code == 'ConditionalCheckFailedException'){
@@ -90,7 +92,7 @@ export function Proposal() {
                     } else if(result.error.msg){
                       alert(result.error.msg)
                     } else {
-                      alert('Vote submission failed\n' + xhr.responseText)
+                      alert('Vote submission failed\n' + xhr.response)
                     }
                   } else {
                     alert('Vote submitted successfully')
@@ -98,9 +100,9 @@ export function Proposal() {
                   }
 
                 } else if (xhr.status == 500) {
-                  alert('Internor Error, please inform the devs!\n' + xhr.responseText);
+                  alert('Internor Error, please inform the devs!\n' + xhr.response);
                 } else {
-                  alert('Error!\n' + xhr.responseText);
+                  alert('Error!\n' + xhr.response);
                 }
 
               }
@@ -124,10 +126,11 @@ export function Proposal() {
 
   useEffect(() => {
     let xhttp = new XMLHttpRequest()
+    xhttp.responseType = 'json';
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
 
-        let proposal = JSON.parse(xhttp.responseText)
+        let proposal = xhttp.response
 
         setProposal(proposal)
 

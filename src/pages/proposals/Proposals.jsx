@@ -8,14 +8,15 @@ import { BASE_URL } from '../../shared/urls.js'
 
 export function Proposals() {
   useEffect(() => {
-    var xhttp = new XMLHttpRequest()
+    let xhttp = new XMLHttpRequest()
+    xhttp.responseType = 'json';
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        console.log(xhttp.responseText)
+        console.log(xhttp.response)
         // Typical action to be performed when the document is ready:
         // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-        var result = JSON.parse(xhttp.responseText)
+        var result = xhttp.response
 
         setList(result.items)
 
