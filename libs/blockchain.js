@@ -96,14 +96,18 @@ module.exports = class Blockchain {
           if (MM_calc > 0) {
             let blck_tmstamp = Date.parse(item.block_timestamp);
             let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
+            if(last_sell) {
+                // If there is a sell, their point calculation day is reset
+                datediff = last_sell;
+            }
             //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
             rows.push({
               timestamp: item.block_timestamp,
               token_amount: MM_calc,
-              days: (last_sell ? last_sell : datediff),
-              points: (last_sell ? last_sell : datediff) * MM_calc
+              days: datediff,
+              points: datediff * MM_calc
             });
-            MM_points += (last_sell ? last_sell : datediff) * MM_calc;
+            MM_points += datediff * MM_calc;
             MM_calc = 0; //reset calculation counter
           }
         }
