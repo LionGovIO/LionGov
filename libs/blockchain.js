@@ -57,6 +57,10 @@ module.exports = class Blockchain {
     let last_sell = false;
     let rows = [];
 
+    //Set it to the correct day. Probably should be on LionGov launch  day.
+
+    let punish_sell_startdate = (new Date('January 01, 2077 11:00 UTC')).getTime(); //timestamp
+
     user_address = user_address.toLowerCase() //must be lowercase
 
     ////////////////////////////
@@ -80,7 +84,8 @@ module.exports = class Blockchain {
           MM_calc -= amount;
           MM_balance -= amount;
           let blck_tmstamp = Date.parse(item.block_timestamp);
-          if(!last_sell){
+
+          if(blck_tmstamp > punish_sell_startdate && !last_sell){
             last_sell = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
           }
         }
