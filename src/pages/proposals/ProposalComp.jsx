@@ -14,7 +14,7 @@ export const ProposalComp = ({ proposal }) => (
           <div className="notification-type mb-2">
             <span className="badge bg-info">Proposal</span>
           </div>
-          <h4 className="notification-title mb-1">{proposal.title}</h4>
+          <Link className="action-link" to={'/proposal/' + proposal.proposalId}><h4 className="notification-title mb-1">{proposal.title}</h4></Link>
           <ul className="notification-meta list-inline mb-0">
             <li className="list-inline-item">{(new Date(parseInt(proposal.creationTime))).toLocaleString()}</li>
             <li className="list-inline-item">|</li>
