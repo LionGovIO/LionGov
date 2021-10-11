@@ -173,7 +173,7 @@ export function Proposal() {
               <ul className="notification-meta list-inline mb-0">
                 <li className="list-inline-item">{(new Date(parseInt(proposal.CreationTime))).toLocaleString()}</li>
                 <li className="list-inline-item">|</li>
-                <li className="list-inline-item">{proposal.WalletAddress}</li>
+                <li className="list-inline-item">Author: {proposal.WalletAddress}</li>
               </ul>
             </div>
             {/*//col*/}

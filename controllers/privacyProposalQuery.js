@@ -45,7 +45,7 @@ module.exports = class privacyProposalQuery extends ControllerClass {
             var proposalId = item.ProposalId.S;
             var proposalType = item.ProposalType.S;
             var creationTime = item.CreationTime.S;
-            // var walletAddress = item.WalletAddress.S;
+            var walletAddress = item.WalletAddress.S;
             var title = item.Title.S;
             var description = item.Description.S;
 
@@ -57,6 +57,7 @@ module.exports = class privacyProposalQuery extends ControllerClass {
               proposalId: proposalId,
               proposalType: proposalType,
               creationTime: creationTime,
+              walletAddress: walletAddress,
               title: title,
               description: description
             }
