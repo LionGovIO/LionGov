@@ -131,6 +131,18 @@ module.exports = class submitProposal extends ControllerClass {
       return;
     }
 
+    let voteWeightInfo = Blkchain.getVoteWeight(postData.walletAddress, Date.now());
+
+    let voteWeight = voteWeightInfo.voteWeight;
+
+    if(voteWeight < 100){
+      res.json({
+        "error": {msg: "You need to have a point weight of 100 or higher to create a proposal.\n" +
+                       "Your current point weight is: " + voteWeight }
+      });
+      res.end();
+      return;
+    }
 
     // TODO: reject invalid post params
     // prevent bad data from being injected in database

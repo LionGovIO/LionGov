@@ -80,20 +80,29 @@ export function Proposal() {
               if (xhr.readyState == XMLHttpRequest.DONE) {
 
                 console.log('response: ' + xhr.responseText)
-                let result = JSON.parse(xhr.responseText);
 
-                if (xhr.status == 200 && !result.error) {
-                  alert('Vote submitted successfully')
-                  getVotesTable(ProposalId, setList) //update vote table
+                if (xhr.status == 200) {
+                  let result = JSON.parse(xhr.responseText);
+
+                  if (result.error) {
+                    if(result.error.code == 'ConditionalCheckFailedException'){
+                      alert('You have already voted!')
+                    } else if(result.error.msg){
+                      alert(result.error.msg)
+                    } else {
+                      alert('Vote submission failed\n' + xhr.responseText)
+                    }
+                  } else {
+                    alert('Vote submitted successfully')
+                    getVotesTable(ProposalId, setList) //update vote table
+                  }
+
+                } else if (xhr.status == 500) {
+                  alert('Internor Error, please inform the devs!\n' + xhr.responseText);
                 } else {
-                  if(result.error && result.error.code == 'ConditionalCheckFailedException'){
-                    alert('You have already voted!')
-                  }
-                  else {
-                    alert('Vote submission failed, please try again' +
-                          (result.error ? '\n' + xhr.responseText : ''));
-                  }
+                  alert('Error!\n' + xhr.responseText);
                 }
+
               }
             }
 

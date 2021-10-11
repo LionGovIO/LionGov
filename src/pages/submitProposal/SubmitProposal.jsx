@@ -54,17 +54,26 @@ export function SubmitProposal() {
               if (xhr.readyState == XMLHttpRequest.DONE) {
 
                 console.log('response: ' + xhr.responseText)
-                let result = JSON.parse(xhr.responseText);
 
-                if (xhr.status == 200 && !result.error) {
-                  // TODO: go to a vote successful page, helps a bit to prevent people to vote multiple times
-                  // TODO: when doing vote calculation, need to get rid of other votes from the same person, only pick 1 (probably the latest one)
-                  alert('Proposal submitted successfully!')
-                  window.location.href = '/proposal/'+ result.proposalId;
-                  //return (<Redirect to={'/proposal/' + result.proposalId}/>)
+                if (xhr.status == 200) {
+                  let result = JSON.parse(xhr.responseText);
+
+                  if (result.error) {
+                    if(result.error.msg){
+                      alert(result.error.msg)
+                    } else {
+                      alert('Proposal submission failed\n' + xhr.responseText)
+                    }
+                  } else {
+                    alert('Proposal submitted successfully!')
+                    window.location.href = '/proposal/'+ result.proposalId;
+                    //return (<Redirect to={'/proposal/' + result.proposalId}/>)
+                  }
+
+                } else if (xhr.status == 500) {
+                  alert('Internor Error, please inform the devs!\n' + xhr.responseText);
                 } else {
-                  alert('Proposal submission failed, please try again' +
-                        (result.error ? '\n' + xhr.responseText : ''));
+                  alert('Error!\n' + xhr.responseText);
                 }
               }
             }

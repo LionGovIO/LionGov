@@ -96,6 +96,18 @@ module.exports = class submitVote extends ControllerClass {
 
         var voteWeight = voteWeightInfo.voteWeight;
 
+        if(voteWeight < 7){
+          let date_options = {year:'numeric', month:'short', day:'numeric', hour12:false, hour:'numeric', minute:'numeric', timeZone:'UTC', timeZoneName:'short'};
+          res.json({
+            "error": {msg: "You need to have a point weight of 7 or higher to vote.\n" +
+                           "This proposal was created on " +
+                           (new Date(parseInt(Proposal.CreationTime))).toLocaleString('en-US', date_options) +
+                           "\nYour point weight for that time is: " + voteWeight }
+          });
+          res.end();
+          return;
+        }
+
         // TODO: add vote version number, so if we adapt how votes are created, we can use if/else
         // on version for backward compatibility
 
