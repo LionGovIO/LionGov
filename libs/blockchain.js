@@ -59,9 +59,22 @@ module.exports = class Blockchain {
 
     user_address = user_address.toLowerCase() //must be lowercase
 
+    ////////////////////////////
+    // Vote Weight calcuation //
+    ////////////////////////////
+
+    // It is a LIFO (Last-In, First-Out) calculation.
+    // So we go in a reverse chronological order.
+
     if (transactions && transactions.length > 0) {
       transactions.forEach(function (item, index, array) {
         let amount = parseInt(item.value) / 10 ** 18; //18 decimals
+
+        // Note: It is possible to an address to transfer to itself.
+
+        /////////////////////////////
+        // Sells and Transfers Out //
+        /////////////////////////////
 
         if (item.from_address == user_address) {
           MM_calc -= amount;
@@ -69,6 +82,11 @@ module.exports = class Blockchain {
           let blck_tmstamp = Date.parse(item.block_timestamp);
           last_sell = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
         }
+
+        ///////////////////////////
+        // Buys and Transfers In //
+        ///////////////////////////
+
         if (item.to_address == user_address) {
           MM_balance += amount;
           MM_calc += amount;
