@@ -36,8 +36,8 @@ function getVotesTable(currentVoteClass, setList) {
       option_Weight['no'] = 0;
 
       for (const i in votes) {
-        option_Weight[votes[i].voteValue.toLowerCase()] += votes[i].voteWeight;
-        totalWeight += votes[i].voteWeight;
+        option_Weight[votes[i].voteValue.toLowerCase()] += number(votes[i].voteWeight);
+        totalWeight += number(votes[i].voteWeight);
       }
 
       //let sum = result.sum;
