@@ -92,63 +92,17 @@ export function Sidebar() {
         <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
           <ul className="app-menu list-unstyled accordion" id="menu-accordion">
             <li className="nav-item">
-              <Link className="nav-link active" to="/">
-                <span className="nav-icon">{houseDoor}</span>
-                <span className="nav-link-text">Overview</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
               <Link className="nav-link" to="/">
-                <span className="nav-icon">{folder}</span>
-                <span className="nav-link-text">Docs</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                <span className="nav-icon">{cardList}</span>
-                <span className="nav-link-text">Governance</span>
-              </Link>
-            </li>
-
-            <li className="nav-item has-submenu">
-              <a
-                className="nav-link submenu-toggle"
-                href="#"
-                data-bs-toggle="collapse"
-                data-bs-target="#submenu-1"
-                aria-expanded="false"
-                aria-controls="submenu-1"
-              >
                 <span className="nav-icon">{files}</span>
                 <span className="nav-link-text">Proposals</span>
-                <span className="submenu-arrow">{chevronDown}</span>
-              </a>
+              </Link>
+            </li>
 
-              <div
-                id="submenu-1"
-                className="collapse submenu submenu-1"
-                data-bs-parent="#menu-accordion"
-              >
-                <ul className="submenu-list list-unstyled">
-                  <li className="submenu-item">
-                    <Link className="submenu-link" to="/">
-                      All proposals
-                    </Link>
-                  </li>
-                  <li className="submenu-item">
-                    <Link className="submenu-link" to="/">
-                      My proposals
-                    </Link>
-                  </li>
-                  <li className="submenu-item">
-                    <Link className="submenu-link" to="/SubmitProposal">
-                      Submit proposal
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+            <li className="nav-item">
+              <Link className="nav-link" to="/SubmitProposal">
+                <span className="nav-icon">{cardList}</span>
+                <span className="nav-link-text">Submit proposal</span>
+              </Link>
             </li>
 
             <li className="nav-item">
