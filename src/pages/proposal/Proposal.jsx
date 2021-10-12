@@ -18,11 +18,74 @@ function getVotesTable(currentVoteClass, setList) {
 
       let result = xhttp.response
 
-      let items = result.items
+      let votes = result.items
 
-      if (items) {
-        setList(items);
+      if (votes) {
+        setList(votes);
       }
+
+      console.log(result);
+
+      // TODO: for now, assume 'Yes' and 'No' are the vote values
+      //let option = {};
+      let option_Weight = {};
+      let totalWeight = 0;
+
+      option_Weight['yes'] = 0;
+
+      option_Weight['no'] = 0;
+
+      for (const i in votes) {
+        option_Weight[votes[i].voteValue] += votes[i].voteWeight;
+        totalWeight += votes[i].voteWeight;
+      }
+
+      //let sum = result.sum;
+      let count = votes.length;
+
+      // Add pie chart
+
+      if (window.myChart instanceof Chart) {
+          window.myChart.destroy();
+      }
+
+      console.log(option_Weight);
+
+      let ctx = document.getElementById('myChart').getContext('2d');
+
+      window.myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['No', 'Yes'],
+          datasets: [{
+            label: '# of Votes',
+            data: [option_Weight['no'], option_Weight['yes']],
+            backgroundColor: [
+              '#ff6484',
+              '#36a2eb'
+            ]
+          }]
+        },
+        options: {
+          plugins: {
+            title: {
+              //display: true,
+              //text: 'Total Vote Weight'
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+        // responsive: true,
+        // maintainAspectRatio: false
+      });
+
+
+      var totalVoteCount = count;
+    //  document.getElementById('total_vote_count_num').text(totalVoteCount);
+
+      //document.getElementById('total_vote_weight_num').text(totalWeight);
 
     }
   }
@@ -182,11 +245,22 @@ export function Proposal() {
         </div>
         {/*//app-card-header*/}
         <div className="app-card-body p-4">
+
           <div className="notification-content">
-            {proposal.Description}
+            <div className="container">
+              <div className="row justify-content-md-center">
+                <div className="col-lg-2">
+                  <canvas id="myChart"></canvas>
+                </div>
+                <div className="col">
+                  {proposal.Description}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         {/*//app-card-body*/}
+
         <div className="app-card-footer px-4 py-3">
 
           <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
