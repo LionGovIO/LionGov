@@ -16,7 +16,12 @@ export function Proposals() {
         // Typical action to be performed when the document is ready:
         // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-        var result = xhttp.response
+        let result = xhttp.response
+
+        // sort by creationTime
+        result.items.sort(function (a, b) {
+          return b.creationTime - a.creationTime;
+        });
 
         setList(result.items)
 
