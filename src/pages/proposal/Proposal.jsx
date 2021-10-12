@@ -264,27 +264,29 @@ export function Proposal() {
         <div className="app-card-footer px-4 py-3">
 
           <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group mb-3">
-              <label htmlFor="field-yes">
-                <input
-                    {...register("option", { required: true })}
-                    type="radio"
-                    name="option"
-                    value="yes"
-                    id="field-yes"
-                />
+            <div className="form-check mb-3">
+              <input
+                  {...register("option", { required: true })}
+                  type="radio"
+                  name="option"
+                  value="yes"
+                  id="field-yes"
+                  className="form-check-input"
+              />
+            <label className="form-check-label" htmlFor="field-yes">
                 Yes
               </label>
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="field-no">
-                <input
-                    {...register("option", { required: true })}
-                    type="radio"
-                    name="option"
-                    value="no"
-                    id="field-no"
-                />
+            <div className="form-check mb-3">
+              <input
+                  {...register("option", { required: true })}
+                  type="radio"
+                  name="option"
+                  value="no"
+                  id="field-no"
+                  className="form-check-input"
+              />
+              <label className="form-check-label" htmlFor="field-no">
                 No
               </label>
               {errors.option?.type === 'required' && "You need to choose one option."}
