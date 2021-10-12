@@ -114,7 +114,7 @@ export function Sidebar() {
           </ul>
         </nav>
 
-        <div className="app-sidepanel-footer">
+        {/*<div className="app-sidepanel-footer">
           <nav className="app-nav app-nav-footer">
             <ul className="app-menu footer-menu list-unstyled">
               <li className="nav-item">
@@ -125,7 +125,7 @@ export function Sidebar() {
               </li>
             </ul>
           </nav>
-        </div>
+        </div>*/}
       </div>
     </div>
   )
