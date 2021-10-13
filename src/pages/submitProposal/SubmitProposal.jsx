@@ -7,6 +7,7 @@ import { BASE_URL } from '../../shared/urls.js'
 
 export function SubmitProposal() {
 
+  const dateOptions =  {weekday:'long', year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'numeric', timeZoneName:'short'};
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const history = useHistory();
 
@@ -86,6 +87,7 @@ export function SubmitProposal() {
                 walletAddress: walletAddress,
                 title: data.proposal_title_input,
                 description: data.proposal_description_input,
+                endTimestamp: expDate.getTime(),
                 timestamp: timestamp,
               })
             )
@@ -98,6 +100,33 @@ export function SubmitProposal() {
 
 
   }
+
+  const calcExpDate = expDays => {
+
+    let expTimestamp = new Date();
+
+    console.log(expTimestamp.getUTCHours())
+    if(expTimestamp.getUTCHours() > 10) {expDays += 1;}
+    expTimestamp.setDate(expTimestamp.getDate() + expDays);
+    expTimestamp.setUTCHours(3);
+    expTimestamp.setUTCMinutes(0);
+    expTimestamp.setUTCSeconds(0);
+    expTimestamp.setUTCMilliseconds(0);
+
+    return expTimestamp;
+
+  }
+
+  const expDayChange = element => {
+
+    const expTimestamp = calcExpDate(parseInt(element.target.value));
+
+    setExpDate(expTimestamp);
+
+  }
+
+  const [expDate, setExpDate] = React.useState(calcExpDate(3))
+
 
   return (
     <div className="container-xl">
@@ -131,6 +160,29 @@ export function SubmitProposal() {
             className="form-control"
           />
           {errors.proposal_description_input?.type === 'required' && "Description is required"}
+        </div>
+        <div className="form-group mb-3">
+          <label className="form-label">Days to End of Proposal</label>
+          <div className="form-group mb-3">
+            <div className="btn-group" role="group" aria-label="Days to End of Proposal">
+              {[3,4,5,6,7].map((day) => [
+                <input
+                    {...register("expdays", { required: true })}
+                    type="radio"
+                    value={day}
+                    key={'btnradio-' + day}
+                    id={'btnradio-' + day}
+                    autoComplete="off"
+                    className="btn-check"
+                    onChange={expDayChange}
+                    defaultChecked={(day == 3)}
+
+                />,
+              <label key={'btnradiolabel-' + day} className="btn btn-outline-secondary" htmlFor={'btnradio-' + day}>{day}</label>
+              ])}
+            </div>
+          </div>
+          <label className="form-label">{expDate.toLocaleDateString(undefined, dateOptions)}</label>
         </div>
         <button type="submit" className="btn btn-primary">
           Submit

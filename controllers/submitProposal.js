@@ -50,6 +50,9 @@ module.exports = class submitProposal extends ControllerClass {
         "Description": { // TODO: description might be deprecated in future, might want to be a more flexible body input
           S: description
         },
+        "EndTimestamp": {
+          S: data.endTimestamp.toString()
+        },
         "CreationTime": {
           S: data.timestamp.toString()
         }
@@ -117,6 +120,28 @@ module.exports = class submitProposal extends ControllerClass {
       res.end();
       return;
     }
+
+    let minTimestamp = new Date();
+    let maxTimestamp = new Date();
+
+    minTimestamp.setDate(minTimestamp.getDate() + 2 );
+
+    maxTimestamp.setDate(maxTimestamp.getDate() + 9 );
+
+    if (postData.endTimestamp < minTimestamp || postData.endTimestamp > maxTimestamp){
+      res.json({ "error": "Invalid End Time" });
+      res.end();
+      return;
+    }
+
+    //Makes sure the time is not being tempered
+    let date_endTimestamp = new Date(postData.endTimestamp);
+    date_endTimestamp.setUTCHours(3);
+    date_endTimestamp.setUTCMinutes(0);
+    date_endTimestamp.setUTCSeconds(0);
+    date_endTimestamp.setUTCMilliseconds(0);
+
+    postData.endTimestamp = date_endTimestamp.getTime();
 
     let message = "New proposal:\n" +
                   'Title: ' + postData.title + "\n" +
