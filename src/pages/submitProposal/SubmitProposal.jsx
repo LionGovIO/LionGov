@@ -150,7 +150,7 @@ export function SubmitProposal() {
           <Input
             type="text"
             {...register("proposal_title_input", { required: true })}
-            placeholder=""
+            placeholder="Title"
             className="form-control"
           />
         {errors.proposal_title_input?.type === 'required' && "Title is required"}
@@ -161,7 +161,7 @@ export function SubmitProposal() {
             style={{ minHeight: "150px" }}
             type="text"
             {...register("proposal_description_input", { required: true })}
-            placeholder=""
+            placeholder="Description"
             className="form-control"
           />
           {errors.proposal_description_input?.type === 'required' && "Description is required"}
@@ -175,6 +175,7 @@ export function SubmitProposal() {
                 <input
                     {...register("option-"+option.toString(), { required: (option < 2) })}
                     type="text"
+                    placeholder={"Option " +  (option+1).toString() + (option > 1 ? ' (Optional)' : '')}
                     id={'option-' + option.toString()}
                     className="form-control"
                 />
