@@ -162,6 +162,9 @@ module.exports = class submitVote extends ControllerClass {
             "VoteWeight": {
               N: voteWeight.toString()
             },
+            "TokenAmount": {
+              N: voteWeightInfo.token_balance.toString()
+            },
             "SignedVoteValue": {
               S: data.signature
             },
