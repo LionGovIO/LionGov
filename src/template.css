@@ -152,7 +152,7 @@ button.close:focus {
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
   height: 2.5rem;
-  border-color: #e7e9ed;
+/*  border-color: #e7e9ed;*/
   color: #5d6778;
 }
 .form-control:focus {
