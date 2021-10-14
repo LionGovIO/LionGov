@@ -26,12 +26,22 @@ module.exports = class singleProposalQuery extends ControllerClass {
 
         let r = data.Item
 
+        let Options = []
+
+        if(r.Options) {
+          for (const i in r.Options.L) {
+            Options.push(r.Options.L[i].S);
+          }
+        }
+
         let Proposal = {
           Title : r.Title.S,
           ProposalId : r.ProposalId.S,
           ProposalType : r.ProposalType.S,
           CreationTime : r.CreationTime.S,
+          EndTimestamp : (r.EndTimestamp ? r.EndTimestamp.S : ''),
           Description : r.Description.S,
+          Options : Options,
           WalletAddress : r.WalletAddress.S
         }
 

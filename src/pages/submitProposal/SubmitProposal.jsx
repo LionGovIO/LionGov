@@ -15,6 +15,12 @@ export function SubmitProposal() {
 
     console.log(data);
 
+    data.options = [];
+
+    for (let i = 0; data["option-"+i]; i++) {
+      console.log("option-"+i)
+      data.options.push(data["option-"+i]);
+    }
     Wallet.onConnect().then( () => {
 
       if(!Wallet.selectedAccount){
@@ -30,8 +36,6 @@ export function SubmitProposal() {
                     'Title: ' + data.proposal_title_input + "\n" +
                     'Description: ' + data.proposal_description_input + "\n" +
                     'Timestamp: ' + timestamp;
-
-      // TODO: add more signature verification on proposals, to make sure that wallet address actually submitted the proposal
 
       let password = ''
       web3.eth.personal.sign(
@@ -88,6 +92,7 @@ export function SubmitProposal() {
                 title: data.proposal_title_input,
                 description: data.proposal_description_input,
                 endTimestamp: expDate.getTime(),
+                options: data.options,
                 timestamp: timestamp,
               })
             )
@@ -161,6 +166,24 @@ export function SubmitProposal() {
           />
           {errors.proposal_description_input?.type === 'required' && "Description is required"}
         </div>
+
+        <div className="form-group mb-3">
+          <label className="form-label">Options:</label>
+          <div className="form-group mb-3">
+            {[0,1,2,3].map((option) => (
+              <div className="form-group mb-3" role="group" key={'option-' + option.toString()}>
+                <input
+                    {...register("option-"+option.toString(), { required: (option < 2) })}
+                    type="text"
+                    id={'option-' + option.toString()}
+                    className="form-control"
+                />
+              {errors["option-"+option.toString()]?.type === 'required' && "This field is required"}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="form-group mb-3">
           <label className="form-label">Days to End of Proposal</label>
           <div className="form-group mb-3">

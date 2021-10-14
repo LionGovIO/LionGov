@@ -17,6 +17,9 @@ module.exports = class submitVote extends ControllerClass {
     this.debug('data!');
     this.debug(data);
 
+    let optionId = data.voteValue;
+    let optionText = data.optionText;
+
     try {
       checksumAddress = ethers.utils.getAddress(data.walletAddress); //EIP55
       if (!checksumAddress) {
@@ -46,7 +49,7 @@ module.exports = class submitVote extends ControllerClass {
 
     let message = 'Proposal id: ' + data.voteClass + '\n' +
                   'Proposal title: '+ data.proposalTitle + '\n' +
-                  'Option: ' + data.voteValue + '\n' +
+                  'Option: ' + data.optionText + '\n' +
                   'Timestamp: ' + data.timestamp;
 
     // verifyMessage (Message , signature) -> return in EIP55 address
@@ -69,6 +72,28 @@ module.exports = class submitVote extends ControllerClass {
         res.end();
         return;
       }
+
+      if (Proposal.ProposalType == 'yes_no'){
+        if (optionId != optionText ||
+            (optionId != 'yes' && optionId != 'no')){
+              res.json({
+                "error": {msg: "Invalid option!"}
+              });
+              res.end();
+              return;
+        }
+      } else {
+        if(Proposal.Options.length < optionId ||
+           Proposal.Options[optionId] != optionText){
+             res.json({
+               "error": {msg: "Inconsistent option data!"}
+             });
+             res.end();
+             return;
+        }
+
+      }
+
 
       // TODO: reject invalid post params
       // prevent bad data from being injected in database
@@ -132,7 +157,7 @@ module.exports = class submitVote extends ControllerClass {
               S: data.voteClass
             },
             "VoteValue": {
-              S: data.voteValue
+              S: optionId
             },
             "VoteWeight": {
               N: voteWeight.toString()

@@ -9,7 +9,7 @@ import { BASE_URL } from '../../shared/urls.js'
 //import { BrowserRouter as Link, useParams } from 'react-router-dom'
 
 
-function getVotesTable(currentVoteClass, setList) {
+function getVotesTable(proposal, currentVoteClass, setList) {
 
   let xhttp = new XMLHttpRequest()
   xhttp.responseType = 'json';
@@ -31,13 +31,32 @@ function getVotesTable(currentVoteClass, setList) {
       let option_Weight = {};
       let totalWeight = 0;
 
-      option_Weight['yes'] = 0;
 
-      option_Weight['no'] = 0;
 
-      for (const i in votes) {
-        option_Weight[votes[i].voteValue.toLowerCase()] += Number(votes[i].voteWeight);
-        totalWeight += Number(votes[i].voteWeight);
+      let chart_data = null;
+
+      let option_labels = null;
+
+      if(proposal.ProposalType == 'yes_no'){
+        option_Weight['yes'] = 0;
+        option_Weight['no'] = 0;
+
+        for (const i in votes) {
+          option_Weight[votes[i].voteValue.toLowerCase()] += Number(votes[i].voteWeight);
+          totalWeight += Number(votes[i].voteWeight);
+        }
+        option_labels = ['No', 'Yes'];
+        chart_data = [option_Weight['no'], option_Weight['yes']];
+      }
+      else {
+        option_Weight = Array(proposal.Options.length).fill(0);
+
+        for (const i in votes) {
+          option_Weight[votes[i].voteValue] += Number(votes[i].voteWeight);
+          totalWeight += Number(votes[i].voteWeight);
+        }
+        option_labels = proposal.Options;
+        chart_data = option_Weight;
       }
 
       //let sum = result.sum;
@@ -49,20 +68,20 @@ function getVotesTable(currentVoteClass, setList) {
           window.myChart.destroy();
       }
 
-      console.log(option_Weight);
-
       let ctx = document.getElementById('myChart').getContext('2d');
 
       window.myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['No', 'Yes'],
+          labels: option_labels,
           datasets: [{
             label: '# of Votes',
-            data: [option_Weight['no'], option_Weight['yes']],
+            data: chart_data,
             backgroundColor: [
               '#ff6484',
-              '#36a2eb'
+              '#36a2eb',
+              '#026e00',
+              '#ecdb54'
             ]
           }]
         },
@@ -116,9 +135,19 @@ export function Proposal() {
 
       let timestamp = Date.now()
 
+      let optionText, optionId = null;
+
+      if (proposal.ProposalType == 'yes_no'){
+        optionId = data.option;
+        optionText = data.option;
+      } else {
+        optionId = data.option;
+        optionText = proposal.Options[data.option];
+      }
+
       let message = 'Proposal id: ' + ProposalId + '\n' +
                     'Proposal title: '+ proposal.Title + '\n' +
-                    'Option: ' + data.option + '\n' +
+                    'Option: ' + optionText + '\n' +
                     'Timestamp: ' + timestamp;
 
       let password = ''
@@ -158,7 +187,7 @@ export function Proposal() {
                       alert('Vote submission failed\n' + xhr.response)
                     }
                   } else {
-                    getVotesTable(ProposalId, setList) //update vote table
+                    getVotesTable(proposal, ProposalId, setList) //update vote table
                     alert('Vote submitted successfully')
                   }
 
@@ -174,7 +203,8 @@ export function Proposal() {
             xhr.send(
               JSON.stringify({
                 voteClass: ProposalId,
-                voteValue: data.option,
+                voteValue: optionId,
+                optionText: optionText,
                 signature: signature,
                 walletAddress: walletAddress,
                 timestamp: timestamp,
@@ -197,7 +227,7 @@ export function Proposal() {
 
         setProposal(proposal)
 
-        getVotesTable(ProposalId, setList)
+        getVotesTable(proposal, ProposalId, setList)
 
       }
     }
@@ -209,6 +239,69 @@ export function Proposal() {
 
   const [proposal, setProposal] = React.useState({})
   const [list, setList] = React.useState([])
+
+  const translateVote = (vote) => {
+    if(proposal.ProposalType == 'yes_no'){ return vote; }
+    else {return proposal.Options[vote];}
+  }
+
+  const YesAndNoOptionsRadio = () => {
+    return (
+      <div>
+        <div className="form-check mb-3">
+          <input
+              {...register("option", { required: true })}
+              type="radio"
+              name="option"
+              value="yes"
+              id="field-yes"
+              className="form-check-input"
+          />
+          <label className="form-check-label" htmlFor="field-yes">
+            Yes
+          </label>
+        </div>
+        <div className="form-check mb-3">
+          <input
+              {...register("option", { required: true })}
+              type="radio"
+              name="option"
+              value="no"
+              id="field-no"
+              className="form-check-input"
+          />
+          <label className="form-check-label" htmlFor="field-no">
+            No
+          </label>
+          {errors.option?.type === 'required' && "You need to choose one option."}
+        </div>
+      </div>
+    )
+  }
+
+  const MultiOptions = (args) => {
+    return (
+      <div>
+        {args.Options.map((option, index) => (
+
+          <div className="form-check mb-3" key={"option-"+index}>
+            <input
+                {...register("option", { required: true })}
+                type="radio"
+                name="option"
+                value={index}
+                id={"option-"+index}
+                className="form-check-input"
+            />
+            <label className="form-check-label" htmlFor={"option-"+index}>
+              {option}
+            </label>
+          </div>
+
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="container-xl">
@@ -264,33 +357,15 @@ export function Proposal() {
         <div className="app-card-footer px-4 py-3">
 
           <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-check mb-3">
-              <input
-                  {...register("option", { required: true })}
-                  type="radio"
-                  name="option"
-                  value="yes"
-                  id="field-yes"
-                  className="form-check-input"
-              />
-            <label className="form-check-label" htmlFor="field-yes">
-                Yes
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                  {...register("option", { required: true })}
-                  type="radio"
-                  name="option"
-                  value="no"
-                  id="field-no"
-                  className="form-check-input"
-              />
-              <label className="form-check-label" htmlFor="field-no">
-                No
-              </label>
-              {errors.option?.type === 'required' && "You need to choose one option."}
-            </div>
+
+            {(proposal &&
+              (proposal.Options ?
+                <MultiOptions Options={proposal.Options} />
+                :
+                <YesAndNoOptionsRadio />
+              )
+            )}
+
             <button type="submit" className="btn btn-primary">
               Vote
             </button>
@@ -316,7 +391,7 @@ export function Proposal() {
                 { list.map((item) => (
                   <tr key={Math.random()}>
                     <td className="cell">{item.obscuredWalletAddress}</td>
-                    <td className="cell">{item.voteValue}</td>
+                    <td className="cell">{translateVote(item.voteValue)}</td>
                     <td className="cell">{item.voteWeight}</td>
                     <td className="cell">
                       <span>{(new Date(parseInt(item.creationTime))).toLocaleDateString()}</span>
