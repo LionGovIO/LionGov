@@ -94,6 +94,15 @@ module.exports = class submitVote extends ControllerClass {
 
       }
 
+      if(Proposal.EndTimestamp &&
+         parseInt(Proposal.EndTimestamp) < Date.now()){
+           res.json({
+             "error": {msg: "Proposal voting ended!"}
+           });
+           res.end();
+           return;
+      }
+
 
       // TODO: reject invalid post params
       // prevent bad data from being injected in database
