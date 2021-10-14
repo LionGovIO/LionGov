@@ -327,10 +327,23 @@ export function Proposal() {
               </div>
               <h4 className="notification-title mb-1">{proposal.Title}</h4>
               <ul className="notification-meta list-inline mb-0">
-                <li className="list-inline-item">{(new Date(parseInt(proposal.CreationTime))).toLocaleString()}</li>
+                <li className="list-inline-item">Started on {(new Date(parseInt(proposal.CreationTime))).toLocaleString()}</li>
                 <li className="list-inline-item">|</li>
                 <li className="list-inline-item">Author: {proposal.WalletAddress}</li>
               </ul>
+              {proposal.EndTimestamp &&
+                (
+                  <ul className="notification-meta list-inline mb-0">
+                    <li className="list-inline-item">
+                      {parseInt(proposal.EndTimestamp) > Date.now()
+                        ? 'Ends on '
+                        : 'Ended on '
+                      }
+                      <strong>{(new Date(parseInt(proposal.EndTimestamp))).toLocaleString()}</strong>
+                    </li>
+                  </ul>
+                )
+              }
             </div>
             {/*//col*/}
           </div>
@@ -356,21 +369,27 @@ export function Proposal() {
 
         <div className="app-card-footer px-4 py-3">
 
-          <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
+          {proposal.EndTimestamp && parseInt(proposal.EndTimestamp) > Date.now()
+            ? (
+              <form id="vote_form" className="" onSubmit={handleSubmit(onSubmit)}>
 
-            {(proposal &&
-              (proposal.Options ?
-                <MultiOptions Options={proposal.Options} />
-                :
-                <YesAndNoOptionsRadio />
-              )
-            )}
+                {(proposal && proposal.Title &&
+                  (proposal.ProposalType != 'yes_no' && proposal.Options ?
+                    <MultiOptions Options={proposal.Options} />
+                    :
+                    <YesAndNoOptionsRadio />
+                  )
+                )}
 
-            <button type="submit" className="btn btn-primary">
-              Vote
-            </button>
-          </form>
-
+                <button type="submit" className="btn btn-primary">
+                  Vote
+                </button>
+              </form>
+            )
+            : (proposal.Title && ( //check if proposal was already loaded to confirm if the perioed really ended
+              <div>Voting period ended!</div>
+            ))
+          }
         </div>
       </div>
 
