@@ -137,12 +137,8 @@ export function SubmitProposal() {
     <div className="container-xl">
       <div>
     <SubmitProposalContainer className="app-card shadow-sm">
-      <div>
+      <div style={{marginBottom: '18px'}}>
         <Heading>Submit Proposal</Heading>
-        <div>
-          Note: This creates a proposal with "Yes" or "No" as the options. More
-          proposal types will be supported in the future.
-        </div>
       </div>
       <form id="proposal_form" className="" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group mb-3">
