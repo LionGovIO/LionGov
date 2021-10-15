@@ -20,7 +20,7 @@ export function Proposals() {
 
         // sort by creationTime
         result.items.sort(function (a, b) {
-          return b.creationTime - a.creationTime;
+          return b.CreationTime - a.CreationTime;
         });
 
         setList(result.items)
@@ -47,7 +47,7 @@ export function Proposals() {
       </div>
 
       {list.map((item) => (
-        <ProposalComp key={item.proposalId} proposal={item} />
+        <ProposalComp key={item.ProposalId} proposal={item} />
       ))}
 
     </div>

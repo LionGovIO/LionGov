@@ -14,11 +14,11 @@ export const ProposalComp = ({ proposal }) => (
           <div className="notification-type mb-2">
             <span className="badge bg-info">Proposal</span>
           </div>
-          <Link className="action-link" to={'/proposal/' + proposal.proposalId}><h4 className="notification-title mb-1">{proposal.title}</h4></Link>
+          <Link className="action-link" to={'/proposal/' + proposal.ProposalId}><h4 className="notification-title mb-1">{proposal.Title}</h4></Link>
           <ul className="notification-meta list-inline mb-0">
-            <li className="list-inline-item">{(new Date(parseInt(proposal.creationTime))).toLocaleString()}</li>
+            <li className="list-inline-item">{(new Date(parseInt(proposal.CreationTime))).toLocaleString()}</li>
             <li className="list-inline-item">|</li>
-            <li className="list-inline-item">Author: {proposal.walletAddress}</li>
+            <li className="list-inline-item">Author: {proposal.WalletAddress}</li>
           </ul>
         </div>
         {/*//col*/}
@@ -28,12 +28,12 @@ export const ProposalComp = ({ proposal }) => (
     {/*//app-card-header*/}
     <div className="app-card-body p-4">
       <div className="notification-content">
-        {proposal.description}
+        {proposal.Description}
       </div>
     </div>
     {/*//app-card-body*/}
     <div className="app-card-footer px-4 py-3">
-      <Link className="action-link" to={'/proposal/' + proposal.proposalId}>
+      <Link className="action-link" to={'/proposal/' + proposal.ProposalId}>
         Vote!
         <svg
           width="1em"

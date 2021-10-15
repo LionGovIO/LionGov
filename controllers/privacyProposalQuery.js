@@ -42,24 +42,17 @@ module.exports = class privacyProposalQuery extends ControllerClass {
 
             // TODO: handle case where desired attributes in item are missing, probably throw an error via callback
 
-            var proposalId = item.ProposalId.S;
-            var proposalType = item.ProposalType.S;
-            var creationTime = item.CreationTime.S;
-            var walletAddress = item.WalletAddress.S;
-            var title = item.Title.S;
-            var description = item.Description.S;
-
             // based on how OpenSea obscures wallet in display in profile page
             // var obscuredWalletAddress = walletAddress.substring(0, 6) + '...' + walletAddress.substring(walletAddress.length - 4, walletAddress.length);
 
             // do not return the VoteValue! ;)
             var outputItem = {
-              proposalId: proposalId,
-              proposalType: proposalType,
-              creationTime: creationTime,
-              walletAddress: walletAddress,
-              title: title,
-              description: description
+              ProposalId: item.ProposalId.S,
+              ProposalType: item.ProposalType.S,
+              CreationTime: item.CreationTime.S,
+              WalletAddress: item.WalletAddress.S,
+              Title: item.Title.S,
+              Description: item.Description.S
             }
 
             console.log(outputItem);
