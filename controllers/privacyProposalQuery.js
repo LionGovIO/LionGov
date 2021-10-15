@@ -50,6 +50,7 @@ module.exports = class privacyProposalQuery extends ControllerClass {
               ProposalId: item.ProposalId.S,
               ProposalType: item.ProposalType.S,
               CreationTime: item.CreationTime.S,
+              EndTimestamp : (item.EndTimestamp ? item.EndTimestamp.S : ''),
               WalletAddress: item.WalletAddress.S,
               Title: item.Title.S,
               Description: item.Description.S

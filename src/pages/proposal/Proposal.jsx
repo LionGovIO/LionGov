@@ -323,7 +323,10 @@ export function Proposal() {
             {/*//col*/}
             <div className="col-12 col-lg-auto text-center text-lg-start">
               <div className="notification-type mb-2">
-                <span className="badge bg-info">Proposal</span>
+                {(proposal.EndTimestamp && proposal.EndTimestamp > Date.now())
+                  ? <span className="badge" style={{backgroundColor: 'green'}}>Active</span>
+                  : <span className="badge bg-secondary">Ended</span>
+                }
               </div>
               <h4 className="notification-title mb-1">{proposal.Title}</h4>
               <ul className="notification-meta list-inline mb-0">

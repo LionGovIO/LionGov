@@ -12,7 +12,10 @@ export const ProposalComp = ({ proposal }) => (
         {/*//col*/}
         <div className="col-12 col-lg-auto text-center text-lg-start">
           <div className="notification-type mb-2">
-            <span className="badge bg-info">Proposal</span>
+            {(proposal.EndTimestamp && proposal.EndTimestamp > Date.now())
+              ? <span className="badge" style={{backgroundColor: 'green'}}>Active</span>
+              : <span className="badge bg-secondary">Ended</span>
+            }
           </div>
           <Link className="action-link" to={'/proposal/' + proposal.ProposalId}><h4 className="notification-title mb-1">{proposal.Title}</h4></Link>
           <ul className="notification-meta list-inline mb-0">
@@ -20,6 +23,19 @@ export const ProposalComp = ({ proposal }) => (
             <li className="list-inline-item">|</li>
             <li className="list-inline-item">Author: {proposal.WalletAddress}</li>
           </ul>
+          {proposal.EndTimestamp &&
+            (
+              <ul className="notification-meta list-inline mb-0">
+                <li className="list-inline-item">
+                  {parseInt(proposal.EndTimestamp) > Date.now()
+                    ? 'Ends on '
+                    : 'Ended on '
+                  }
+                  <strong>{(new Date(parseInt(proposal.EndTimestamp))).toLocaleString()}</strong>
+                </li>
+              </ul>
+            )
+          }
         </div>
         {/*//col*/}
       </div>
