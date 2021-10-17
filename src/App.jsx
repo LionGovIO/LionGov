@@ -14,7 +14,9 @@ import { init } from './init'
 import WalletClass from './Wallet'
 
 global.Wallet = new WalletClass();
-//init()
+
+
+init()
 
 
 export function App() {

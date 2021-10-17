@@ -66,19 +66,7 @@ export function SubmitProposal() {
               history.push('/proposal/' + response.data.proposalId);
               alert('Proposal submitted successfully!')
             })
-            .catch(function (error) {
-              if (error.response &&
-                  error.response.data &&
-                  error.response.data.error &&
-                  error.response.data.error.msg) {
-
-                alert(error.response.data.error.msg)
-
-              } else {
-                alert("Error!\n " + error.toJSON())
-                console.log(error.toJSON());
-              }
-            })
+            .catch(console.error)
 
           }
         }

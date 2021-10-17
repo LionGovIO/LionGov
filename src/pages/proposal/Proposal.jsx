@@ -106,19 +106,7 @@ function getVotesTable(proposal, currentVoteClass, setList) {
 
 
   })
-  .catch(function (error) {
-    if (error.response &&
-        error.response.data &&
-        error.response.data.error &&
-        error.response.data.error.msg) {
-
-      alert(error.response.data.error.msg)
-
-    } else {
-      alert("Error!\n " + error.toJSON())
-      console.log(error.toJSON());
-    }
-  })
+  .catch(console.error)
 
 }
 
@@ -185,23 +173,7 @@ export function Proposal() {
               getVotesTable(proposal, ProposalId, setList) //update vote table
               alert('Vote submitted successfully')
             })
-            .catch(function (error) {
-              if (error.response) {
-                let err = error.response.data.error;
-                if(err.code == 'ConditionalCheckFailedException'){
-                  alert('You have already voted!')
-                } else if(err.msg){
-                  alert(err.msg)
-                } else {
-                  alert('Vote submission failed\n' + JSON.stringify(error.response))
-                }
-                console.log(error.response);
-
-              } else {
-                alert("Error!\n " + error.toJSON())
-                console.log(error.toJSON());
-              }
-            })
+            .catch(console.error)
 
           }
         }
@@ -220,20 +192,7 @@ export function Proposal() {
 
       getVotesTable(proposal, ProposalId, setList)
     })
-    .catch(function (error) {
-      if (error.response) {
-        if(error.response.data.error){
-          alert(error.response.data.error.msg)
-        } else {
-          alert(JSON.stringify(error.response))
-        }
-        console.log(error.response);
-
-      } else {
-        alert("Error!\n " + error.toJSON())
-        console.log(error.toJSON());
-      }
-    })
+    .catch(console.error)
 
   }, [])
 

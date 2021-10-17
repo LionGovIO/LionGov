@@ -20,19 +20,7 @@ export function Proposals() {
 
       setList(result.items)
     })
-    .catch(function (error) {
-      if (error.response &&
-          error.response.data &&
-          error.response.data.error &&
-          error.response.data.error.msg) {
-
-        alert(error.response.data.error.msg)
-
-      } else {
-        alert("Error!\n " + error.toJSON())
-        console.log(error.toJSON());
-      }
-    })
+    .catch(console.error)
 
   }, [])
 
