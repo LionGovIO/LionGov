@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form"
 //import { ProposalComp } from '../proposals/ProposalComp'
 import { BASE_URL } from '../../shared/urls.js'
 //import { BrowserRouter as Link, useParams } from 'react-router-dom'
-import axios from 'axios';
 
 
 function getVotesTable(proposal, currentVoteClass, setList) {
