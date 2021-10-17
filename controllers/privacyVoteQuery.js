@@ -56,7 +56,8 @@ module.exports = class privacyVoteQuery extends ControllerClass {
               voteValue: item.VoteValue.S,
               obscuredWalletAddress: obscuredWalletAddress,
               voteWeight: item.VoteWeight.N,
-              creationTime: item.CreationTime.S
+              creationTime: item.CreationTime.S,
+              IpfsAddress: (item.IpfsAddress ? item.IpfsAddress.S : '') //backward compatibility
             }
 
             console.log(outputItem);

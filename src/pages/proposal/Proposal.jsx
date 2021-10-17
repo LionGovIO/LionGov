@@ -367,6 +367,7 @@ export function Proposal() {
                   <th className="cell">Vote</th>
                   <th className="cell">Weight</th>
                   <th className="cell">Date</th>
+                  <th className="cell" style={{textAlign: 'center'}}>Vote Proof</th>
                 </tr>
               </thead>
               <tbody>
@@ -378,6 +379,16 @@ export function Proposal() {
                     <td className="cell">
                       <span>{(new Date(parseInt(item.creationTime))).toLocaleDateString()}</span>
                       <span className="note">{(new Date(parseInt(item.creationTime))).toLocaleTimeString()}</span>
+                    </td>
+                    <td className="cell" style={{textAlign: 'center'}}>
+                      {item.IpfsAddress &&
+                        <a target='_blank' href={"https://ipfs.io/ipfs/" + encodeURI(item.IpfsAddress)}>
+                          <img
+                            style={{filter: "contrast(14%)", width: '21px'}}
+                            src="/assets/vectors/file-alt-regular.svg"
+                          />
+                        </a>
+                      }
                     </td>
                   </tr>
                 )) }

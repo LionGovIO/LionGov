@@ -82,10 +82,14 @@ const ethers = require('ethers');
 const c = require('./public/constants');
 const blkchain = require('./libs/blockchain');
 const Moralis = require('moralis/node');
+const IPFS = require('ipfs-core')
 
 const AWS = require("aws-sdk");
 
 dynamoDB = new AWS.DynamoDB(); // Global scope
+
+ipfs = null; // Global scope
+IPFS.create().then( e => {ipfs = e});
 
 Moralis.initialize(process.env.MORALIS_APP_ID);
 
