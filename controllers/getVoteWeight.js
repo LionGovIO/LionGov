@@ -18,6 +18,7 @@ module.exports = class getVoteWeight extends ControllerClass {
       try {
         checksumAddress = ethers.utils.getAddress(walletAddress.trim()); //EIP55
         if (!checksumAddress) {
+          res.status(400);
           res.json({
             "error": {msg: "No address informed!"}
           });
@@ -26,6 +27,7 @@ module.exports = class getVoteWeight extends ControllerClass {
         }
       } catch (e) {
         this.debug(e);
+        res.status(400);
         res.json({
           "error": {msg: "Invalid Address!"}
         });

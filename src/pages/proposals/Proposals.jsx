@@ -8,27 +8,32 @@ import { BASE_URL } from '../../shared/urls.js'
 
 export function Proposals() {
   useEffect(() => {
-    let xhttp = new XMLHttpRequest()
-    xhttp.responseType = 'json';
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log(xhttp.response)
-        // Typical action to be performed when the document is ready:
-        // document.getElementById("demo").innerHTML = xhttp.responseText;
 
-        let result = xhttp.response
+    axios.get(BASE_URL + '/privacyproposalquery')
+    .then(function (response) {
+      let result = response.data
 
-        // sort by creationTime
-        result.items.sort(function (a, b) {
-          return b.CreationTime - a.CreationTime;
-        });
+      // sort by creationTime
+      result.items.sort(function (a, b) {
+        return b.CreationTime - a.CreationTime;
+      });
 
-        setList(result.items)
+      setList(result.items)
+    })
+    .catch(function (error) {
+      if (error.response &&
+          error.response.data &&
+          error.response.data.error &&
+          error.response.data.error.msg) {
 
+        alert(error.response.data.error.msg)
+
+      } else {
+        alert("Error!\n " + error.toJSON())
+        console.log(error.toJSON());
       }
-    }
-    xhttp.open('GET', BASE_URL + '/privacyproposalquery', true)
-    xhttp.send()
+    })
+
   }, [])
 
 

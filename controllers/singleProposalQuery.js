@@ -59,12 +59,16 @@ module.exports = class singleProposalQuery extends ControllerClass {
     this.debug(req.query);
 
     if (!req.query || !req.query.proposal) {
+      res.status(400);
       res.json({"error": "Request not valid!"});
       res.end(); return;
     }
     let proposalId = req.query.proposal;
 
     this._singleProposalQuery(proposalId, function(Proposal){
+      if(Proposal && Proposal.error){
+        res.status(500);
+      }
       res.json(Proposal);
       res.end();
     });

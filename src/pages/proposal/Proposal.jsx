@@ -7,113 +7,120 @@ import { useForm } from "react-hook-form"
 //import { ProposalComp } from '../proposals/ProposalComp'
 import { BASE_URL } from '../../shared/urls.js'
 //import { BrowserRouter as Link, useParams } from 'react-router-dom'
+import axios from 'axios';
 
 
 function getVotesTable(proposal, currentVoteClass, setList) {
 
-  let xhttp = new XMLHttpRequest()
-  xhttp.responseType = 'json';
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+  axios.get(BASE_URL + '/privacyvotequery', {
+    params: {
+      voteClass: currentVoteClass
+    }
+  })
+  .then(function (response) {
 
-      let result = xhttp.response
+    let result = response.data
 
-      let votes = result.items
+    let votes = result.items
 
-      if (votes) {
-        setList(votes);
+    if (votes) {
+      setList(votes);
+    }
+
+    console.log(result);
+
+    // TODO: for now, assume 'Yes' and 'No' are the vote values
+    //let option = {};
+    let option_Weight = {};
+    let totalWeight = 0;
+
+    let chart_data = null;
+    let option_labels = null;
+
+    if(proposal.ProposalType == 'yes_no'){
+      option_Weight['yes'] = 0;
+      option_Weight['no'] = 0;
+
+      for (const i in votes) {
+        option_Weight[votes[i].voteValue.toLowerCase()] += Number(votes[i].voteWeight);
+        totalWeight += Number(votes[i].voteWeight);
       }
+      option_labels = ['No', 'Yes'];
+      chart_data = [option_Weight['no'], option_Weight['yes']];
+    }
+    else {
+      option_Weight = Array(proposal.Options.length).fill(0);
 
-      console.log(result);
-
-      // TODO: for now, assume 'Yes' and 'No' are the vote values
-      //let option = {};
-      let option_Weight = {};
-      let totalWeight = 0;
-
-
-
-      let chart_data = null;
-
-      let option_labels = null;
-
-      if(proposal.ProposalType == 'yes_no'){
-        option_Weight['yes'] = 0;
-        option_Weight['no'] = 0;
-
-        for (const i in votes) {
-          option_Weight[votes[i].voteValue.toLowerCase()] += Number(votes[i].voteWeight);
-          totalWeight += Number(votes[i].voteWeight);
-        }
-        option_labels = ['No', 'Yes'];
-        chart_data = [option_Weight['no'], option_Weight['yes']];
+      for (const i in votes) {
+        option_Weight[votes[i].voteValue] += Number(votes[i].voteWeight);
+        totalWeight += Number(votes[i].voteWeight);
       }
-      else {
-        option_Weight = Array(proposal.Options.length).fill(0);
+      option_labels = proposal.Options;
+      chart_data = option_Weight;
+    }
 
-        for (const i in votes) {
-          option_Weight[votes[i].voteValue] += Number(votes[i].voteWeight);
-          totalWeight += Number(votes[i].voteWeight);
-        }
-        option_labels = proposal.Options;
-        chart_data = option_Weight;
-      }
+    //let sum = result.sum;
+    let count = votes.length;
 
-      //let sum = result.sum;
-      let count = votes.length;
+    // Add pie chart
 
-      // Add pie chart
+    if (window.myChart instanceof Chart) {
+        window.myChart.destroy();
+    }
 
-      if (window.myChart instanceof Chart) {
-          window.myChart.destroy();
-      }
+    let ctx = document.getElementById('myChart').getContext('2d');
 
-      let ctx = document.getElementById('myChart').getContext('2d');
-
-      window.myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: option_labels,
-          datasets: [{
-            label: '# of Votes',
-            data: chart_data,
-            backgroundColor: [
-              '#ff6484',
-              '#36a2eb',
-              '#026e00',
-              '#ecdb54'
-            ]
-          }]
-        },
-        options: {
-          plugins: {
-            title: {
-              //display: true,
-              //text: 'Total Vote Weight'
-            },
-            legend: {
-              position: 'bottom'
-            }
+    window.myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: option_labels,
+        datasets: [{
+          label: '# of Votes',
+          data: chart_data,
+          backgroundColor: [
+            '#ff6484',
+            '#36a2eb',
+            '#026e00',
+            '#ecdb54'
+          ]
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            //display: true,
+            //text: 'Total Vote Weight'
+          },
+          legend: {
+            position: 'bottom'
           }
         }
-        // responsive: true,
-        // maintainAspectRatio: false
-      });
+      }
+      // responsive: true,
+      // maintainAspectRatio: false
+    });
+
+    var totalVoteCount = count;
+    //document.getElementById('total_vote_count_num').text(totalVoteCount);
+
+    //document.getElementById('total_vote_weight_num').text(totalWeight);
 
 
-      var totalVoteCount = count;
-    //  document.getElementById('total_vote_count_num').text(totalVoteCount);
+  })
+  .catch(function (error) {
+    if (error.response &&
+        error.response.data &&
+        error.response.data.error &&
+        error.response.data.error.msg) {
 
-      //document.getElementById('total_vote_weight_num').text(totalWeight);
+      alert(error.response.data.error.msg)
 
+    } else {
+      alert("Error!\n " + error.toJSON())
+      console.log(error.toJSON());
     }
-  }
-  xhttp.open(
-    'GET',
-    BASE_URL + '/privacyvotequery?voteClass=' + currentVoteClass,
-    true
-  )
-  xhttp.send()
+  })
+
 }
 
 
@@ -165,52 +172,38 @@ export function Proposal() {
 
             console.log('signature! ' + signature)
 
-            let xhr = new XMLHttpRequest()
-            xhr.responseType = 'json';
-            xhr.open('POST', BASE_URL + '/submitvote', true)
-            xhr.setRequestHeader('Content-Type', 'application/json')
-
-            xhr.onreadystatechange = function () {
-              if (xhr.readyState == XMLHttpRequest.DONE) {
-
-                console.log('response: ' + xhr.response)
-
-                if (xhr.status == 200) {
-                  let result = xhr.response;
-
-                  if (result.error) {
-                    if(result.error.code == 'ConditionalCheckFailedException'){
-                      alert('You have already voted!')
-                    } else if(result.error.msg){
-                      alert(result.error.msg)
-                    } else {
-                      alert('Vote submission failed\n' + xhr.response)
-                    }
-                  } else {
-                    getVotesTable(proposal, ProposalId, setList) //update vote table
-                    alert('Vote submitted successfully')
-                  }
-
-                } else if (xhr.status == 500) {
-                  alert('Internor Error, please inform the devs!\n' + xhr.response);
+            axios.post(BASE_URL + '/submitvote', {
+              voteClass: ProposalId,
+              voteValue: optionId,
+              optionText: optionText,
+              signature: signature,
+              walletAddress: walletAddress,
+              timestamp: timestamp,
+              proposalTitle: proposal.Title
+            })
+            .then(function (response) {
+              // handle success
+              getVotesTable(proposal, ProposalId, setList) //update vote table
+              alert('Vote submitted successfully')
+            })
+            .catch(function (error) {
+              if (error.response) {
+                let err = error.response.data.error;
+                if(err.code == 'ConditionalCheckFailedException'){
+                  alert('You have already voted!')
+                } else if(err.msg){
+                  alert(err.msg)
                 } else {
-                  alert('Error!\n' + xhr.response);
+                  alert('Vote submission failed\n' + JSON.stringify(error.response))
                 }
+                console.log(error.response);
 
+              } else {
+                alert("Error!\n " + error.toJSON())
+                console.log(error.toJSON());
               }
-            }
+            })
 
-            xhr.send(
-              JSON.stringify({
-                voteClass: ProposalId,
-                voteValue: optionId,
-                optionText: optionText,
-                signature: signature,
-                walletAddress: walletAddress,
-                timestamp: timestamp,
-                proposalTitle: proposal.Title
-              })
-            )
           }
         }
       );
@@ -218,22 +211,31 @@ export function Proposal() {
   }
 
   useEffect(() => {
-    let xhttp = new XMLHttpRequest()
-    xhttp.responseType = 'json';
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
 
-        let proposal = xhttp.response
+    axios.get(BASE_URL + '/singleproposalquery?proposal='+encodeURI(ProposalId))
+    .then(function (response) {
+      // handle success
+      let proposal = response.data
 
-        setProposal(proposal)
+      setProposal(proposal)
 
-        getVotesTable(proposal, ProposalId, setList)
+      getVotesTable(proposal, ProposalId, setList)
+    })
+    .catch(function (error) {
+      if (error.response) {
+        if(error.response.data.error){
+          alert(error.response.data.error.msg)
+        } else {
+          alert(JSON.stringify(error.response))
+        }
+        console.log(error.response);
 
+      } else {
+        alert("Error!\n " + error.toJSON())
+        console.log(error.toJSON());
       }
-    }
+    })
 
-    xhttp.open('GET', BASE_URL + '/singleproposalquery?proposal='+encodeURI(ProposalId), true)
-    xhttp.send()
   }, [])
 
 

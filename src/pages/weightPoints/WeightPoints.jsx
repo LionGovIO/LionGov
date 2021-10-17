@@ -36,38 +36,27 @@ export function WeightPoints(){
 
     }
 
-    let xhttp = new XMLHttpRequest()
-    xhttp.responseType = 'json';
-    xhttp.onreadystatechange = function () {
-      if (xhttp.readyState == XMLHttpRequest.DONE) {
-        if (xhttp.status == 200) {
-          let result = xhttp.response;
-          console.log(result)
-
-          if (result.error) {
-            if(result.error.msg){
-              alert(result.error.msg)
-            } else {
-              alert('Error\n' + xhttp.response)
-            }
-          } else { //If successful
-            setList(result)  // update table
-          }
-
-        } else if (xhttp.status == 500) {
-          alert('Internor Error, please inform the devs!\n' + xhttp.response);
-        } else {
-          alert('Error!\n' + xhttp.response);
-        }
+    axios.get(BASE_URL + '/getvoteweight', {
+      params: {
+        walletAddress: address
       }
+    })
+    .then(function (response) {
+      setList(response.data)
+    })
+    .catch(function (error) {
+      if (error.response &&
+          error.response.data &&
+          error.response.data.error &&
+          error.response.data.error.msg) {
 
-    }
-    xhttp.open(
-      'GET',
-      BASE_URL + '/getvoteweight?walletAddress=' + encodeURI(address),
-      true
-    )
-    xhttp.send()
+        alert(error.response.data.error.msg)
+
+      } else {
+        alert("Error!\n " + error.toJSON())
+        console.log(error.toJSON());
+      }
+    })
 
 
   }

@@ -23,6 +23,7 @@ module.exports = class submitVote extends ControllerClass {
     try {
       checksumAddress = ethers.utils.getAddress(data.walletAddress); //EIP55
       if (!checksumAddress) {
+        res.status(400);
         res.json({
           "error": {msg: "No address informed!"}
         });
@@ -30,6 +31,7 @@ module.exports = class submitVote extends ControllerClass {
         return;
       }
     } catch (e) {
+      res.status(400);
       res.json({
         "error": {msg: "Invalid Address!"}
       });
@@ -40,6 +42,7 @@ module.exports = class submitVote extends ControllerClass {
     let signature_valid_for = 5 * 60 * 1000; //5 min in milliseconds
 
     if (data.timestamp < (Date.now() - signature_valid_for)){
+      res.status(400);
       res.json({
         "error": {msg: 'Signature expired! Try submitting again or checking your system clock.'}
       });
@@ -55,6 +58,7 @@ module.exports = class submitVote extends ControllerClass {
     // verifyMessage (Message , signature) -> return in EIP55 address
 
     if (checksumAddress != ethers.utils.verifyMessage(message, data.signature)) {
+      res.status(400);
       res.json({
         "error": {msg: "Invalid signature!"}
       });
@@ -66,6 +70,7 @@ module.exports = class submitVote extends ControllerClass {
     singleProposalQuery._singleProposalQuery(data.voteClass, function(Proposal){
 
       if(Proposal.error){
+        res.status(400);
         res.json({
           "error": {msg: "Invalid proposal id!"}
         });
@@ -76,6 +81,7 @@ module.exports = class submitVote extends ControllerClass {
       if (Proposal.ProposalType == 'yes_no'){
         if (optionId != optionText ||
             (optionId != 'yes' && optionId != 'no')){
+              res.status(400);
               res.json({
                 "error": {msg: "Invalid option!"}
               });
@@ -85,6 +91,7 @@ module.exports = class submitVote extends ControllerClass {
       } else {
         if(Proposal.Options.length < optionId ||
            Proposal.Options[optionId] != optionText){
+             res.status(400);
              res.json({
                "error": {msg: "Inconsistent option data!"}
              });
@@ -96,6 +103,7 @@ module.exports = class submitVote extends ControllerClass {
 
       if(Proposal.EndTimestamp &&
          parseInt(Proposal.EndTimestamp) < Date.now()){
+           res.status(400);
            res.json({
              "error": {msg: "Proposal voting ended!"}
            });
@@ -116,6 +124,7 @@ module.exports = class submitVote extends ControllerClass {
       Blkchain.getVoteWeight(walletAddress, parseInt(Proposal.CreationTime)).then(voteWeightInfo => {
         debug('voteWeightInfo! ' + voteWeightInfo);
         if (!voteWeightInfo) {
+          res.status(500);
           res.json({
             "error": {msg: "Blockchain object empty! contact devs!"}
           });
@@ -123,6 +132,7 @@ module.exports = class submitVote extends ControllerClass {
           return;
         }
         if (voteWeightInfo.error) {
+          res.status(500);
           res.json(voteWeightInfo);
           res.end();
           return;
@@ -132,6 +142,7 @@ module.exports = class submitVote extends ControllerClass {
 
         if(voteWeight < 7){
           let date_options = {year:'numeric', month:'short', day:'numeric', hour12:false, hour:'numeric', minute:'numeric', timeZone:'UTC', timeZoneName:'short'};
+          res.status(403);
           res.json({
             "error": {msg: "You need to have a point weight of 7 or higher to vote.\n" +
                            "This proposal was created on " +
@@ -195,7 +206,9 @@ module.exports = class submitVote extends ControllerClass {
             console.log(err);
             if (err.code == 'ConditionalCheckFailedException') {
               err.msg = 'Primary key is already in use';
+              res.status(403);
             } else {
+              res.status(500);
               err.msg = err.message;
             }
 

@@ -106,6 +106,7 @@ module.exports = class submitProposal extends ControllerClass {
     try {
       checksumAddress = ethers.utils.getAddress(postData.walletAddress); //EIP55
       if (!checksumAddress) {
+        res.status(400);
         res.json({
           "error": {msg: "No address informed!"}
         });
@@ -113,6 +114,7 @@ module.exports = class submitProposal extends ControllerClass {
         return;
       }
     } catch (e) {
+      res.status(400);
       res.json({
         "error": {msg: "Invalid Address!"}
       });
@@ -123,6 +125,7 @@ module.exports = class submitProposal extends ControllerClass {
     let signature_valid_for = 5 * 60 * 1000; //5 min in milliseconds
 
     if (postData.timestamp < (Date.now() - signature_valid_for)){
+      res.status(400);
       res.json({
         "error": {msg: 'Signature expired! Try submitting again or checking your system clock.'}
       });
@@ -138,6 +141,7 @@ module.exports = class submitProposal extends ControllerClass {
     maxTimestamp.setDate(maxTimestamp.getDate() + 9 );
 
     if (postData.endTimestamp < minTimestamp || postData.endTimestamp > maxTimestamp){
+      res.status(400);
       res.json({ "error": "Invalid End Time" });
       res.end();
       return;
@@ -153,6 +157,7 @@ module.exports = class submitProposal extends ControllerClass {
     postData.endTimestamp = date_endTimestamp.getTime();
 
     if (postData.options.length > 15){
+      res.status(400);
       res.json({ "error": "Too many options" });
       res.end();
       return;
@@ -166,6 +171,7 @@ module.exports = class submitProposal extends ControllerClass {
     // verifyMessage (Message , signature) -> return in EIP55 address
 
     if (checksumAddress != ethers.utils.verifyMessage(message, postData.signature)) {
+      res.status(400);
       res.json({ "error": "Invalid signature!" });
       res.end();
       return;
@@ -176,6 +182,7 @@ module.exports = class submitProposal extends ControllerClass {
     let voteWeight = voteWeightInfo.voteWeight;
 
     if(voteWeight < 100){
+      res.status(403);
       res.json({
         "error": {msg: "You need to have a point weight of 100 or higher to create a proposal.\n" +
                        "Your current point weight is: " + voteWeight }
@@ -196,6 +203,7 @@ module.exports = class submitProposal extends ControllerClass {
       console.log(result);
 
       if (err) {
+        res.status(500);
         res.json(err);
         res.end();
         return;

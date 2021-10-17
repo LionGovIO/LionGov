@@ -53,49 +53,33 @@ export function SubmitProposal() {
 
             console.log('signature! ' + signature)
 
-            let xhr = new XMLHttpRequest()
-            xhr.responseType = 'json';
-            xhr.open('POST', BASE_URL + '/submitproposal', true)
-            xhr.setRequestHeader('Content-Type', 'application/json')
+            axios.post(BASE_URL + '/submitproposal', {
+              signature: signature,
+              walletAddress: walletAddress,
+              title: data.proposal_title_input,
+              description: data.proposal_description_input,
+              endTimestamp: expDate.getTime(),
+              options: data.options,
+              timestamp: timestamp,
+            })
+            .then(function (response) {
+              history.push('/proposal/' + response.data.proposalId);
+              alert('Proposal submitted successfully!')
+            })
+            .catch(function (error) {
+              if (error.response &&
+                  error.response.data &&
+                  error.response.data.error &&
+                  error.response.data.error.msg) {
 
-            xhr.onreadystatechange = function () {
-              if (xhr.readyState == XMLHttpRequest.DONE) {
+                alert(error.response.data.error.msg)
 
-                console.log('response: ' + xhr.response)
-
-                if (xhr.status == 200) {
-                  let result = xhr.response;
-
-                  if (result.error) {
-                    if(result.error.msg){
-                      alert(result.error.msg)
-                    } else {
-                      alert('Proposal submission failed\n' + xhr.response)
-                    }
-                  } else {
-                    history.push('/proposal/' + result.proposalId);
-                    alert('Proposal submitted successfully!')
-                  }
-
-                } else if (xhr.status == 500) {
-                  alert('Internor Error, please inform the devs!\n' + xhr.response);
-                } else {
-                  alert('Error!\n' + xhr.response);
-                }
+              } else {
+                alert("Error!\n " + error.toJSON())
+                console.log(error.toJSON());
               }
-            }
+            })
 
-            xhr.send(
-              JSON.stringify({
-                signature: signature,
-                walletAddress: walletAddress,
-                title: data.proposal_title_input,
-                description: data.proposal_description_input,
-                endTimestamp: expDate.getTime(),
-                options: data.options,
-                timestamp: timestamp,
-              })
-            )
           }
         }
       );

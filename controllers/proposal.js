@@ -21,6 +21,7 @@ module.exports = class getVoteWeight extends ControllerClass {
     // read in the index.html file
     fs.readFile(filePath, 'utf8', function (err,data) {
       if (err) {
+        res.status(500);
         res.send("Error");
         return console.log(err);
       }

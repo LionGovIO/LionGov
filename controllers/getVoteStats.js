@@ -117,6 +117,8 @@ module.exports = class getVoteStats extends ControllerClass {
             res.json(output);
           });
         } catch (e) {
+          res.status(400);
+          res.end();
           console.error(e);
         }
       }
