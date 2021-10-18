@@ -179,6 +179,9 @@ export function SubmitProposal() {
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
+        <span style={{marginLeft: '20px'}}>
+          You need at least 100 weight points to create a proposal!
+        </span>
       </form>
     </SubmitProposalContainer>
     </div>
