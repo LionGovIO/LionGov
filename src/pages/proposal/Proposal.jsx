@@ -364,9 +364,9 @@ export function Proposal() {
               <thead>
                 <tr>
                   <th className="cell">Wallet</th>
-                  <th className="cell">Vote</th>
-                  <th className="cell">Weight</th>
-                  <th className="cell">Date</th>
+                  <th className="cell" style={{textAlign: 'right'}}>Vote</th>
+                  <th className="cell" style={{textAlign: 'right'}}>Weight</th>
+                  <th className="cell" style={{textAlign: 'center'}}>Date</th>
                   <th className="cell" style={{textAlign: 'center'}}>Vote Proof</th>
                 </tr>
               </thead>
@@ -374,9 +374,9 @@ export function Proposal() {
                 { list.map((item) => (
                   <tr key={Math.random()}>
                     <td className="cell">{item.obscuredWalletAddress}</td>
-                    <td className="cell">{translateVote(item.voteValue)}</td>
-                    <td className="cell">{item.voteWeight}</td>
-                    <td className="cell">
+                    <td className="cell" style={{textAlign: 'right'}}>{translateVote(item.voteValue)}</td>
+                    <td className="cell" style={{textAlign: 'right'}}>{Number(item.voteWeight).toLocaleString('en-US', {minimumFractionDigits: 5, maximumFractionDigits: 5})}</td>
+                    <td className="cell" style={{textAlign: 'center'}}>
                       <span>{(new Date(parseInt(item.creationTime))).toLocaleDateString()}</span>
                       <span className="note">{(new Date(parseInt(item.creationTime))).toLocaleTimeString()}</span>
                     </td>
