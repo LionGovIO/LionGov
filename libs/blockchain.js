@@ -57,9 +57,9 @@ module.exports = class Blockchain {
     let last_sell = false;
     let rows = [];
 
-    //Set it to the correct day. Probably should be on LionGov launch  day.
+    //Set day for higher seller punishment. Selling resets the whole bag voting points.
 
-    let punish_sell_startdate = (new Date('January 01, 2077 11:00 UTC')).getTime(); //timestamp
+    let punish_sell_startdate = (new Date('2021-10-23 2:30 UTC')).getTime(); //timestamp
 
     user_address = user_address.toLowerCase() //must be lowercase
 
