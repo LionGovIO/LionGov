@@ -1,6 +1,9 @@
 
+const BigNumber = require('bignumber.js');
 const c = require('../public/constants');
 let redis = false;
+
+BigNumber.set({ DECIMAL_PLACES: 18 })
 
 if(process.env.LIONGOV_CACHE_REDIS){
   redis = require('redis');
@@ -61,11 +64,11 @@ module.exports = class Blockchain {
 
   getVoteWeightChain(transactions, user_address, chain, timestamp) {
 
-    let MM_in = 0;
-    let MM_out = 0;
-    let MM_calc = 0;
-    let MM_points = 0;
-    let MM_balance = 0;
+    let MM_in = new BigNumber(0);
+    let MM_out = new BigNumber(0);
+    let MM_calc = new BigNumber(0);
+    let MM_points = new BigNumber(0);
+    let MM_balance = new BigNumber(0);
     let last_sell = false;
     let rows = [];
 
@@ -83,8 +86,8 @@ module.exports = class Blockchain {
     // So we go in a reverse chronological order.
 
     if (transactions && transactions.length > 0) {
-      transactions.forEach(function (item, index, array) {
-        let amount = parseInt(item.value) / 10 ** 18; //18 decimals
+      for (const item of transactions) {
+        let amount = new BigNumber(item.value).times(1e-18) //18 decimals
 
         // Note: It is possible to an address to transfer to itself.
 
@@ -93,8 +96,8 @@ module.exports = class Blockchain {
         /////////////////////////////
 
         if (item.from_address == user_address) {
-          MM_calc -= amount;
-          MM_balance -= amount;
+          MM_calc = MM_calc.minus(amount);
+          MM_balance = MM_balance.minus(amount);
           let blck_tmstamp = Date.parse(item.block_timestamp);
 
           if(blck_tmstamp > punish_sell_startdate && !last_sell){
@@ -107,8 +110,8 @@ module.exports = class Blockchain {
         ///////////////////////////
 
         if (item.to_address == user_address) {
-          MM_balance += amount;
-          MM_calc += amount;
+          MM_balance = MM_balance.plus(amount);
+          MM_calc = MM_calc.plus(amount);
 
           if (MM_calc > 0) {
             let blck_tmstamp = Date.parse(item.block_timestamp);
@@ -117,25 +120,29 @@ module.exports = class Blockchain {
                 // If there is a sell, their point calculation day is reset
                 datediff = last_sell;
             }
-            //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points);
+
+            MM_points = MM_points.plus(MM_calc.times(datediff));
+            //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points + "  -balance: "+MM_balance);
+
             rows.push({
               timestamp: item.block_timestamp,
-              token_amount: MM_calc,
+              token_amount: MM_calc.toString(),
               days: datediff,
-              points: datediff * MM_calc
+              points: MM_points.toString()
             });
-            MM_points += datediff * MM_calc;
-            MM_calc = 0; //reset calculation counter
+
+            MM_calc = MM_calc.times(0); //reset calculation counter
           }
         }
-      });
+
+      }
     }
 
 
     return {
       points_detail: rows,
-      token_balance: MM_balance,
-      points_balance: MM_points,
+      token_balance: MM_balance.toString(),
+      points_balance: MM_points.toString(),
       chain: chain
     };
 
@@ -143,8 +150,8 @@ module.exports = class Blockchain {
 
   async getVoteWeight(user_address, timestamp, cache = false) {
     let voteWeightdetail = [];
-    let voteWeight = 0;
-    let tokenBalance = 0;
+    let voteWeight = new BigNumber(0);
+    let tokenBalance = new BigNumber(0);
     let result = false;
     let cache_key = false;
     let chain = Object.keys(c.MM_contract);
@@ -201,10 +208,10 @@ module.exports = class Blockchain {
 
     //Sum balances
     voteWeightdetail.forEach(item => {
-      voteWeight += item.points_balance;
-      tokenBalance += item.token_balance;
+      voteWeight = voteWeight.plus(new BigNumber(item.points_balance));
+      tokenBalance = tokenBalance.plus(new BigNumber(item.token_balance));
     });
-    result = { token_balance: tokenBalance, voteWeight: voteWeight, details: voteWeightdetail };
+    result = { token_balance: tokenBalance.toString(), voteWeight: voteWeight.toString(), details: voteWeightdetail };
 
 
     //////////////////

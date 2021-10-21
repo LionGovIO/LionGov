@@ -8226,6 +8226,7 @@ fsevents@~2.3.2:
     aws-sdk: ^2.995.0
     axios: ^0.21.4
     babel-loader: ^8.2.2
+    bignumber.js: ^9.0.1
     buffer: ^6.0.3
     compression: ^1.7.4
     compression-webpack-plugin: ^9.0.0
