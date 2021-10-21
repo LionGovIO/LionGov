@@ -31,13 +31,25 @@ module.exports = class Blockchain {
 
     try {
 
-      const transactions = await this.Moralis.Web3API.account.getTokenTransfers({
-        chain: chain,
-        address: user_address,
-        from_block: token_first_block
-      });
+      let offset = 0;
+      let token_txs = [];
+      let page_size = 500;
+      let transactions = null;
+      do {
+        transactions = await this.Moralis.Web3API.account.getTokenTransfers({
+          chain: chain,
+          address: user_address,
+          from_block: token_first_block,
+          limit: page_size,
+          offset: offset
+        });
+        offset += page_size;
 
-      return transactions.result.filter(item => (item.address == token_address.toLowerCase()));
+        token_txs = token_txs.concat(transactions.result.filter(item => (item.address == token_address.toLowerCase())));
+
+      } while (transactions.total > offset)
+
+      return token_txs;
     } catch (e) {
       console.error("Moralis API connection error!");
       console.error(e);
