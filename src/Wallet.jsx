@@ -5,6 +5,8 @@ class WalletClass {
   // Web3modal instance
   web3Modal;
 
+  web3;
+
   // Chosen wallet provider given by the dialog window
   provider;
 
@@ -21,18 +23,16 @@ class WalletClass {
     this.WalletConnectProvider = window.WalletConnectProvider.default;
 
     const providerOptions = {
-    /*  walletconnect: {
-        package: WalletConnectProvider, //This should work only with HTTPS
+      walletconnect: {
+        package: this.WalletConnectProvider,
         options: {
-          // Mikko's test key - don't copy as your mileage may vary  //8043bb2cf99347b1bfadfb233c5325c0
-          infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", //a1d145ed2a82409a8a4371b4861f89cf
+          infuraId: "a1d145ed2a82409a8a4371b4861f89cf",
         }
-      }*/
+      }
     };
 
     this.web3Modal = new this.Web3Modal({
-      network: "matic",
-      cacheProvider: false, // optional
+      cacheProvider: true, // optional
       providerOptions, // required
       disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
     });
@@ -40,9 +40,9 @@ class WalletClass {
     // check if web wallet is already connected.
     if (window.ethereum) {
 
-      web3 = new Web3(window.ethereum);
+      this.web3 = new Web3(window.ethereum);
 
-      web3.eth.getAccounts((accounta,accountb) => {
+      this.web3.eth.getAccounts((accounta,accountb) => {
         //if(accounta){onConnect();}
         //else
         if(accountb[0]){this.onConnect();} // <<-- this is what works for me on Firefox Metamask
@@ -52,9 +52,11 @@ class WalletClass {
   }
 
   connected = () => {
-    this.selectedAccount = ethereum.selectedAddress;
-    this.changeButton(obscureAddress(ethereum.selectedAddress));
-    if(this.onConnectCallBack){this.onConnectCallBack(ethereum.selectedAddress);}
+    this.web3.eth.getAccounts().then((accounts) => {
+      this.selectedAccount = accounts[0];
+      this.changeButton(obscureAddress(this.selectedAccount));
+      if(this.onConnectCallBack){this.onConnectCallBack(ethereum.selectedAddress);}
+    });
   }
 
   disconnected = () => {
@@ -65,16 +67,16 @@ class WalletClass {
   fetchAccountData = async () => {
 
     // Get a Web3 instance for the wallet
-    const web3 = new Web3(this.provider);
+    this.web3 = new Web3(this.provider);
 
     // Get connected chain id from Ethereum node
-    const chainId = await web3.eth.getChainId();
+    const chainId = await this.web3.eth.getChainId();
 
     // Get list of accounts of the connected wallet
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await this.web3.eth.getAccounts();
 
     // MetaMask does not give you all accounts, only the selected account
-    this.selectedAccount = ethereum.selectedAddress;
+    this.selectedAccount = accounts[0];
 
     if(!accounts[0]){await this.onDisconnect();return;} //if user disconnected wallet
 
@@ -83,9 +85,9 @@ class WalletClass {
 
 
 
-  refreshAccountData = async () => {
+  updateButton = async () => {
 
-    if (window.ethereum && ethereum.selectedAddress) {
+    if (this.selectedAccount) {
       this.connected();
     } else {
       this.changeButton('disconnected');
@@ -98,6 +100,7 @@ class WalletClass {
       this.provider = await this.web3Modal.connect();
     } catch(e) {
       console.log("Could not get a wallet connection", e);
+      this.onDisconnect();
       return;
     }
 
@@ -113,8 +116,10 @@ class WalletClass {
       this.fetchAccountData();
     });
 
-    console.log('await this.refreshAccountData();')
-    await this.refreshAccountData();
+
+    this.fetchAccountData();
+    //console.log('await this.refreshAccountData();')
+    //await this.refreshAccountData();
 
   }
 
@@ -125,7 +130,7 @@ class WalletClass {
 
       await this.provider.disconnect();
 
-      await this.Disconnect();
+      await this.onDisconnect();
 
     } else {
 

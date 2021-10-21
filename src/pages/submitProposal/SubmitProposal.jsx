@@ -38,7 +38,7 @@ export function SubmitProposal() {
                     'Timestamp: ' + timestamp;
 
       let password = ''
-      web3.eth.personal.sign(
+      Wallet.web3.eth.personal.sign(
         message,
         walletAddress,
         password,
