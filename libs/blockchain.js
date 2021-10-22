@@ -113,7 +113,7 @@ module.exports = class Blockchain {
           MM_balance = MM_balance.plus(amount);
           MM_calc = MM_calc.plus(amount);
 
-          if (MM_calc > 0) {
+          if (MM_calc.isGreaterThan(0)) {
             let blck_tmstamp = Date.parse(item.block_timestamp);
             let datediff = Math.round((timestamp - blck_tmstamp) / (1000 * 60 * 60 * 24));
             if(last_sell) {
