@@ -121,15 +121,17 @@ module.exports = class Blockchain {
                 datediff = last_sell;
             }
 
-            MM_points = MM_points.plus(MM_calc.times(datediff));
+            let row_points = MM_calc.times(datediff);
             //console.log(item.block_timestamp + " + " + MM_calc + " * " + datediff + " days = " + (datediff * MM_calc) + " -> total: " + MM_points + "  -balance: "+MM_balance);
 
             rows.push({
               timestamp: item.block_timestamp,
               token_amount: MM_calc.toString(),
               days: datediff,
-              points: MM_points.toString()
+              points: row_points.toString()
             });
+
+            MM_points = MM_points.plus(row_points);
 
             MM_calc = MM_calc.times(0); //reset calculation counter
           }
