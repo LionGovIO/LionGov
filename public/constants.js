@@ -15,6 +15,11 @@ module.exports = {
       first_block: 9209224
     }
   },
+  TL_MM_Stake : {
+    eth : {
+      address : "0xbe9b9c6356303006903bf81cd25d9943ecd77976",
+    }
+  },
   SIGNATURE_MESSAGE : "Session id: SESSIONID\n\nSign your session id with your Polygon Account, this proves to us and to all players that you are the real owner of that address and NFTs. This does not cost any fees."
 
 ,

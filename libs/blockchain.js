@@ -69,6 +69,7 @@ module.exports = class Blockchain {
     let MM_calc = new BigNumber(0);
     let MM_points = new BigNumber(0);
     let MM_balance = new BigNumber(0);
+    let MM_staked = new BigNumber(0);
     let last_sell = false;
     let rows = [];
 
@@ -96,6 +97,16 @@ module.exports = class Blockchain {
         /////////////////////////////
 
         if (item.from_address == user_address) {
+
+          // Tokens sent to Staking
+
+          if(item.to_address == c.TL_MM_Stake.eth.address){
+            MM_staked = MM_staked.plus(amount);
+            continue;
+          }
+
+          // Tokens sent to any other address
+
           MM_calc = MM_calc.minus(amount);
           MM_balance = MM_balance.minus(amount);
           let blck_tmstamp = Date.parse(item.block_timestamp);
@@ -110,6 +121,22 @@ module.exports = class Blockchain {
         ///////////////////////////
 
         if (item.to_address == user_address) {
+
+          // Withdrawing from Stake pool
+
+          if(item.from_address == c.TL_MM_Stake.eth.address){
+            MM_staked = MM_staked.minus(amount);
+
+            // If withdrawing less than total staked
+            // then its not the rewards
+            if(MM_staked.isLessThanOrEqualTo(0)){
+              continue;
+            }
+
+            // Otherwise they are reciving the pools reward
+            amount = MM_staked;
+          }
+
           MM_balance = MM_balance.plus(amount);
           MM_calc = MM_calc.plus(amount);
 
