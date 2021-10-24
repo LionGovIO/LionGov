@@ -31,7 +31,7 @@ export const ProposalComp = ({ proposal }) => (
                     ? 'Ends on '
                     : 'Ended on '
                   }
-                  <strong>{(new Date(parseInt(proposal.EndTimestamp))).toLocaleString()}</strong>
+                  <strong>{(new Date(parseInt(proposal.EndTimestamp))).toLocaleString(undefined, {timeZoneName: 'short'}).replace(/:\d+ /, ' ')}</strong>
                 </li>
               </ul>
             )
